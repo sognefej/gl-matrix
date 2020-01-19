@@ -496,7 +496,7 @@ mod tests {
 
         let frob_a = frob(&mat_a);
 
-        assert_eq!((1_f32.powi(2) + 2_f32.powi(2) + 3_f32.powi(2) + 4_f32.powi(2) +5_f32.powi(2) + 6_f32.powi(2)).sqrt(), frob_a);
+        assert_eq!((1_f32.powi(2) + 2_f32.powi(2) + 3_f32.powi(2) + 4_f32.powi(2) + 5_f32.powi(2) + 6_f32.powi(2)).sqrt(), frob_a);
     }
 
     #[test]
