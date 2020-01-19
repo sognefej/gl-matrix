@@ -595,7 +595,7 @@ mod tests {
     }
    
     #[test] 
-    fn transpose_same_mat2() { 
+    fn transpose_same_mat3() { 
         let mut mat_a: Mat3 = [1., 0., 0.,
                                0., 1., 0.,
                                1., 2., 1.];
@@ -611,7 +611,7 @@ mod tests {
     }
 
     #[test] 
-    fn transpose_different_mat2() { 
+    fn transpose_different_mat3() { 
         let mut out: Mat3 = [0., 0., 0.,
                              0., 0., 0.,
                              0., 0., 0.];
@@ -627,7 +627,7 @@ mod tests {
     }
    
     #[test]
-    fn adjugate_mat2() { 
+    fn adjugate_mat3() { 
         let mut out: Mat3 = [0., 0., 0.,
                              0., 0., 0.,
                              0., 0., 0.];
@@ -1014,7 +1014,7 @@ mod tests {
     }
 
     #[test]
-    fn mat3_are_exact_equal() { 
+    fn mat3s_are_exact_equal() { 
         let mat_a: Mat3 = [0., 1., 2., 
                            3., 5., 6., 
                            7., 8., 9.];
@@ -1028,7 +1028,7 @@ mod tests {
     }
 
     #[test]
-    fn mat3_are_not_exact_equal() { 
+    fn mat3s_are_not_exact_equal() { 
         let mat_a: Mat3 = [0., 1., 2., 
                            3., 4., 5., 
                            6., 7., 8.];
@@ -1042,7 +1042,7 @@ mod tests {
     }
 
     #[test]
-    fn mat3_are_equal() { 
+    fn mat3s_are_equal() { 
         let mat_a: Mat3 = [0., 1., 2., 
                            3., 5., 6., 
                            7., 8., 9.];
@@ -1056,7 +1056,7 @@ mod tests {
     }
 
     #[test]
-    fn mat2ds_are_equal_enough() { 
+    fn mat3s_are_equal_enough() { 
         let mat_a: Mat3 = [0., 1., 2., 
                            3., 5., 6., 
                            7., 8., 9.];
@@ -1070,7 +1070,7 @@ mod tests {
     }
 
     #[test]
-    fn mat2ds_are_not_equal() { 
+    fn mat3s_are_not_equal() { 
         let mat_a: Mat3 = [0., 1., 2., 
                            3., 4., 5., 
                            6., 7., 8.];
