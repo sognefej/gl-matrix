@@ -355,7 +355,6 @@ mod tests {
         let mut out: Mat2 = [0., 0., 0., 0.];
         let mat_a: Mat2 = [1., 2., 3., 4.];
        
-        // not the same matrix 
         adjoint(&mut out, &mat_a); 
         
         assert_eq!([4., -2., -3., 1.], out);         

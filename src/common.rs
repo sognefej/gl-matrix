@@ -10,7 +10,7 @@ pub type Vec3 = [f32; 3];
 pub type Vec4 = [f32; 4];
 
 // Configuration Constants 
-pub static PI: f32= std::f32::consts::PI; 
+pub static PI: f32= core::f32::consts::PI; 
 pub static EPSILON: f32 = 0.000001;
 pub static INFINITY: f32 = 1.0_f32 / 0.0_f32;
 pub static NEG_INFINITY: f32 = -1.0_f32 / 0.0_f32;

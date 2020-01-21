@@ -635,7 +635,6 @@ mod tests {
                            0., 1., 0.,
                            1., 2., 1.];
         
-        // not the same matrix 
         adjoint(&mut out, &mat_a); 
         
         assert_eq!([1., 0., 0.,
