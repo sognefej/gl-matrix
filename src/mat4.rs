@@ -1,4 +1,4 @@
-use super::common::{Mat4, Vec3, Quat, Quat2, EPSILON, PI, hypot, INFINITY, NEG_INFINITY};
+use super::common::{Mat4, Vec3, Quat, Quat2, hypot, EPSILON, PI, INFINITY, NEG_INFINITY};
 
 pub struct Fov {
     up_degrees: f32,
@@ -426,7 +426,7 @@ pub fn rotate(out: &mut Mat4, a: &Mat4, rad: f32, axis: &Vec3) {
     let mut x = axis[0];
     let mut y = axis[1];
     let mut z = axis[2];
-    let len = hypot(&axis.to_vec());
+    let len = hypot(axis);
 
     if len < EPSILON { 
         // Don't do anything 
@@ -640,7 +640,7 @@ pub fn from_rotation(out: &mut Mat4, rad: f32, axis: &Vec3) {
     let mut x = axis[0];
     let mut y = axis[1];
     let mut z = axis[2];
-    let len = hypot(&axis.to_vec());
+    let len = hypot(axis);
 
     if len < EPSILON { 
         // Don't do anything 
@@ -834,9 +834,9 @@ pub fn get_scaling(out: &mut Vec3, mat: &Mat4) {
     vec_3[1] = mat[9]; // m32
     vec_3[2] = mat[10]; // m33
 
-    out[0] = hypot(&vec_1.to_vec());
-    out[1] = hypot(&vec_2.to_vec());
-    out[2] = hypot(&vec_3.to_vec());
+    out[0] = hypot(&vec_1);
+    out[1] = hypot(&vec_2);
+    out[2] = hypot(&vec_3);
 }
 
 pub fn get_rotation(out: &mut Quat, mat: &Mat4) {
@@ -1160,7 +1160,7 @@ pub fn look_at(mut out: &mut Mat4, eye: &Vec3, center: &Vec3, up: &Vec3) {
     let mut z1 = eyey - centery;
     let mut z2 = eyez - centerz;
     let z_vec: Vec3 = [z0, z1, z2];
-    let mut len = 1. / hypot(&z_vec.to_vec());
+    let mut len = 1. / hypot(&z_vec);
     
     z0 *= len;
     z1 *= len;
@@ -1171,7 +1171,7 @@ pub fn look_at(mut out: &mut Mat4, eye: &Vec3, center: &Vec3, up: &Vec3) {
     let mut x2 = upx * z1 - upy * z0;
 
     let x_vec: Vec3 = [x0, x1, x2];
-    len = 1. / hypot(&x_vec.to_vec());
+    len = 1. / hypot(&x_vec);
     if len > 0_f32 {
         x0 = 0.;
         x1 = 0.;
@@ -1188,7 +1188,7 @@ pub fn look_at(mut out: &mut Mat4, eye: &Vec3, center: &Vec3, up: &Vec3) {
     let mut y2 = z0 * x1 - z1 * x0;
     
     let y_vec: Vec3 = [y0, y1, y2];
-    len = hypot(&y_vec.to_vec());
+    len = hypot(&y_vec);
     if len == 0_f32 {
         y0 = 0.;
         y1 = 0.;
@@ -1268,8 +1268,8 @@ pub fn target_to(out: &mut Mat4, eye: &Vec3, target: &Vec3, up: &Vec3) {
     out[15] = 1.;
 }
 
-pub fn str(a: &Mat4) -> String {
-    let a0 = ["Mat4(".to_string(), a[0].to_string()].join("");
+pub fn string(a: &Mat4) -> String {
+    let a0 = ["mat4(".to_string(), a[0].to_string()].join("");
     let a1 = a[1].to_string(); 
     let a2 = a[2].to_string(); 
     let a3 = a[3].to_string(); 
@@ -1290,7 +1290,7 @@ pub fn str(a: &Mat4) -> String {
 }
 
 pub fn frob(a: &Mat4) -> f32 {
-    hypot(&a.to_vec())
+    hypot(a)
 }
 
 pub fn add(out: &mut Mat4, a: &Mat4, b: &Mat4) {

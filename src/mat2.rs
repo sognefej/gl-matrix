@@ -1,4 +1,4 @@
-use super::common::{Mat2, Vec2, EPSILON, hypot};
+use super::common::{Mat2, Vec2, hypot, EPSILON};
 
 pub fn create() -> Mat2 {
     let mut out: Mat2 = [0_f32; 4];    
@@ -167,7 +167,7 @@ pub fn from_scaling(out: &mut Mat2, v: &Vec2) {
     out[3] = v[1];
 }
 
-pub fn mat2_string(a: &Mat2) -> String {
+pub fn string(a: &Mat2) -> String {
     let a0 = ["mat2(".to_string(), a[0].to_string()].join("");
     let a1 = a[1].to_string(); 
     let a2 = a[2].to_string(); 
@@ -177,7 +177,7 @@ pub fn mat2_string(a: &Mat2) -> String {
 }
 
 pub fn frob(a: &Mat2) -> f32 {
-    hypot(&a.to_vec())
+    hypot(a)
 }
 
 pub fn ldu(l: &mut Mat2, _d: &mut Mat2, u: &mut Mat2, a: &Mat2) {
@@ -440,7 +440,7 @@ mod tests {
     fn get_mat2_string() { 
         let mat_a: Mat2 = [1., 2., 3., 4.];
         
-        let str_a = mat2_string(&mat_a);
+        let str_a = string(&mat_a);
 
         assert_eq!("mat2(1, 2, 3, 4)".to_string(), str_a);
     }

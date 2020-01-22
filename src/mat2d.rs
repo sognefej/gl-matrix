@@ -1,4 +1,4 @@
-use super::common::{Mat2d, Vec2, EPSILON, hypot};
+use super::common::{Mat2d, Vec2, hypot, EPSILON};
 
 pub fn create() -> Mat2d {
     let mut out: Mat2d = [0_f32; 6];
@@ -203,8 +203,8 @@ pub fn from_translation(out: &mut Mat2d, v: &Vec2) {
     out[5] = v[1];  
 }
 
-pub fn mat2d_string(a: &Mat2d) -> String {
-    let a0 = ["Mat2d(".to_string(), a[0].to_string()].join("");
+pub fn string(a: &Mat2d) -> String {
+    let a0 = ["mat2d(".to_string(), a[0].to_string()].join("");
     let a1 = a[1].to_string(); 
     let a2 = a[2].to_string(); 
     let a3 = a[3].to_string(); 
@@ -215,7 +215,7 @@ pub fn mat2d_string(a: &Mat2d) -> String {
 }
 
 pub fn frob(a: &Mat2d) -> f32 {
-    hypot(&a.to_vec())
+    hypot(a)
 }
 
 pub fn add(out: &mut Mat2d, a: &Mat2d, b: &Mat2d) {
@@ -485,9 +485,9 @@ mod tests {
     fn get_mat2d_string() { 
         let mat_a: Mat2d = [1., 2., 3., 4., 5., 6.];
         
-        let str_a = mat2d_string(&mat_a);
+        let str_a = string(&mat_a);
 
-        assert_eq!("Mat2d(1, 2, 3, 4, 5, 6)".to_string(), str_a);
+        assert_eq!("mat2d(1, 2, 3, 4, 5, 6)".to_string(), str_a);
     }
 
     #[test]

@@ -1,4 +1,4 @@
-use super::common::{Mat3, Mat4, Mat2d, Quat, Vec2, EPSILON, hypot};
+use super::common::{Mat3, Mat4, Mat2d, Quat, Vec2, hypot, EPSILON};
 
 pub fn create() -> Mat3 {
     let mut out: Mat3 = [0_f32; 9];
@@ -383,8 +383,8 @@ pub fn projection(out: &mut Mat3, width: f32, height: f32) {
     out[8] = 1.;
 }
   
-pub fn mat3_string(a: &Mat3) -> String {
-    let a0 = ["Mat3(".to_string(), a[0].to_string()].join("");
+pub fn string(a: &Mat3) -> String {
+    let a0 = ["mat3(".to_string(), a[0].to_string()].join("");
     let a1 = a[1].to_string(); 
     let a2 = a[2].to_string(); 
     let a3 = a[3].to_string(); 
@@ -398,7 +398,7 @@ pub fn mat3_string(a: &Mat3) -> String {
 }
   
 pub fn frob(a: &Mat3) -> f32 {
-    hypot(&a.to_vec())
+    hypot(a)
 }
   
 pub fn add(out: &mut Mat3, a: &Mat3, b: &Mat3) {
@@ -881,9 +881,9 @@ mod tests {
                            0., 1., 0.,
                            1., 2., 1.];
 
-        let str_a = mat3_string(&mat_a);
+        let str_a = string(&mat_a);
 
-        assert_eq!("Mat3(1, 0, 0, 0, 1, 0, 1, 2, 1)".to_string(), str_a);
+        assert_eq!("mat3(1, 0, 0, 0, 1, 0, 1, 2, 1)".to_string(), str_a);
     }
 
     #[test]

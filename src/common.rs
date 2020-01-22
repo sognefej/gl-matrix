@@ -1,3 +1,5 @@
+use rand::Rng;
+
 // Public types 
 pub type Mat2 = [f32; 4];
 pub type Mat2d = [f32; 6];
@@ -39,6 +41,18 @@ pub fn hypot(arguments: &[f32]) -> f32 {
     y.sqrt()
 }
 
+// A f32 between 0-1 
+pub fn random_f32() -> f32 { 
+    let mut rng = rand::thread_rng();
+    // f64 gives a uniform distriution over 0-1
+    // f32 gives random numbers over the entire f32 space
+    // however we want a f32 between 0-1
+    let r_f32: f64 = rng.gen();
+    // convert the f64 to f32 so we can use it 
+    let r_f32 = r_f32 as f32;
+
+    r_f32
+}
 
 #[cfg(test)] 
 mod tests {
@@ -74,6 +88,13 @@ mod tests {
         let y = 3.0_f32;
         let vec2: [f32; 2] = [x, y]; 
 
-        assert_eq!(x.hypot(y), hypot(&vec2.to_vec()));
+        assert_eq!(x.hypot(y), hypot(&vec2));
+    }
+
+    #[test]
+    fn random_f32_between_zero_and_one() { 
+        let r = random_f32(); 
+
+        assert!(r >= 0_f32 && r <= 1_f32);
     }
 }

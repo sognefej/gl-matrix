@@ -3,3 +3,7 @@ name = "gl-matrix"
 version = "0.1.0"
 authors = ["Eric Sognefest"]
 edition = "2018"
+
+[dependencies]
+rand = "0.7.3"
+
