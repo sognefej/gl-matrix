@@ -1411,22 +1411,22 @@ pub fn equals(a: &Mat4, b: &Mat4) -> bool {
     let b14 = b[14]; 
     let b15 = b[15];
 
-    f32::abs(a0 - b0) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a0), f32::abs(b0)))
-        && f32::abs(a1 - b1) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a1), f32::abs(b1)))
-        && f32::abs(a2 - b2) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a2), f32::abs(b2)))
-        && f32::abs(a3 - b3) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a3), f32::abs(b3)))
-        && f32::abs(a4 - b4) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a4), f32::abs(b4)))
-        && f32::abs(a5 - b5) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a5), f32::abs(b5)))
-        && f32::abs(a6 - b6) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a6), f32::abs(b6)))
-        && f32::abs(a7 - b7) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a7), f32::abs(b7)))
-        && f32::abs(a8 - b8) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a8), f32::abs(b8)))
-        && f32::abs(a9 - b9) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a9), f32::abs(b9)))
-        && f32::abs(a10 - b10) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a10), f32::abs(b10)))
-        && f32::abs(a11 - b11) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a11), f32::abs(b11)))
-        && f32::abs(a12 - b12) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a12), f32::abs(b12)))
-        && f32::abs(a13 - b13) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a13), f32::abs(b13)))
-        && f32::abs(a14 - b14) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a14), f32::abs(b14)))
-        && f32::abs(a15 - b15) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a15), f32::abs(b15)))
+    f32::abs(a0 - b0) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a0), f32::abs(b0))) &&
+    f32::abs(a1 - b1) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a1), f32::abs(b1))) &&
+    f32::abs(a2 - b2) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a2), f32::abs(b2))) &&
+    f32::abs(a3 - b3) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a3), f32::abs(b3))) &&
+    f32::abs(a4 - b4) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a4), f32::abs(b4))) &&
+    f32::abs(a5 - b5) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a5), f32::abs(b5))) && 
+    f32::abs(a6 - b6) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a6), f32::abs(b6))) && 
+    f32::abs(a7 - b7) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a7), f32::abs(b7))) && 
+    f32::abs(a8 - b8) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a8), f32::abs(b8))) && 
+    f32::abs(a9 - b9) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a9), f32::abs(b9))) &&
+    f32::abs(a10 - b10) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a10), f32::abs(b10))) &&
+    f32::abs(a11 - b11) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a11), f32::abs(b11))) && 
+    f32::abs(a12 - b12) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a12), f32::abs(b12))) && 
+    f32::abs(a13 - b13) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a13), f32::abs(b13))) && 
+    f32::abs(a14 - b14) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a14), f32::abs(b14))) && 
+    f32::abs(a15 - b15) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a15), f32::abs(b15)))
 }
 
 pub fn mul(out: &mut Mat4, a: &Mat4, b: &Mat4) {

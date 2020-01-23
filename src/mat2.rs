@@ -20,18 +20,22 @@ pub fn clone(a: &Mat2) -> Mat2 {
     out
 } 
 
-pub fn copy(out: &mut Mat2, a: &Mat2) {
+pub fn copy(out: &mut Mat2, a: &Mat2) -> Mat2 {
     out[0] = a[0];
     out[1] = a[1];
     out[2] = a[2];
     out[3] = a[3];
+
+    *out
 }
 
-pub fn identity(out: &mut Mat2) {
+pub fn identity(out: &mut Mat2) -> Mat2 {
     out[0] = 1_f32;
     out[1] = 0_f32;
     out[2] = 0_f32;
     out[3] = 1_f32;
+
+    *out
 }
 
 pub fn from_values(m00: f32, m01: f32, m10: f32, m11: f32) -> Mat2 {
@@ -44,11 +48,13 @@ pub fn from_values(m00: f32, m01: f32, m10: f32, m11: f32) -> Mat2 {
     out
 }
 
-pub fn set(out: &mut Mat2, m00: f32, m01: f32, m10: f32, m11: f32) {
+pub fn set(out: &mut Mat2, m00: f32, m01: f32, m10: f32, m11: f32) -> Mat2 {
     out[0] = m00;
     out[1] = m01;
     out[2] = m10;
     out[3] = m11;
+
+    *out
 }
 
 pub fn transpose(out: &mut Mat2, a: &Mat2) {
@@ -216,10 +222,10 @@ pub fn equals(a: &Mat2, b: &Mat2) -> bool {
     let b2 = b[2];
     let b3 = b[3];
 
-    f32::abs(a0 - b0) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a0), f32::abs(b0)))
-        && f32::abs(a1 - b1) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a1), f32::abs(b1)))
-        && f32::abs(a2 - b2) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a2), f32::abs(b2)))
-        && f32::abs(a3 - b3) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a3), f32::abs(b3)))
+    f32::abs(a0 - b0) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a0), f32::abs(b0))) && 
+    f32::abs(a1 - b1) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a1), f32::abs(b1))) && 
+    f32::abs(a2 - b2) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a2), f32::abs(b2))) && 
+    f32::abs(a3 - b3) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a3), f32::abs(b3)))
 }
 
 pub fn multiply_scalar(out: &mut Mat2, a: &Mat2, b: f32) {
@@ -277,6 +283,16 @@ mod tests {
         assert_eq!(mat_a, out);
     }
 
+    #[test]
+    fn copy_result_equal_to_out() { 
+        let mut out =  [0., 0., 0., 0.];
+        let mat_a: Mat2 = [1., 2., 3., 4.];
+   
+        let result = copy(&mut out, &mat_a);
+      
+        assert_eq!(result, out);
+    }
+
     #[test] 
     fn set_a_mat2_to_identity() {  
         let mut out: Mat2 = [0., 0., 0., 0.];  
@@ -287,6 +303,15 @@ mod tests {
         assert_eq!(out, ident);
     }
 
+    #[test] 
+    fn identity_reslut_equal_to_out() {  
+        let mut out: Mat2 = [0., 0., 0., 0.];  
+    
+        let result = identity(&mut out);
+     
+        assert_eq!(result, out);
+    }
+    
     #[test]
     fn create_mat2_from_values() { 
         let out = from_values(1., 2., 3. ,4.); 
@@ -301,6 +326,15 @@ mod tests {
         set(&mut out, 1., 2., 3., 4.);
 
         assert_eq!([1., 2., 3., 4.], out); 
+    }
+    
+    #[test]
+    fn set_reslut_equal_to_out() { 
+        let mut out: Mat2 = [0., 0., 0., 0.];
+     
+        let result = set(&mut out, 1., 2., 3., 4.);
+
+        assert_eq!(result, out);
     }
     
     #[test] 
