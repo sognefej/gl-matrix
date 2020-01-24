@@ -4,7 +4,7 @@ pub mod mat2d;
 pub mod mat3;
 pub mod mat4;
 pub mod quat; 
-//pub mod quat2;
+pub mod quat2;
 pub mod vec2;
 pub mod vec3; 
 pub mod vec4; 

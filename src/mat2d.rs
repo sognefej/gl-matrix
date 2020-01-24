@@ -22,25 +22,31 @@ pub fn clone(a: &Mat2d) -> Mat2d {
     out
 }
 
-pub fn copy(out: &mut Mat2d, a: &Mat2d) {
+pub fn copy(out: &mut Mat2d, a: &Mat2d) -> Mat2d {
     out[0] = a[0];
     out[1] = a[1];
     out[2] = a[2];
     out[3] = a[3];
     out[4] = a[4];  
     out[5] = a[5];
+
+    *out
 }
 
-pub fn identity(out: &mut Mat2d) {
+pub fn identity(out: &mut Mat2d) -> Mat2d {
     out[0] = 1.;
     out[1] = 0.;
     out[2] = 0.;
     out[3] = 1.;
     out[4] = 0.;
     out[5] = 0.;
+
+    *out
 }
 
-pub fn from_values(a: f32, b: f32, c: f32, d: f32, tx: f32, ty: f32) -> Mat2d {
+pub fn from_values(a: f32, b: f32, 
+                   c: f32, d: f32, 
+                   tx: f32, ty: f32) -> Mat2d {
     let mut out: Mat2d = [0_f32; 6];
   
     out[0] = a;
@@ -53,16 +59,20 @@ pub fn from_values(a: f32, b: f32, c: f32, d: f32, tx: f32, ty: f32) -> Mat2d {
     out
 }
 
-pub fn set(out: &mut Mat2d, a: f32, b: f32, c: f32, d: f32, tx: f32, ty: f32) {
+pub fn set(out: &mut Mat2d, a: f32, b: f32, 
+                            c: f32, d: f32, 
+                            tx: f32, ty: f32) -> Mat2d {
     out[0] = a;
     out[1] = b;
     out[2] = c;
     out[3] = d;
     out[4] = tx;  
     out[5] = ty;
+
+    *out
 }
 
-pub fn invert(mut out: Mat2d, a: &Mat2d) -> Result<Mat2d, String> {
+pub fn invert(out: &mut Mat2d, a: &Mat2d) -> Result<Mat2d, String> {
     let aa = a[0];
     let ab = a[1];
     let ac = a[2];
@@ -86,14 +96,14 @@ pub fn invert(mut out: Mat2d, a: &Mat2d) -> Result<Mat2d, String> {
     out[4] = (ac * aty - ad * atx) * det;
     out[5] = (ab * atx - aa * aty) * det;
   
-    Ok(out)
+    Ok(*out)
   }
 
 pub fn determinant(a: &Mat2d) -> f32 { 
     a[0] * a[3] - a[1] * a[2]
 }
 
-pub fn multiply(out: &mut Mat2d, a: &Mat2d, b: &Mat2d) {
+pub fn multiply(out: &mut Mat2d, a: &Mat2d, b: &Mat2d) -> Mat2d {
     let a0 = a[0];
     let a1 = a[1];
     let a2 = a[2]; 
@@ -114,9 +124,11 @@ pub fn multiply(out: &mut Mat2d, a: &Mat2d, b: &Mat2d) {
     out[3] = a1 * b2 + a3 * b3;
     out[4] = a0 * b4 + a2 * b5 + a4;
     out[5] = a1 * b4 + a3 * b5 + a5;
+
+    *out
 }
 
-pub fn rotate(out: &mut Mat2d, a: &Mat2d, rad: f32) {
+pub fn rotate(out: &mut Mat2d, a: &Mat2d, rad: f32) -> Mat2d {
     let a0 = a[0]; 
     let a1 = a[1];
     let a2 = a[2];
@@ -133,9 +145,11 @@ pub fn rotate(out: &mut Mat2d, a: &Mat2d, rad: f32) {
     out[3] = a1 * -s + a3 * c;
     out[4] = a4;
     out[5] = a5;
+
+    *out
 }
 
-pub fn scale(out: &mut Mat2d, a: &Mat2d, v: &Vec2) {
+pub fn scale(out: &mut Mat2d, a: &Mat2d, v: &Vec2) -> Mat2d {
     let a0 = a[0];
     let a1 = a[1];
     let a2 = a[2];
@@ -152,9 +166,11 @@ pub fn scale(out: &mut Mat2d, a: &Mat2d, v: &Vec2) {
     out[3] = a3 * v1;
     out[4] = a4;
     out[5] = a5;
+
+    *out
 }
 
-pub fn translate(out: &mut Mat2d, a: &Mat2d, v: &Vec2) {
+pub fn translate(out: &mut Mat2d, a: &Mat2d, v: &Vec2) -> Mat2d {
     let a0 = a[0];
     let a1 = a[1];
     let a2 = a[2];
@@ -171,9 +187,11 @@ pub fn translate(out: &mut Mat2d, a: &Mat2d, v: &Vec2) {
     out[3] = a3;
     out[4] = a0 * v0 + a2 * v1 + a4;
     out[5] = a1 * v0 + a3 * v1 + a5;
+
+    *out
 }
 
-pub fn from_rotation(out: &mut Mat2d, rad: f32) {
+pub fn from_rotation(out: &mut Mat2d, rad: f32) -> Mat2d {
     let s = f32::sin(rad);
     let c = f32::cos(rad);
   
@@ -183,24 +201,30 @@ pub fn from_rotation(out: &mut Mat2d, rad: f32) {
     out[3] = c;
     out[4] = 0.;  
     out[5] = 0.;
+
+    *out
 }
 
-pub fn from_scaling(out: &mut Mat2d, v: &Vec2) {
+pub fn from_scaling(out: &mut Mat2d, v: &Vec2) -> Mat2d {
     out[0] = v[0];
     out[1] = 0.;
     out[2] = 0.;
     out[3] = v[1];
     out[4] = 0.;
     out[5] = 0.;  
+
+    *out
 }
 
-pub fn from_translation(out: &mut Mat2d, v: &Vec2) {
+pub fn from_translation(out: &mut Mat2d, v: &Vec2) -> Mat2d {
     out[0] = 1.;
     out[1] = 0.;
     out[2] = 0.;
     out[3] = 1.;
     out[4] = v[0];
     out[5] = v[1];  
+
+    *out
 }
 
 pub fn string(a: &Mat2d) -> String {
@@ -218,40 +242,48 @@ pub fn frob(a: &Mat2d) -> f32 {
     hypot(a)
 }
 
-pub fn add(out: &mut Mat2d, a: &Mat2d, b: &Mat2d) {
+pub fn add(out: &mut Mat2d, a: &Mat2d, b: &Mat2d) -> Mat2d {
     out[0] = a[0] + b[0];
     out[1] = a[1] + b[1];
     out[2] = a[2] + b[2];
     out[3] = a[3] + b[3];
     out[4] = a[4] + b[4];
-    out[5] = a[5] + b[5];    
+    out[5] = a[5] + b[5];   
+    
+    *out
 }
 
-pub fn subtract(out: &mut Mat2d, a: &Mat2d, b: &Mat2d) {
+pub fn subtract(out: &mut Mat2d, a: &Mat2d, b: &Mat2d) -> Mat2d {
     out[0] = a[0] - b[0];
     out[1] = a[1] - b[1];
     out[2] = a[2] - b[2];
     out[3] = a[3] - b[3];
     out[4] = a[4] - b[4];
-    out[5] = a[5] - b[5];  
+    out[5] = a[5] - b[5]; 
+    
+    *out
 }
 
-pub fn multiply_scalar(out: &mut Mat2d, a: &Mat2d, b: f32) {
+pub fn multiply_scalar(out: &mut Mat2d, a: &Mat2d, b: f32) -> Mat2d {
     out[0] = a[0] * b;
     out[1] = a[1] * b;
     out[2] = a[2] * b;
     out[3] = a[3] * b;
     out[4] = a[4] * b;
-    out[5] = a[5] * b;  
+    out[5] = a[5] * b; 
+    
+    *out
 }
 
-pub fn multiply_scalar_and_add(out: &mut Mat2d, a: &Mat2d, b: &Mat2d, scale: f32) {
+pub fn multiply_scalar_and_add(out: &mut Mat2d, a: &Mat2d, b: &Mat2d, scale: f32) -> Mat2d {
     out[0] = a[0] + (b[0] * scale);
     out[1] = a[1] + (b[1] * scale);
     out[2] = a[2] + (b[2] * scale);
     out[3] = a[3] + (b[3] * scale);
     out[4] = a[4] + (b[4] * scale);
     out[5] = a[5] + (b[5] * scale);
+
+    *out
 }
 
 pub fn exact_equals(a: &Mat2d, b: &Mat2d) -> bool {
@@ -280,12 +312,12 @@ pub fn equals(a: &Mat2d, b: &Mat2d) -> bool {
     f32::abs(a5 - b5) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a5), f32::abs(b5)))
 }
 
-pub fn mul(out: &mut Mat2d, a: &Mat2d, b: &Mat2d) {
-    multiply(out, a, b);
+pub fn mul(out: &mut Mat2d, a: &Mat2d, b: &Mat2d) -> Mat2d {
+    multiply(out, a, b)
 }
 
-pub fn sub(out: &mut Mat2d, a: &Mat2d, b: &Mat2d) {
-    subtract(out, a, b);
+pub fn sub(out: &mut Mat2d, a: &Mat2d, b: &Mat2d) -> Mat2d {
+    subtract(out, a, b)
 }
 
 
@@ -316,9 +348,10 @@ mod tests {
         let mut out =  [0., 0., 0., 0., 0., 0.];
         let mat_a: Mat2d = [1., 2., 3., 4., 5., 6.];
    
-        copy(&mut out, &mat_a);
+        let result = copy(&mut out, &mat_a);
       
         assert_eq!(mat_a, out);
+        assert_eq!(result, out);
     }
 
     #[test] 
@@ -326,9 +359,10 @@ mod tests {
         let mut out: Mat2d = [0., 0., 0., 0., 0., 0.];  
         let ident = [1., 0., 0., 1., 0., 0.];
     
-        identity(&mut out);
+        let result = identity(&mut out);
      
         assert_eq!(out, ident);
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -342,34 +376,36 @@ mod tests {
     fn set_mat2d_with_values() { 
         let mut out: Mat2d = [0., 0., 0., 0., 0., 0.];
      
-        set(&mut out, 1., 2., 3., 4., 5., 6.);
+        let result = set(&mut out, 1., 2., 3., 4., 5., 6.);
 
         assert_eq!([1., 2., 3., 4., 5., 6.], out); 
+        assert_eq!(result, out);
     }
     
     #[test] 
     fn invert_mat2d() {  
-        let out: Mat2d = [0., 0., 0., 0., 0., 0.];
+        let mut out: Mat2d = [0., 0., 0., 0., 0., 0.];
         let mat_a: Mat2d = [1., 2., 3., 4., 5., 6.];
 
-        let out = invert(out, &mat_a); 
-        let out = match out { 
-            Ok(out) => out,
+        let result = invert(&mut out, &mat_a); 
+        let result = match result { 
+            Ok(result) => result,
             Err(_error) => panic!("This should have worked!")
         };
 
         assert_eq!([ -2., 1., 1.5, -0.5, 1., -2.], out);
+        assert_eq!(result, out);
     } 
 
     #[test] 
     #[should_panic(expected = "Matrix is singular")]
     fn invert_singular_mat2d() {  
-        let out: Mat2d =  [0., 0., 0., 0., 0., 0.];
+        let mut out: Mat2d =  [0., 0., 0., 0., 0., 0.];
         let mat_a: Mat2d = [-1., 3./2., 2./3., -1., 0., 0.]; 
 
-        let out = invert(out, &mat_a); 
-        let _out = match out { 
-            Ok(out) => out,
+        let result = invert(&mut out, &mat_a); 
+        let _result = match result { 
+            Ok(result) => result,
             Err(error) => panic!(error)
         };
     } 
@@ -389,9 +425,10 @@ mod tests {
         let mat_a: Mat2d = [1., 2., 3., 4., 5., 6.];
         let mat_b: Mat2d = [7., 8., 9., 10., 11., 12.];
 
-        multiply(&mut out, &mat_a, &mat_b);
+        let result = multiply(&mut out, &mat_a, &mat_b);
 
-        assert_eq!([31., 46., 39., 58., 52., 76.], out); 
+        assert_eq!([31., 46., 39., 58., 52., 76.], out);
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -400,9 +437,10 @@ mod tests {
         let mat_a: Mat2d = [1., 2., 3., 4., 5., 6.];
         let mat_b: Mat2d = [7., 8., 9., 10., 11., 12.];
 
-        mul(&mut out, &mat_a, &mat_b);
+        let result = mul(&mut out, &mat_a, &mat_b);
 
         assert_eq!([31., 46., 39., 58., 52., 76.], out); 
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -424,9 +462,10 @@ mod tests {
         let mut out: Mat2d = [0., 0., 0., 0., 0., 0.];
         let mat_a: Mat2d = [1., 2., 3., 4., 5., 6.];
         
-        rotate(&mut out, &mat_a, PI * 0.5);
+        let result = rotate(&mut out, &mat_a, PI * 0.5);
         
         assert!(equals(&[3.0, 4.0, -1.0, -2.0, 5., 6.], &out));
+        assert_eq!(result, out);
     }
     
     #[test]
@@ -435,9 +474,10 @@ mod tests {
         let mat_a: Mat2d = [1., 2., 3., 4., 5., 6.];
         let vec_a: Vec2 = [2., 3.];
 
-        scale(&mut out, &mat_a, &vec_a);
+        let result = scale(&mut out, &mat_a, &vec_a);
 
-        assert_eq!([2., 4., 9., 12., 5., 6.], out)
+        assert_eq!([2., 4., 9., 12., 5., 6.], out);
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -446,9 +486,10 @@ mod tests {
         let mat_a: Mat2d = [1., 2., 3., 4., 5., 6.];
         let vec_a: Vec2 = [2., 3.];
 
-        translate(&mut out, &mat_a, &vec_a);
+        let result = translate(&mut out, &mat_a, &vec_a);
 
-        assert_eq!([1., 2., 3., 4., 16., 22.], out)
+        assert_eq!([1., 2., 3., 4., 16., 22.], out);
+        assert_eq!(result, out);
     }
     
     #[test]
@@ -456,9 +497,10 @@ mod tests {
         use super::super::common::{PI};
         let mut out: Mat2d = [0., 0., 0., 0., 0., 0.];
 
-        from_rotation(&mut out, PI);
+        let result = from_rotation(&mut out, PI);
 
         assert!(equals(&[-1.0, -0.0, 0.0, -1.0, 0.0, 0.0], &out));
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -466,9 +508,10 @@ mod tests {
         let mut out: Mat2d = [0., 0., 0., 0., 0., 0.];
         let vec_a: Vec2 = [2., 3.];
 
-        from_scaling(&mut out, &vec_a);
+        let result = from_scaling(&mut out, &vec_a);
 
-        assert_eq!([2., 0., 0., 3., 0., 0.], out)
+        assert_eq!([2., 0., 0., 3., 0., 0.], out);
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -496,7 +539,9 @@ mod tests {
 
         let frob_a = frob(&mat_a);
 
-        assert_eq!((1_f32.powi(2) + 2_f32.powi(2) + 3_f32.powi(2) + 4_f32.powi(2) + 5_f32.powi(2) + 6_f32.powi(2)).sqrt(), frob_a);
+        assert_eq!((1_f32.powi(2) + 2_f32.powi(2) + 
+                    3_f32.powi(2) + 4_f32.powi(2) + 
+                    5_f32.powi(2) + 6_f32.powi(2)).sqrt(), frob_a);
     }
 
     #[test]
@@ -505,9 +550,10 @@ mod tests {
         let mat_a: Mat2d = [1., 2., 3., 4., 5., 6.];
         let mat_b: Mat2d = [7., 8., 9., 10., 11., 12.];
 
-        add(&mut out, &mat_a, &mat_b);
+        let result = add(&mut out, &mat_a, &mat_b);
 
         assert_eq!([8., 10., 12., 14., 16., 18.], out);
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -516,9 +562,10 @@ mod tests {
         let mat_a: Mat2d = [1., 2., 3., 4., 5., 6.];
         let mat_b: Mat2d = [7., 8., 9., 10., 11., 12.];
 
-        subtract(&mut out, &mat_a, &mat_b);
+        let result = subtract(&mut out, &mat_a, &mat_b);
 
         assert_eq!([-6., -6., -6., -6., -6., -6.], out);
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -527,9 +574,10 @@ mod tests {
         let mat_a: Mat2d = [1., 2., 3., 4., 5., 6.];
         let mat_b: Mat2d = [7., 8., 9., 10., 11., 12.];
 
-        sub(&mut out, &mat_a, &mat_b);
+        let result = sub(&mut out, &mat_a, &mat_b);
 
         assert_eq!([-6., -6., -6., -6., -6., -6.], out);
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -545,6 +593,27 @@ mod tests {
         assert_eq!(out_a, out_b);
     }
 
+    #[test]
+    fn multiply_mat2d_by_scalar() { 
+        let mut out: Mat2d = [0., 0., 0., 0., 0., 0.];
+        let mat_a: Mat2d = [1., 2., 3., 4., 5., 6.];
+        
+        multiply_scalar(&mut out, &mat_a, 2.);
+
+        assert_eq!([2., 4., 6., 8., 10., 12.], out);
+    }
+
+    #[test]
+    fn multiply_mat2d_by_scalar_and_add() { 
+        let mut out: Mat2d = [0., 0., 0., 0., 0., 0.];
+        let mat_a: Mat2d = [1., 2., 3., 4., 5., 6.];
+        let mat_b: Mat2d = [7., 8., 9., 10., 11., 12.];
+
+        multiply_scalar_and_add(&mut out, &mat_a, &mat_b, 0.5);
+
+        assert_eq!([4.5, 6., 7.5, 9., 10.5, 12.], out);
+    } 
+   
     #[test]
     fn mat2ds_are_exact_equal() { 
         let mat_a: Mat2d = [0., 1., 2., 3., 5., 6.];
@@ -594,25 +663,4 @@ mod tests {
 
         assert!(!r0);  
     }
-
-    #[test]
-    fn multiply_mat2d_by_scalar() { 
-        let mut out: Mat2d = [0., 0., 0., 0., 0., 0.];
-        let mat_a: Mat2d = [1., 2., 3., 4., 5., 6.];
-        
-        multiply_scalar(&mut out, &mat_a, 2.);
-
-        assert_eq!([2., 4., 6., 8., 10., 12.], out);
-    }
-
-    #[test]
-    fn multiply_mat2d_by_scalar_and_add() { 
-        let mut out: Mat2d = [0., 0., 0., 0., 0., 0.];
-        let mat_a: Mat2d = [1., 2., 3., 4., 5., 6.];
-        let mat_b: Mat2d = [7., 8., 9., 10., 11., 12.];
-
-        multiply_scalar_and_add(&mut out, &mat_a, &mat_b, 0.5);
-
-        assert_eq!([4.5, 6., 7.5, 9., 10.5, 12.], out);
-    } 
 }

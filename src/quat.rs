@@ -447,7 +447,6 @@ pub fn set_axis(out: &mut Quat, view: &Vec3,
     matr[2] = -view[0];
     matr[5] = -view[1];
     matr[8] = -view[2];
-    
-    
+   
     normalize(out, &from_mat3(&mut clone(out), matr));
 }

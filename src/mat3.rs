@@ -38,7 +38,7 @@ pub fn clone(a: &Mat3) -> Mat3 {
     out
 }
   
-pub fn copy(out: &mut Mat3, a: &Mat3) {
+pub fn copy(out: &mut Mat3, a: &Mat3) -> Mat3 {
     out[0] = a[0];
     out[1] = a[1];
     out[2] = a[2];
@@ -48,6 +48,8 @@ pub fn copy(out: &mut Mat3, a: &Mat3) {
     out[6] = a[6];
     out[7] = a[7];
     out[8] = a[8];
+
+    *out
 }
 
 pub fn from_values(m00: f32, m01: f32, m02: f32, 
@@ -70,7 +72,7 @@ pub fn from_values(m00: f32, m01: f32, m02: f32,
   
 pub fn set(out: &mut Mat3, m00: f32, m01: f32, m02: f32,
                            m10: f32, m11: f32, m12: f32,
-                           m20: f32, m21: f32, m22: f32) {
+                           m20: f32, m21: f32, m22: f32) -> Mat3 {
     out[0] = m00;
     out[1] = m01;
     out[2] = m02;
@@ -80,9 +82,11 @@ pub fn set(out: &mut Mat3, m00: f32, m01: f32, m02: f32,
     out[6] = m20;
     out[7] = m21;
     out[8] = m22;
+
+    *out
 }
 
-pub fn identity(out: &mut Mat3) {
+pub fn identity(out: &mut Mat3) -> Mat3 {
     out[0] = 1.;
     out[1] = 0.;
     out[2] = 0.;
@@ -92,9 +96,11 @@ pub fn identity(out: &mut Mat3) {
     out[6] = 0.;
     out[7] = 0.;
     out[8] = 1.;
+
+    *out 
 }
   
-pub fn transpose(out: &mut Mat3, a: &Mat3) {
+pub fn transpose(out: &mut Mat3, a: &Mat3) -> Mat3 {
     // If we are transposing ourselves we can skip a few steps but have to cache some values
     if out.eq(&a) {
         let a01 = a[1];
@@ -118,9 +124,11 @@ pub fn transpose(out: &mut Mat3, a: &Mat3) {
         out[7] = a[5];
         out[8] = a[8];
     }
+
+    *out
 }
   
-pub fn adjoint(out: &mut Mat3, a: &Mat3) {
+pub fn adjoint(out: &mut Mat3, a: &Mat3) -> Mat3 {
     let a00 = a[0];
     let a01 = a[1];
     let a02 = a[2];
@@ -140,6 +148,8 @@ pub fn adjoint(out: &mut Mat3, a: &Mat3) {
     out[6] = a10 * a21 - a11 * a20;
     out[7] = a01 * a20 - a00 * a21;
     out[8] = a00 * a11 - a01 * a10;
+
+    *out
 }
   
 pub fn determinant(a: &Mat3) -> f32 {
@@ -158,7 +168,7 @@ pub fn determinant(a: &Mat3) -> f32 {
     + a02 * (a21 * a10 - a11 * a20)
 }
   
-pub fn multiply(out: &mut Mat3, a: &Mat3, b: &Mat3) {
+pub fn multiply(out: &mut Mat3, a: &Mat3, b: &Mat3) -> Mat3 {
     let a00 = a[0];
     let a01 = a[1]; 
     let a02 = a[2];
@@ -188,6 +198,8 @@ pub fn multiply(out: &mut Mat3, a: &Mat3, b: &Mat3) {
     out[6] = b20 * a00 + b21 * a10 + b22 * a20;
     out[7] = b20 * a01 + b21 * a11 + b22 * a21;
     out[8] = b20 * a02 + b21 * a12 + b22 * a22;
+
+    *out
 }
   
 pub fn translate(out: &mut Mat3, a: &Mat3, v: &Vec2) {
@@ -549,9 +561,10 @@ mod tests {
                            0., 1., 0.,
                            1., 2., 1.];
    
-        copy(&mut out, &mat_a);
+        let result = copy(&mut out, &mat_a);
       
         assert_eq!(mat_a, out);
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -571,13 +584,14 @@ mod tests {
                              0., 0., 0.,
                              0., 0., 0.];
      
-        set(&mut out, 1., 2., 3.,
+        let result = set(&mut out, 1., 2., 3.,
                       4., 5., 6.,
                       7., 8., 9.);
 
         assert_eq!([1., 2., 3.,
                     4., 5., 6.,
-                    7., 8., 9.], out); 
+                    7., 8., 9.], out);
+        assert_eq!(result, out);
     }
    
     #[test]
@@ -589,9 +603,10 @@ mod tests {
                            0., 1., 0., 
                            0., 0., 1.];
     
-        identity(&mut out);
+        let result = identity(&mut out);
      
         assert_eq!(ident, out);
+        assert_eq!(result, out);
     }
    
     #[test] 
@@ -603,11 +618,12 @@ mod tests {
                                 0., 1., 0.,
                                 1., 2., 1.];
       
-        transpose(&mut mat_a, &mat_a_copy);
+        let result = transpose(&mut mat_a, &mat_a_copy);
 
         assert_eq!([1., 0., 1.,
                     0., 1., 2.,
                     0., 0., 1.], mat_a);
+        assert_eq!(result, mat_a);
     }
 
     #[test] 
@@ -619,11 +635,12 @@ mod tests {
                            0., 1., 0.,
                            1., 2., 1.];
         
-        transpose(&mut out, &mat_a); 
+        let result = transpose(&mut out, &mat_a); 
        
         assert_eq!([1., 0., 1.,
                     0., 1., 2.,
                     0., 0., 1.], out);
+        assert_eq!(result, out);
     }
    
     #[test]
@@ -635,11 +652,12 @@ mod tests {
                            0., 1., 0.,
                            1., 2., 1.];
         
-        adjoint(&mut out, &mat_a); 
+        let result = adjoint(&mut out, &mat_a); 
         
         assert_eq!([1., 0., 0.,
                     0., 1., 0.,
                    -1., -2., 1.], out);         
+        assert_eq!(result, out);
     }
     
     #[test]

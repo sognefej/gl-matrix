@@ -150,7 +150,7 @@ pub fn length(a: &Vec4) -> f32 {
     hypot(&len.to_vec())
 }
 
-pub fn squared_length(a: &Vec4) -> f32 {
+pub fn squared_length(a: &[f32]) -> f32 {
     let x = a[0];
     let y = a[1];
     let z = a[2];
