@@ -10,7 +10,7 @@ pub fn create() -> Mat3 {
     out
 }
   
-pub fn from_mat4(out: &mut Mat3, a: &Mat4) {
+pub fn from_mat4(out: &mut Mat3, a: &Mat4) -> Mat3 {
     out[0] = a[0];
     out[1] = a[1];
     out[2] = a[2];
@@ -20,6 +20,8 @@ pub fn from_mat4(out: &mut Mat3, a: &Mat4) {
     out[6] = a[8];
     out[7] = a[9];
     out[8] = a[10];
+
+    *out
 }
 
 pub fn clone(a: &Mat3) -> Mat3 {
@@ -202,7 +204,7 @@ pub fn multiply(out: &mut Mat3, a: &Mat3, b: &Mat3) -> Mat3 {
     *out
 }
   
-pub fn translate(out: &mut Mat3, a: &Mat3, v: &Vec2) {
+pub fn translate(out: &mut Mat3, a: &Mat3, v: &Vec2) -> Mat3 {
     let a00 = a[0];
     let a01 = a[1];
     let a02 = a[2];
@@ -225,9 +227,11 @@ pub fn translate(out: &mut Mat3, a: &Mat3, v: &Vec2) {
     out[6] = x * a00 + y * a10 + a20;
     out[7] = x * a01 + y * a11 + a21;
     out[8] = x * a02 + y * a12 + a22;
+
+    *out
 }
   
-pub fn rotate(out: &mut Mat3, a: &Mat3, rad: f32) {
+pub fn rotate(out: &mut Mat3, a: &Mat3, rad: f32) -> Mat3 {
     let a00 = a[0];
     let a01 = a[1];
     let a02 = a[2];
@@ -250,9 +254,11 @@ pub fn rotate(out: &mut Mat3, a: &Mat3, rad: f32) {
     out[6] = a20;
     out[7] = a21;
     out[8] = a22;
+
+    *out
 }
 
-pub fn scale(out: &mut Mat3, a: &Mat3, v: &Vec2) {
+pub fn scale(out: &mut Mat3, a: &Mat3, v: &Vec2) -> Mat3 {
     let x = v[0];
     let y = v[1];
 
@@ -265,9 +271,11 @@ pub fn scale(out: &mut Mat3, a: &Mat3, v: &Vec2) {
     out[6] = a[6];
     out[7] = a[7];
     out[8] = a[8];
+
+    *out
 }
 
-pub fn from_translation(out: &mut Mat3 , v: &Vec2) {
+pub fn from_translation(out: &mut Mat3 , v: &Vec2) -> Mat3 {
     out[0] = 1.;
     out[1] = 0.;
     out[2] = 0.;
@@ -277,9 +285,11 @@ pub fn from_translation(out: &mut Mat3 , v: &Vec2) {
     out[6] = v[0];
     out[7] = v[1];
     out[8] = 1.;
+
+    *out
 }
   
-pub fn from_rotation(out: &mut Mat3, rad: f32) {
+pub fn from_rotation(out: &mut Mat3, rad: f32) -> Mat3 {
     let s = f32::sin(rad);
     let c = f32::cos(rad);
 
@@ -292,9 +302,11 @@ pub fn from_rotation(out: &mut Mat3, rad: f32) {
     out[6] = 0.;
     out[7] = 0.;
     out[8] = 1.;
+
+    *out
 }
   
-pub fn from_scaling(out: &mut Mat3, v: &Vec2) {
+pub fn from_scaling(out: &mut Mat3, v: &Vec2) -> Mat3 {
     out[0] = v[0];
     out[1] = 0.;
     out[2] = 0.;
@@ -304,9 +316,11 @@ pub fn from_scaling(out: &mut Mat3, v: &Vec2) {
     out[6] = 0.;
     out[7] = 0.;
     out[8] = 1.;
+
+    *out
 }
   
-pub fn from_mat2d(out: &mut Mat3, a: &Mat2d) {
+pub fn from_mat2d(out: &mut Mat3, a: &Mat2d) -> Mat3 {
     out[0] = a[0];
     out[1] = a[1];
     out[2] = 0.;
@@ -316,9 +330,11 @@ pub fn from_mat2d(out: &mut Mat3, a: &Mat2d) {
     out[6] = a[4];
     out[7] = a[5];
     out[8] = 1.;
+
+    *out
 }
 
-pub fn from_quat(out: &mut Mat3, q: &Quat) {
+pub fn from_quat(out: &mut Mat3, q: &Quat) -> Mat3 {
     let x = q[0];
     let y = q[1];
     let z = q[2];
@@ -345,9 +361,11 @@ pub fn from_quat(out: &mut Mat3, q: &Quat) {
     out[2] = zx - wy;
     out[5] = zy + wx;
     out[8] = 1. - xx - yy;
+
+    *out
 }
   
-pub fn invert(mut out: Mat3, a: &Mat3) -> Result<Mat3, String> {
+pub fn invert(out: &mut Mat3, a: &Mat3) -> Option<Mat3> {
     let a00 = a[0];
     let a01 = a[1];
     let a02 = a[2];
@@ -365,7 +383,7 @@ pub fn invert(mut out: Mat3, a: &Mat3) -> Result<Mat3, String> {
   
     // Make sure matrix is not singular
     if det == 0_f32 {  
-        return Err("Matrix is singular".to_string());
+        return None;
     }
 
     let det = 1_f32 / det;
@@ -380,10 +398,10 @@ pub fn invert(mut out: Mat3, a: &Mat3) -> Result<Mat3, String> {
     out[7] = (-a21 * a00 + a01 * a20) * det;
     out[8] = (a11 * a00 - a01 * a10) * det;
 
-    Ok(out)
+    Some(*out)
 }
   
-pub fn projection(out: &mut Mat3, width: f32, height: f32) {
+pub fn projection(out: &mut Mat3, width: f32, height: f32) -> Mat3 {
     out[0] = 2. / width;
     out[1] = 0.;
     out[2] = 0.;
@@ -393,6 +411,8 @@ pub fn projection(out: &mut Mat3, width: f32, height: f32) {
     out[6] = -1.;
     out[7] = 1.;
     out[8] = 1.;
+
+    *out
 }
   
 pub fn string(a: &Mat3) -> String {
@@ -413,7 +433,7 @@ pub fn frob(a: &Mat3) -> f32 {
     hypot(a)
 }
   
-pub fn add(out: &mut Mat3, a: &Mat3, b: &Mat3) {
+pub fn add(out: &mut Mat3, a: &Mat3, b: &Mat3) -> Mat3 {
     out[0] = a[0] + b[0];
     out[1] = a[1] + b[1];
     out[2] = a[2] + b[2];
@@ -423,9 +443,11 @@ pub fn add(out: &mut Mat3, a: &Mat3, b: &Mat3) {
     out[6] = a[6] + b[6];
     out[7] = a[7] + b[7];
     out[8] = a[8] + b[8];
+
+    *out
 }
   
-pub fn subtract(out: &mut Mat3, a: &Mat3, b: &Mat3) {
+pub fn subtract(out: &mut Mat3, a: &Mat3, b: &Mat3) -> Mat3 {
     out[0] = a[0] - b[0];
     out[1] = a[1] - b[1];
     out[2] = a[2] - b[2];
@@ -435,9 +457,11 @@ pub fn subtract(out: &mut Mat3, a: &Mat3, b: &Mat3) {
     out[6] = a[6] - b[6];
     out[7] = a[7] - b[7];
     out[8] = a[8] - b[8];
+
+    *out
 }
 
-pub fn multiply_scalar(out: &mut Mat3, a: &Mat3, b: f32) {
+pub fn multiply_scalar(out: &mut Mat3, a: &Mat3, b: f32) -> Mat3 {
     out[0] = a[0] * b;
     out[1] = a[1] * b;
     out[2] = a[2] * b;
@@ -447,9 +471,11 @@ pub fn multiply_scalar(out: &mut Mat3, a: &Mat3, b: f32) {
     out[6] = a[6] * b;
     out[7] = a[7] * b;
     out[8] = a[8] * b;
+
+    *out
 }
   
-pub fn multiply_scalar_and_add(out: &mut Mat3, a: &Mat3, b: &Mat3, scale: f32) {
+pub fn multiply_scalar_and_add(out: &mut Mat3, a: &Mat3, b: &Mat3, scale: f32) -> Mat3 {
     out[0] = a[0] + (b[0] * scale);
     out[1] = a[1] + (b[1] * scale);
     out[2] = a[2] + (b[2] * scale);
@@ -459,6 +485,8 @@ pub fn multiply_scalar_and_add(out: &mut Mat3, a: &Mat3, b: &Mat3, scale: f32) {
     out[6] = a[6] + (b[6] * scale);
     out[7] = a[7] + (b[7] * scale);
     out[8] = a[8] + (b[8] * scale);
+
+    *out
 }
   
 pub fn exact_equals(a: &Mat3, b: &Mat3) -> bool {
@@ -500,12 +528,12 @@ pub fn equals(a: &Mat3, b: &Mat3) -> bool {
     f32::abs(a8 - b8) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a8), f32::abs(b8)))
 }
 
-pub fn mul(out: &mut Mat3, a: &Mat3, b: &Mat3) {
-    multiply(out, a, b);
+pub fn mul(out: &mut Mat3, a: &Mat3, b: &Mat3) -> Mat3 {
+    multiply(out, a, b)
 }
 
-pub fn sub(out: &mut Mat3, a: &Mat3, b: &Mat3) {
-    subtract(out, a, b);
+pub fn sub(out: &mut Mat3, a: &Mat3, b: &Mat3) -> Mat3 {
+    subtract(out, a, b)
 }
 
 
@@ -534,11 +562,12 @@ mod tests {
                            0., 0., 1., 0.,
                            0., 0., 0., 1.];
        
-        from_mat4(&mut out, &mat_a);
+        let result = from_mat4(&mut out, &mat_a);
 
         assert_eq!([1., 0., 0., 
                     0., 1., 0., 
                     0., 0., 1.], out);
+        assert_eq!(result, out);
     }
     
     #[test] 
@@ -585,8 +614,8 @@ mod tests {
                              0., 0., 0.];
      
         let result = set(&mut out, 1., 2., 3.,
-                      4., 5., 6.,
-                      7., 8., 9.);
+                                   4., 5., 6.,
+                                   7., 8., 9.);
 
         assert_eq!([1., 2., 3.,
                     4., 5., 6.,
@@ -683,11 +712,12 @@ mod tests {
                            0., 1., 0.,
                            3., 4., 1.];
 
-        multiply(&mut out, &mat_a, &mat_b);
+        let result = multiply(&mut out, &mat_a, &mat_b);
 
         assert_eq!([1., 0., 0.,
                     0., 1., 0.,
                     4., 6., 1.], out); 
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -702,11 +732,12 @@ mod tests {
                            0., 1., 0.,
                            3., 4., 1.];
 
-        mul(&mut out, &mat_a, &mat_b);
+        let result = mul(&mut out, &mat_a, &mat_b);
 
         assert_eq!([1., 0., 0.,
                     0., 1., 0.,
                     4., 6., 1.], out); 
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -740,11 +771,12 @@ mod tests {
                            1., 2., 1.];
         let vec_a: Vec2 = [2., 3.];
 
-        translate(&mut out, &mat_a, &vec_a);
+        let result = translate(&mut out, &mat_a, &vec_a);
 
         assert_eq!([1., 0., 0.,
                     0., 1., 0.,
-                    3., 5., 1.], out)
+                    3., 5., 1.], out);
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -757,11 +789,12 @@ mod tests {
                            0., 1., 0.,
                            1., 2., 1.];
         
-        rotate(&mut out, &mat_a, PI * 0.5);
+        let result = rotate(&mut out, &mat_a, PI * 0.5);
         
         assert!(equals(&[0., 1., 0.,
                         -1., 0., 0.,
                          1., 2., 1.], &out));
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -774,11 +807,12 @@ mod tests {
                            1., 2., 1.];
         let vec_a: Vec2 = [2., 3.];
 
-        scale(&mut out, &mat_a, &vec_a);
+        let scale = scale(&mut out, &mat_a, &vec_a);
 
         assert_eq!([ 2., 0., 0.,
                      0., 3., 0.,
-                     1., 2., 1.], out)
+                     1., 2., 1.], out);
+        assert_eq!(scale, out);
     }
    
     #[test]
@@ -786,11 +820,12 @@ mod tests {
         let mut out = create(); 
         let vec_a: Vec2 = [2., 3.];
 
-        from_translation(&mut out, &vec_a);
+        let result = from_translation(&mut out, &vec_a);
 
         assert_eq!([1., 0., 0.,
                     0., 1., 0.,
-                    2., 3., 1.], out)
+                    2., 3., 1.], out);
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -798,11 +833,12 @@ mod tests {
         use super::super::common::{PI};
         let mut out = create(); 
         
-        from_rotation(&mut out, PI);
+        let result = from_rotation(&mut out, PI);
         
         assert!(equals(&[-1., 0., 0.,
                           0.,-1., 0.,
                           0., 0., 1.], &out));
+        assert_eq!(result, out);
         }
 
     #[test]
@@ -810,11 +846,12 @@ mod tests {
         let mut out = create(); 
         let vec_a: Vec2 = [2., 3.];
 
-        from_scaling(&mut out, &vec_a);
+        let result = from_scaling(&mut out, &vec_a);
 
         assert_eq!([ 2., 0., 0.,
                      0., 3., 0.,
-                     0., 0., 1.], out)
+                     0., 0., 1.], out);
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -824,11 +861,12 @@ mod tests {
                             3., 4.,
                             5., 6.];
 
-        from_mat2d(&mut out, &mat_a);
+        let result = from_mat2d(&mut out, &mat_a);
 
         assert_eq!([1., 2., 0.,
                     3., 4., 0.,
                     5., 6., 1.], out);
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -836,48 +874,47 @@ mod tests {
         let mut out = create();
         let q: Quat = [0., -0.7071067811865475, 0., 0.7071067811865475];
 
-        from_quat(&mut out, &q);
+        let result = from_quat(&mut out, &q);
 
         assert!(equals(&[0., 0., 1., 
                          0., 1., 0., 
                         -1., 0., 0.], &out));
+        assert_eq!(result, out);
     }
 
     #[test]
     fn invert_mat3() { 
-        let out: Mat3 = [0., 0., 0., 
-                         0., 0., 0.,
-                         0., 0., 0.];
+        let mut out: Mat3 = [0., 0., 0., 
+                             0., 0., 0.,
+                             0., 0., 0.];
         let mat_a: Mat3 = [1., 0., 0.,
                            0., 1., 0.,
                            1., 2., 1.];
 
-        let out = invert(out, &mat_a); 
-        let out = match out { 
-            Ok(out) => out,
-            Err(_error) => panic!("This should have worked!")
+        let result = invert(&mut out, &mat_a); 
+        let result = match result { 
+            Some(result) => result,
+            None => panic!("This should have worked!")
         };
 
         assert_eq!([1., 0., 0.,
                     0., 1., 0.,
-                   -1., -2., 1.], out)
+                   -1., -2., 1.], out);
+        assert_eq!(result, out);
     }
 
     #[test] 
-    #[should_panic(expected = "Matrix is singular")]
     fn invert_singular_mat2d() {  
-        let out: Mat3 = [0., 0., 0., 
-                         0., 0., 0.,
-                         0., 0., 0.];
+        let mut out: Mat3 = [0., 0., 0., 
+                             0., 0., 0.,
+                             0., 0., 0.];
         let mat_a: Mat3 = [-1., 3./2., 0.,
                             2./3., -1., 0.,
                             0., 0., 1.]; 
 
-        let out = invert(out, &mat_a); 
-        let _out = match out { 
-            Ok(out) => out,
-            Err(error) => panic!(error)
-        };
+        let result = invert(&mut out, &mat_a); 
+
+        assert_eq!(None, result);
     } 
 
     #[test]
@@ -886,11 +923,12 @@ mod tests {
                              0., 0., 0.,
                              0., 0., 0.];
         
-        projection(&mut out, 100.0, 200.0);
+        let result = projection(&mut out, 100.0, 200.0);
 
         assert_eq!([0.02, 0., 0.,
                     0., -0.01, 0.,
                     -1., 1., 1.], out);
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -929,11 +967,12 @@ mod tests {
                            13., 14., 15.,
                            16., 17., 18.];
         
-        add(&mut out, &mat_a, &mat_b);
+        let result = add(&mut out, &mat_a, &mat_b);
 
         assert_eq!([11., 13., 15., 
                     17., 19., 21., 
                     23., 25., 27.], out);
+        assert_eq!(result, out);
     } 
 
     #[test]
@@ -948,11 +987,12 @@ mod tests {
                            13., 14., 15.,
                            16., 17., 18.];
         
-        subtract(&mut out, &mat_a, &mat_b);
+        let result = subtract(&mut out, &mat_a, &mat_b);
 
         assert_eq!([-9., -9., -9., 
                     -9., -9., -9., 
                     -9., -9., -9.], out);
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -967,11 +1007,12 @@ mod tests {
                            13., 14., 15.,
                            16., 17., 18.];
         
-        sub(&mut out, &mat_a, &mat_b);
+        let result = sub(&mut out, &mat_a, &mat_b);
 
         assert_eq!([-9., -9., -9., 
                     -9., -9., -9., 
                     -9., -9., -9.], out);
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -1004,11 +1045,12 @@ mod tests {
                            4., 5., 6.,
                            7., 8., 9.];
         
-        multiply_scalar(&mut out, &mat_a, 2.);
+        let result = multiply_scalar(&mut out, &mat_a, 2.);
 
         assert_eq!([2., 4., 6., 
                     8., 10., 12., 
-                    14., 16., 18.], out)
+                    14., 16., 18.], out);
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -1023,11 +1065,12 @@ mod tests {
                            13., 14., 15.,
                            16., 17., 18.];
 
-        multiply_scalar_and_add(&mut out, &mat_a, &mat_b, 0.5);
+        let result = multiply_scalar_and_add(&mut out, &mat_a, &mat_b, 0.5);
 
         assert_eq!([6., 7.5, 9., 
                     10.5, 12., 13.5, 
                     15., 16.5, 18.], out);
+        assert_eq!(result, out);
     }
 
     #[test]

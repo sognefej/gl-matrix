@@ -75,7 +75,7 @@ pub fn transpose(out: &mut Mat2, a: &Mat2) -> Mat2 {
     *out
 }
 
-pub fn invert(out: &mut Mat2, a: &Mat2) -> Result<Mat2, String> {
+pub fn invert(out: &mut Mat2, a: &Mat2) -> Option<Mat2> {
     let a0 = a[0];
     let a1 = a[1];
     let a2 = a[2]; 
@@ -85,7 +85,7 @@ pub fn invert(out: &mut Mat2, a: &Mat2) -> Result<Mat2, String> {
     
     // Make sure matrix is not singular
     if det == 0_f32 { 
-        return Err("Matrix is singular".to_string());
+        return None;
     }
      
     let det = 1_f32 / det;
@@ -95,7 +95,7 @@ pub fn invert(out: &mut Mat2, a: &Mat2) -> Result<Mat2, String> {
     out[2] = -a2 * det;
     out[3] =  a0 * det;
     
-    Ok(*out)
+    Some(*out)
 }
 
 pub fn adjoint(out: &mut Mat2, a: &Mat2) -> Mat2 {
@@ -367,8 +367,8 @@ mod tests {
 
         let result = invert(&mut out, &mat_a); 
         let result = match result { 
-            Ok(result) => result,
-            Err(_error) => panic!("This should have worked!")
+            Some(result) => result,
+            None => panic!("This should have worked!")
         };
 
         assert_eq!([-2., 1., 1.5, -0.5], out);
@@ -376,16 +376,13 @@ mod tests {
     } 
 
     #[test] 
-    #[should_panic(expected = "Matrix is singular")]
     fn invert_singular_mat2() {  
         let mut out: Mat2 =  [0., 0., 0., 0.];
         let mat_a: Mat2 = [-1., 3./2., 2./3., -1.]; 
 
-        let result = invert(&mut out, &mat_a); 
-        let _result = match result { 
-            Ok(result) => result,
-            Err(error) => panic!(error)
-        };
+        let result = invert(&mut out, &mat_a);
+
+        assert_eq!(None, result);
     } 
     
     #[test] 

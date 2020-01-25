@@ -72,7 +72,7 @@ pub fn set(out: &mut Mat2d, a: f32, b: f32,
     *out
 }
 
-pub fn invert(out: &mut Mat2d, a: &Mat2d) -> Result<Mat2d, String> {
+pub fn invert(out: &mut Mat2d, a: &Mat2d) -> Option<Mat2d> {
     let aa = a[0];
     let ab = a[1];
     let ac = a[2];
@@ -84,7 +84,7 @@ pub fn invert(out: &mut Mat2d, a: &Mat2d) -> Result<Mat2d, String> {
   
     // Make sure matrix is not singular
     if det == 0_f32 {  
-        return Err("Matrix is singular".to_string());
+        return None;
     }
   
     let det = 1_f32 / det;
@@ -96,7 +96,7 @@ pub fn invert(out: &mut Mat2d, a: &Mat2d) -> Result<Mat2d, String> {
     out[4] = (ac * aty - ad * atx) * det;
     out[5] = (ab * atx - aa * aty) * det;
   
-    Ok(*out)
+    Some(*out)
   }
 
 pub fn determinant(a: &Mat2d) -> f32 { 
@@ -389,8 +389,8 @@ mod tests {
 
         let result = invert(&mut out, &mat_a); 
         let result = match result { 
-            Ok(result) => result,
-            Err(_error) => panic!("This should have worked!")
+            Some(result) => result,
+            None => panic!("This should have worked!")
         };
 
         assert_eq!([ -2., 1., 1.5, -0.5, 1., -2.], out);
@@ -398,16 +398,13 @@ mod tests {
     } 
 
     #[test] 
-    #[should_panic(expected = "Matrix is singular")]
     fn invert_singular_mat2d() {  
         let mut out: Mat2d =  [0., 0., 0., 0., 0., 0.];
         let mat_a: Mat2d = [-1., 3./2., 2./3., -1., 0., 0.]; 
 
         let result = invert(&mut out, &mat_a); 
-        let _result = match result { 
-            Ok(result) => result,
-            Err(error) => panic!(error)
-        };
+        
+        assert_eq!(None, result);
     } 
     
     #[test]

@@ -41,7 +41,7 @@ pub fn clone(a: &Mat4) -> Mat4 {
     out
 }
 
-pub fn copy(out: &mut Mat4, a: &Mat4) {
+pub fn copy(out: &mut Mat4, a: &Mat4) -> Mat4 {
     out[0] = a[0];
     out[1] = a[1];
     out[2] = a[2];
@@ -58,6 +58,8 @@ pub fn copy(out: &mut Mat4, a: &Mat4) {
     out[13] = a[13];
     out[14] = a[14];
     out[15] = a[15];
+
+    *out
 }
 
 pub fn from_values(m00: f32, m01: f32, m02: f32, m03: f32, 
@@ -89,7 +91,7 @@ pub fn from_values(m00: f32, m01: f32, m02: f32, m03: f32,
 pub fn set(out: &mut Mat4, m00: f32, m01: f32, m02: f32, m03: f32, 
                            m10: f32, m11: f32, m12: f32, m13: f32, 
                            m20: f32, m21: f32, m22: f32, m23: f32, 
-                           m30: f32, m31: f32, m32: f32, m33: f32) {
+                           m30: f32, m31: f32, m32: f32, m33: f32) -> Mat4 {
     out[0] = m00;
     out[1] = m01;
     out[2] = m02;
@@ -106,9 +108,11 @@ pub fn set(out: &mut Mat4, m00: f32, m01: f32, m02: f32, m03: f32,
     out[13] = m31;
     out[14] = m32;
     out[15] = m33;
+
+    *out
 }
 
-pub fn identity(out: &mut Mat4) {
+pub fn identity(out: &mut Mat4) -> Mat4 {
     out[0] = 1.;
     out[1] = 0.;
     out[2] = 0.;
@@ -125,9 +129,11 @@ pub fn identity(out: &mut Mat4) {
     out[13] = 0.;
     out[14] = 0.;
     out[15] = 1.;
+    
+    *out
 }
 
-pub fn transpose(out: &mut Mat4, a: &Mat4) {
+pub fn transpose(out: &mut Mat4, a: &Mat4) -> Mat4 {
     // If we are transposing ourselves we can skip a few steps but have to cache some values
     if out.eq(&a) {
         let a01 = a[1];
@@ -167,9 +173,11 @@ pub fn transpose(out: &mut Mat4, a: &Mat4) {
         out[14] = a[11];
         out[15] = a[15];
     }
+
+    *out
 }
 
-pub fn invert(mut out: Mat4, a: &Mat4) -> Result<Mat4, String> {
+pub fn invert(out: &mut Mat4, a: &Mat4) -> Option<Mat4> {
     let a00 = a[0];
     let a01 = a[1];
     let a02 = a[2];
@@ -204,7 +212,7 @@ pub fn invert(mut out: Mat4, a: &Mat4) -> Result<Mat4, String> {
 
     // Make sure matrix is not singular
     if det == 0_f32 {  
-        return Err("Matrix is singular".to_string());
+        return None;
     }
 
     let det = 1_f32 / det;
@@ -226,10 +234,10 @@ pub fn invert(mut out: Mat4, a: &Mat4) -> Result<Mat4, String> {
     out[14] = (a31 * b01 - a30 * b03 - a32 * b00) * det;
     out[15] = (a20 * b03 - a21 * b01 + a22 * b00) * det;
 
-    Ok(out)
+    Some(*out)
 }
 
-pub fn adjoint(out: &mut Mat4, a: &Mat4) {
+pub fn adjoint(out: &mut Mat4, a: &Mat4) -> Mat4 {
     let a00 = a[0];
     let a01 = a[1];
     let a02 = a[2];
@@ -263,6 +271,8 @@ pub fn adjoint(out: &mut Mat4, a: &Mat4) {
     out[13] =  a00 * (a21 * a32 - a22 * a31) - a20 * (a01 * a32 - a02 * a31) + a30 * (a01 * a22 - a02 * a21);
     out[14] = -(a00 * (a11 * a32 - a12 * a31) - a10 * (a01 * a32 - a02 * a31) + a30 * (a01 * a12 - a02 * a11));
     out[15] =  a00 * (a11 * a22 - a12 * a21) - a10 * (a01 * a22 - a02 * a21) + a20 * (a01 * a12 - a02 * a11);
+
+    *out
 }
 
 pub fn determinant(a: &Mat4) -> f32 {
@@ -300,7 +310,7 @@ pub fn determinant(a: &Mat4) -> f32 {
     b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06
 }
 
-pub fn multiply(out: &mut Mat4, a: &Mat4, b: &Mat4) {
+pub fn multiply(out: &mut Mat4, a: &Mat4, b: &Mat4) -> Mat4 {
     let a00 = a[0];
     let a01 = a[1];
     let a02 = a[2];
@@ -354,9 +364,11 @@ pub fn multiply(out: &mut Mat4, a: &Mat4, b: &Mat4) {
     out[13] = b0*a01 + b1*a11 + b2*a21 + b3*a31;
     out[14] = b0*a02 + b1*a12 + b2*a22 + b3*a32;
     out[15] = b0*a03 + b1*a13 + b2*a23 + b3*a33;
+
+    *out
 }
 
-pub fn translate(out: &mut Mat4, a: &Mat4, v: &Vec3) {
+pub fn translate(out: &mut Mat4, a: &Mat4, v: &Vec3) -> Mat4 {
     let x = v[0];
     let y = v[1];
     let z = v[2];
@@ -397,9 +409,11 @@ pub fn translate(out: &mut Mat4, a: &Mat4, v: &Vec3) {
         out[14] = a02 * x + a12 * y + a22 * z + a[14];
         out[15] = a03 * x + a13 * y + a23 * z + a[15];
     }
+
+    *out
 }
 
-pub fn scale(out: &mut Mat4, a: &Mat4, v: &Vec3) {
+pub fn scale(out: &mut Mat4, a: &Mat4, v: &Vec3) -> Mat4 {
     let x = v[0];
     let y = v[1];
     let z = v[2];
@@ -420,9 +434,11 @@ pub fn scale(out: &mut Mat4, a: &Mat4, v: &Vec3) {
     out[13] = a[13];
     out[14] = a[14];
     out[15] = a[15];
+
+    *out
 }
 
-pub fn rotate(out: &mut Mat4, a: &Mat4, rad: f32, axis: &Vec3) {
+pub fn rotate(out: &mut Mat4, a: &Mat4, rad: f32, axis: &Vec3) -> Option<Mat4> {
     let mut x = axis[0];
     let mut y = axis[1];
     let mut z = axis[2];
@@ -430,7 +446,7 @@ pub fn rotate(out: &mut Mat4, a: &Mat4, rad: f32, axis: &Vec3) {
 
     if len < EPSILON { 
         // Don't do anything 
-        return; 
+        return None;
     }
 
     let len = 1_f32 / len;
@@ -488,9 +504,11 @@ pub fn rotate(out: &mut Mat4, a: &Mat4, rad: f32, axis: &Vec3) {
         out[14] = a[14];
         out[15] = a[15];
     }
+
+    Some(*out)
 }
 
-pub fn rotate_x(out: &mut Mat4, a: &Mat4, rad: f32) {
+pub fn rotate_x(out: &mut Mat4, a: &Mat4, rad: f32) -> Mat4 {
     let s = f32::sin(rad);
     let c = f32::cos(rad);
 
@@ -524,9 +542,11 @@ pub fn rotate_x(out: &mut Mat4, a: &Mat4, rad: f32) {
     out[9] = a21 * c - a11 * s;
     out[10] = a22 * c - a12 * s;
     out[11] = a23 * c - a13 * s;
+
+    *out
 }
 
-pub fn rotate_y(out: &mut Mat4, a: &Mat4, rad: f32) {
+pub fn rotate_y(out: &mut Mat4, a: &Mat4, rad: f32) -> Mat4 {
     let s = f32::sin(rad);
     let c = f32::cos(rad);
 
@@ -560,9 +580,11 @@ pub fn rotate_y(out: &mut Mat4, a: &Mat4, rad: f32) {
     out[9] = a01 * s + a21 * c;
     out[10] = a02 * s + a22 * c;
     out[11] = a03 * s + a23 * c;
+
+    *out
 }
 
-pub fn rotate_z(out: &mut Mat4, a: &Mat4, rad: f32) {
+pub fn rotate_z(out: &mut Mat4, a: &Mat4, rad: f32) -> Mat4 {
     let s = f32::sin(rad);
     let c = f32::cos(rad);
 
@@ -596,9 +618,11 @@ pub fn rotate_z(out: &mut Mat4, a: &Mat4, rad: f32) {
     out[5] = a11 * c - a01 * s;
     out[6] = a12 * c - a02 * s;
     out[7] = a13 * c - a03 * s;
+
+    *out
 }
 
-pub fn from_translation(out: &mut Mat4, v: &Vec3) {
+pub fn from_translation(out: &mut Mat4, v: &Vec3) -> Mat4 {
     out[0] = 1.;
     out[1] = 0.;
     out[2] = 0.;
@@ -615,9 +639,11 @@ pub fn from_translation(out: &mut Mat4, v: &Vec3) {
     out[13] = v[1];
     out[14] = v[2];
     out[15] = 1.;
+
+    *out
 }
 
-pub fn from_scaling(out: &mut Mat4, v: &Vec3) {
+pub fn from_scaling(out: &mut Mat4, v: &Vec3) -> Mat4 {
     out[0] = v[0];
     out[1] = 0.;
     out[2] = 0.;
@@ -634,9 +660,11 @@ pub fn from_scaling(out: &mut Mat4, v: &Vec3) {
     out[13] = 0.;
     out[14] = 0.;
     out[15] = 1.;
+
+    *out
 }
 
-pub fn from_rotation(out: &mut Mat4, rad: f32, axis: &Vec3) {
+pub fn from_rotation(out: &mut Mat4, rad: f32, axis: &Vec3) -> Option<Mat4> {
     let mut x = axis[0];
     let mut y = axis[1];
     let mut z = axis[2];
@@ -644,7 +672,7 @@ pub fn from_rotation(out: &mut Mat4, rad: f32, axis: &Vec3) {
 
     if len < EPSILON { 
         // Don't do anything 
-        return;
+        return None;
     }
 
     let len = 1_f32 / len;
@@ -674,9 +702,11 @@ pub fn from_rotation(out: &mut Mat4, rad: f32, axis: &Vec3) {
     out[13] = 0.;
     out[14] = 0.;
     out[15] = 1.;
+
+    Some(*out)
 }
 
-pub fn from_x_rotation(out: &mut Mat4, rad: f32) {
+pub fn from_x_rotation(out: &mut Mat4, rad: f32) -> Mat4 {
     let s = f32::sin(rad);
     let c = f32::cos(rad);
 
@@ -697,9 +727,11 @@ pub fn from_x_rotation(out: &mut Mat4, rad: f32) {
     out[13] = 0.;
     out[14] = 0.;
     out[15] = 1.;
+
+    *out
 }
 
-pub fn from_y_rotation(out: &mut Mat4, rad: f32) {
+pub fn from_y_rotation(out: &mut Mat4, rad: f32) -> Mat4 {
     let s = f32::sin(rad);
     let c = f32::cos(rad);
 
@@ -720,9 +752,11 @@ pub fn from_y_rotation(out: &mut Mat4, rad: f32) {
     out[13] = 0.;
     out[14] = 0.;
     out[15] = 1.;
+
+    *out 
 }
 
-pub fn from_z_rotation(out: &mut Mat4, rad: f32) {
+pub fn from_z_rotation(out: &mut Mat4, rad: f32) -> Mat4 {
     let s = f32::sin(rad);
     let c = f32::cos(rad);
 
@@ -743,9 +777,11 @@ pub fn from_z_rotation(out: &mut Mat4, rad: f32) {
     out[13] = 0.;
     out[14] = 0.;
     out[15] = 1.;
+
+    *out
 }
 
-pub fn from_rotation_translation(out: &mut Mat4, q: &Quat, v: &Vec3) {
+pub fn from_rotation_translation(out: &mut Mat4, q: &Quat, v: &Vec3) -> Mat4 {
     // Quaternion math
     let x = q[0];
     let y = q[1];
@@ -781,6 +817,8 @@ pub fn from_rotation_translation(out: &mut Mat4, q: &Quat, v: &Vec3) {
     out[13] = v[1];
     out[14] = v[2];
     out[15] = 1.;
+
+    *out
 }
 
 pub fn from_quat2(mut out: &mut Mat4, a: &Quat2) {
@@ -1138,7 +1176,7 @@ pub fn ortho(out: &mut Mat4,
     out[15] = 1.;
 }
 
-pub fn look_at(mut out: &mut Mat4, eye: &Vec3, center: &Vec3, up: &Vec3) {
+pub fn look_at(mut out: &mut Mat4, eye: &Vec3, center: &Vec3, up: &Vec3) -> Mat4 {
     let eyex = eye[0];
     let eyey = eye[1];
     let eyez = eye[2];
@@ -1216,6 +1254,8 @@ pub fn look_at(mut out: &mut Mat4, eye: &Vec3, center: &Vec3, up: &Vec3) {
     out[13] = -(y0 * eyex + y1 * eyey + y2 * eyez);
     out[14] = -(z0 * eyex + z1 * eyey + z2 * eyez);
     out[15] = 1.;
+
+    *out
 }
 
 pub fn target_to(out: &mut Mat4, eye: &Vec3, target: &Vec3, up: &Vec3) {
@@ -1429,8 +1469,8 @@ pub fn equals(a: &Mat4, b: &Mat4) -> bool {
     f32::abs(a15 - b15) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a15), f32::abs(b15)))
 }
 
-pub fn mul(out: &mut Mat4, a: &Mat4, b: &Mat4) {
-    multiply(out, a, b);
+pub fn mul(out: &mut Mat4, a: &Mat4, b: &Mat4) -> Mat4 {
+    multiply(out, a, b)
 }
 
 pub fn sub(out: &mut Mat4, a: &Mat4, b: &Mat4) {
@@ -1477,9 +1517,10 @@ mod tests {
                            0., 0., 1., 0.,
                            1., 2., 3., 1.];
 
-        copy(&mut out, &mat_a);
+        let result = copy(&mut out, &mat_a);
 
         assert_eq!(mat_a, out);
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -1502,15 +1543,16 @@ mod tests {
                              0., 0., 0., 0.,
                              0., 0., 0., 0.];
         
-        set(&mut out, 1., 2., 3., 4.,
-                      5., 6., 7., 8., 
-                      9., 10., 11., 12., 
-                      13., 14., 15., 16.);
+        let result = set(&mut out, 1., 2., 3., 4.,
+                                   5., 6., 7., 8., 
+                                   9., 10., 11., 12., 
+                                   13., 14., 15., 16.);
         
         assert_eq!([1., 2., 3., 4., 
                     5., 6., 7., 8., 
                     9., 10., 11., 12., 
                     13., 14., 15., 16.], out);
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -1524,9 +1566,10 @@ mod tests {
                            0., 0., 1., 0.,
                            0., 0., 0., 1.];
         
-        identity(&mut out);
+        let result = identity(&mut out);
 
         assert_eq!(ident, out);
+        assert_eq!(result, out);
     }
 
     #[test] 
@@ -1540,12 +1583,13 @@ mod tests {
                                 0., 0., 1., 0.,
                                 1., 2., 3., 1.];
       
-        transpose(&mut mat_a, &mat_a_copy);
+        let result = transpose(&mut mat_a, &mat_a_copy);
 
         assert_eq!([1., 0., 0., 1.,
                     0., 1., 0., 2.,
                     0., 0., 1., 3.,
                     0., 0., 0., 1.], mat_a);
+        assert_eq!(result, mat_a);
     }
 
     #[test] 
@@ -1559,54 +1603,53 @@ mod tests {
                            0., 0., 1., 0.,
                            1., 2., 3., 1.];
         
-        transpose(&mut out, &mat_a); 
+        let result = transpose(&mut out, &mat_a); 
        
         assert_eq!([1., 0., 0., 1.,
                     0., 1., 0., 2.,
                     0., 0., 1., 3.,
                     0., 0., 0., 1.], out);
+        assert_eq!(result, out);
     }
 
     #[test]
     fn invert_mat4() { 
-        let out: Mat4 = [0., 0., 0., 0.,
-                         0., 0., 0., 0.,
-                         0., 0., 0., 0.,
-                         0., 0., 0., 0.];
+        let mut out: Mat4 = [0., 0., 0., 0.,
+                             0., 0., 0., 0.,
+                             0., 0., 0., 0.,
+                             0., 0., 0., 0.];
         let mat_a: Mat4 = [1., 0., 0., 0.,
                            0., 1., 0., 0.,
                            0., 0., 1., 0.,
                            1., 2., 3., 1.];
 
-        let out = invert(out, &mat_a); 
-        let out = match out { 
-            Ok(out) => out,
-            Err(_error) => panic!("This should have worked!")
+        let result = invert(&mut out, &mat_a); 
+        let result = match result { 
+            Some(result) => result,
+            None => panic!("This should have worked!")
         };
 
         assert_eq!([1., 0., 0., 0.,
                     0., 1., 0., 0.,
                     0., 0., 1., 0.,
                    -1., -2., -3., 1.], out);
+        assert_eq!(result, out);
     }
 
     #[test] 
-    #[should_panic(expected = "Matrix is singular")]
     fn invert_singular_mat2d() {  
-        let out: Mat4 = [0., 0., 0., 0.,
-                         0., 0., 0., 0., 
-                         0., 0., 0., 0., 
-                         0., 0., 0., 0.];
+        let mut out: Mat4 = [0., 0., 0., 0.,
+                             0., 0., 0., 0., 
+                             0., 0., 0., 0., 
+                             0., 0., 0., 0.];
         let mat_a: Mat4 = [-1., 3./2., 0., 0.,
                             2./3., -1., 0., 0.,
                             0., 0., 1., 0.,
                             0., 0., 0., 1.]; 
 
-        let out = invert(out, &mat_a); 
-        let _out = match out { 
-            Ok(out) => out,
-            Err(error) => panic!(error)
-        };
+        let result = invert(&mut out, &mat_a); 
+        
+        assert_eq!(None, result);
     } 
 
     #[test]
@@ -1620,12 +1663,13 @@ mod tests {
                            0., 0., 1., 0.,
                            1., 2., 3., 1.];
         
-        adjoint(&mut out, &mat_a); 
+        let result = adjoint(&mut out, &mat_a); 
         
         assert_eq!([1., 0., 0., 0.,
                     0., 1., 0., 0.,
                     0., 0., 1., 0.,
                    -1., -2., -3., 1.], out);
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -1655,12 +1699,13 @@ mod tests {
                            0., 0., 1., 0.,
                            4., 5., 6., 1.];
 
-        multiply(&mut out, &mat_a, &mat_b);
+        let result = multiply(&mut out, &mat_a, &mat_b);
 
         assert_eq!([1., 0., 0., 0.,
                     0., 1., 0., 0.,
                     0., 0., 1., 0.,
-                    5., 7., 9., 1.], out); 
+                    5., 7., 9., 1.], out);
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -1678,12 +1723,13 @@ mod tests {
                            0., 0., 1., 0.,
                            4., 5., 6., 1.];
 
-        mul(&mut out, &mat_a, &mat_b);
+        let result = mul(&mut out, &mat_a, &mat_b);
 
         assert_eq!([1., 0., 0., 0.,
                     0., 1., 0., 0.,
                     0., 0., 1., 0.,
                     5., 7., 9., 1.], out); 
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -1723,12 +1769,13 @@ mod tests {
                            1., 2., 3., 1.];
         let vec_a: Vec3 = [4., 5., 6.];
 
-        translate(&mut out, &mat_a, &vec_a);
+        let result = translate(&mut out, &mat_a, &vec_a);
     
         assert_eq!([1., 0., 0., 0.,
                     0., 1., 0., 0.,
                     0., 0., 1., 0.,
-                    5., 7., 9., 1.], out); 
+                    5., 7., 9., 1.], out);
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -1744,12 +1791,13 @@ mod tests {
         let vec_a: Vec3 = [4., 5., 6.];
 
 
-        scale(&mut out, &mat_a, &vec_a);
+        let result = scale(&mut out, &mat_a, &vec_a);
 
         assert_eq!([4., 0., 0., 0.,
                     0., 5., 0., 0.,
                     0., 0., 6., 0.,
                     1., 2., 3., 1.], out); 
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -1765,13 +1813,17 @@ mod tests {
         let rad: f32 = PI * 0.5;
         let axis: Vec3 = [1., 0., 0.];
         
-        rotate(&mut mat_a, &mat_a_copy, rad, &axis);
+        let result = rotate(&mut mat_a, &mat_a_copy, rad, &axis);
+        let result = match result { 
+            Some(result) => result,
+            None => panic!("This should have worked!")
+        };
 
         assert!(equals(&[1., 0., 0., 0.,
                          0., f32::cos(rad), f32::sin(rad), 0.,
                          0., -f32::sin(rad), f32::cos(rad), 0.,
                          1., 2., 3., 1.], &mat_a));
-
+        assert_eq!(result, mat_a);
    }
 
     #[test]
@@ -1787,12 +1839,17 @@ mod tests {
         let rad: f32 = PI * 0.5;
         let axis: Vec3 = [1., 0., 0.];
         
-        rotate(&mut out, &mat_a, rad, &axis);
-
+        let result = rotate(&mut out, &mat_a, rad, &axis);
+        let result = match result { 
+            Some(result) => result,
+            None => panic!("This should have worked!")
+        };
+        
         assert!(equals(&[1., 0., 0., 0.,
                          0., f32::cos(rad), f32::sin(rad), 0.,
                          0., -f32::sin(rad), f32::cos(rad), 0.,
                          1., 2., 3., 1.], &out));
+        assert_eq!(result, out)
     }
 
     #[test]
@@ -1808,12 +1865,13 @@ mod tests {
         let rad: f32 = PI * 0.5;
         let axis: Vec3 = [1_f32*10_f32.powi(-16), 0., 0.];
         
-        rotate(&mut out, &mat_a, rad, &axis);
+        let result = rotate(&mut out, &mat_a, rad, &axis);
 
         assert_eq!([0., 0., 0., 0.,
                     0., 0., 0., 0.,
                     0., 0., 0., 0.,
                     0., 0., 0., 0.], out);
+        assert_eq!(None, result);
     }
 
     #[test]
