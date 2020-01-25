@@ -2,6 +2,6 @@
 [![codecov](https://codecov.io/gh/sognefej/gl-matrix/branch/master/graph/badge.svg)](https://codecov.io/gh/sognefej/gl-matrix)
 
 # gl_matrix
-A Rust implementation of [GlMatrix](http://glmatrix.net/)
+A Rust implementation of [glMatrix](http://glmatrix.net/)
 
 
