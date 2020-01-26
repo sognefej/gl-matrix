@@ -821,7 +821,7 @@ pub fn from_rotation_translation(out: &mut Mat4, q: &Quat, v: &Vec3) -> Mat4 {
     *out
 }
 
-pub fn from_quat2(mut out: &mut Mat4, a: &Quat2) {
+pub fn from_quat2(mut out: &mut Mat4, a: &Quat2) -> Mat4 {
     let mut translation: Vec3 = [0_f32; 3];
     let bx = -a[0];
     let by = -a[1];
@@ -847,16 +847,18 @@ pub fn from_quat2(mut out: &mut Mat4, a: &Quat2) {
     }
 
     let quat_a: Quat = [a[0], a[1], a[2], a[3]];
-    from_rotation_translation(&mut out, &quat_a, &translation);
+    from_rotation_translation(&mut out, &quat_a, &translation)
 }
 
-pub fn get_translation(out: &mut Vec3, mat: &Mat4) {
+pub fn get_translation(out: &mut Vec3, mat: &Mat4) -> Vec3 {
     out[0] = mat[12];
     out[1] = mat[13];
     out[2] = mat[14];
+
+    *out
 }
 
-pub fn get_scaling(out: &mut Vec3, mat: &Mat4) {
+pub fn get_scaling(out: &mut Vec3, mat: &Mat4) -> Vec3 {
     let mut vec_1: Vec3 = [0_f32; 3];
     vec_1[0] = mat[0]; // m11
     vec_1[1] = mat[1]; // m12
@@ -875,9 +877,11 @@ pub fn get_scaling(out: &mut Vec3, mat: &Mat4) {
     out[0] = hypot(&vec_1);
     out[1] = hypot(&vec_2);
     out[2] = hypot(&vec_3);
+
+    *out
 }
 
-pub fn get_rotation(out: &mut Quat, mat: &Mat4) {
+pub fn get_rotation(out: &mut Quat, mat: &Mat4) -> Quat {
     let mut scaling: Vec3 = [0_f32; 3];
     
     get_scaling(&mut scaling, &mat);
@@ -923,10 +927,12 @@ pub fn get_rotation(out: &mut Quat, mat: &Mat4) {
         out[1] = (sm23 + sm32) / s;
         out[2] = 0.25 * s;
     }
+
+    *out
 }
 
 pub fn from_rotation_translation_scale(out: &mut Mat4, q: &Quat, 
-                                       v: &Vec3, s: &Vec3) {
+                                       v: &Vec3, s: &Vec3) -> Mat4 {
     // Quaternion math
     let x = q[0];
     let y = q[1];
@@ -965,10 +971,12 @@ pub fn from_rotation_translation_scale(out: &mut Mat4, q: &Quat,
     out[13] = v[1];
     out[14] = v[2];
     out[15] = 1.;
+
+    *out
 }
 
 pub fn from_rotation_translation_scale_origin(out: &mut Mat4, q: &Quat,
-                                              v: &Vec3, s: &Vec3, o: &Vec3) {
+                                              v: &Vec3, s: &Vec3, o: &Vec3) -> Mat4 {
     // Quaternion math
     let x = q[0];
     let y = q[1];
@@ -1022,9 +1030,11 @@ pub fn from_rotation_translation_scale_origin(out: &mut Mat4, q: &Quat,
     out[13] = v[1] + oy - (out1 * ox + out5 * oy + out9 * oz);
     out[14] = v[2] + oz - (out2 * ox + out6 * oy + out10 * oz);
     out[15] = 1.;
+
+    *out
 }
 
-pub fn from_quat(out: &mut Mat4, q: &Quat) {
+pub fn from_quat(out: &mut Mat4, q: &Quat) -> Mat4 {
     let x = q[0];
     let y = q[1];
     let z = q[2];
@@ -1059,12 +1069,14 @@ pub fn from_quat(out: &mut Mat4, q: &Quat) {
     out[13] = 0.;
     out[14] = 0.;
     out[15] = 1.;
+
+    *out
 }
 
 pub fn frustum(out: &mut Mat4, 
                left: f32, right: f32, 
                bottom: f32, top: f32, 
-               near: f32, far: f32) {
+               near: f32, far: f32) -> Mat4 {
     let rl = 1. / (right - left);
     let tb = 1. / (top - bottom);
     let nf = 1. / (near - far);
@@ -1085,9 +1097,12 @@ pub fn frustum(out: &mut Mat4,
     out[13] = 0.;
     out[14] = (far * near * 2.) * nf;
     out[15] = 0.;
+
+    *out
 }
 
-pub fn perspective(out: &mut Mat4, fovy: f32, aspect: f32, near: f32, far: Option<f32>) {
+pub fn perspective(out: &mut Mat4, fovy: f32, aspect: f32, 
+                   near: f32, far: Option<f32>) -> Mat4 {
     let f = 1.0 / f32::tan(fovy / 2.);
     let nf;
 
@@ -1122,6 +1137,8 @@ pub fn perspective(out: &mut Mat4, fovy: f32, aspect: f32, near: f32, far: Optio
             out[14] = -2. * near;        
         }
     };
+
+    *out
 }
 
 pub fn perspective_from_field_of_view(out: &mut Mat4, fov: &Fov, near: f32, far: f32) {
@@ -1153,7 +1170,7 @@ pub fn perspective_from_field_of_view(out: &mut Mat4, fov: &Fov, near: f32, far:
 pub fn ortho(out: &mut Mat4,
              left: f32, right: f32, 
              bottom: f32, top: f32, 
-             near: f32, far: f32) {
+             near: f32, far: f32) -> Mat4 {
     let lr = 1. / (left - right);
     let bt = 1. / (bottom - top);
     let nf = 1. / (near - far);
@@ -1174,6 +1191,8 @@ pub fn ortho(out: &mut Mat4,
     out[13] = (top + bottom) * bt;
     out[14] = (far + near) * nf;
     out[15] = 1.;
+
+    *out
 }
 
 pub fn look_at(mut out: &mut Mat4, eye: &Vec3, center: &Vec3, up: &Vec3) -> Mat4 {
@@ -1333,7 +1352,7 @@ pub fn frob(a: &Mat4) -> f32 {
     hypot(a)
 }
 
-pub fn add(out: &mut Mat4, a: &Mat4, b: &Mat4) {
+pub fn add(out: &mut Mat4, a: &Mat4, b: &Mat4) -> Mat4 {
     out[0] = a[0] + b[0];
     out[1] = a[1] + b[1];
     out[2] = a[2] + b[2];
@@ -1350,9 +1369,11 @@ pub fn add(out: &mut Mat4, a: &Mat4, b: &Mat4) {
     out[13] = a[13] + b[13];
     out[14] = a[14] + b[14];
     out[15] = a[15] + b[15];
+
+    *out
 }
 
-pub fn subtract(out: &mut Mat4, a: &Mat4, b: &Mat4) {
+pub fn subtract(out: &mut Mat4, a: &Mat4, b: &Mat4) -> Mat4 {
     out[0] = a[0] - b[0];
     out[1] = a[1] - b[1];
     out[2] = a[2] - b[2];
@@ -1369,9 +1390,11 @@ pub fn subtract(out: &mut Mat4, a: &Mat4, b: &Mat4) {
     out[13] = a[13] - b[13];
     out[14] = a[14] - b[14];
     out[15] = a[15] - b[15];
+
+    *out
 }
 
-pub fn multiply_scalar(out: &mut Mat4, a: &Mat4, b: f32) {
+pub fn multiply_scalar(out: &mut Mat4, a: &Mat4, b: f32) -> Mat4 {
     out[0] = a[0] * b;
     out[1] = a[1] * b;
     out[2] = a[2] * b;
@@ -1388,9 +1411,11 @@ pub fn multiply_scalar(out: &mut Mat4, a: &Mat4, b: f32) {
     out[13] = a[13] * b;
     out[14] = a[14] * b;
     out[15] = a[15] * b;
+
+    *out
 }
 
-pub fn multiply_scalar_and_add(out: &mut Mat4, a: &Mat4, b: &Mat4, scale: f32) {
+pub fn multiply_scalar_and_add(out: &mut Mat4, a: &Mat4, b: &Mat4, scale: f32) -> Mat4 {
     out[0] = a[0] + (b[0] * scale);
     out[1] = a[1] + (b[1] * scale);
     out[2] = a[2] + (b[2] * scale);
@@ -1407,6 +1432,8 @@ pub fn multiply_scalar_and_add(out: &mut Mat4, a: &Mat4, b: &Mat4, scale: f32) {
     out[13] = a[13] + (b[13] * scale);
     out[14] = a[14] + (b[14] * scale);
     out[15] = a[15] + (b[15] * scale);
+
+    *out
 }
 
 pub fn exact_equals(a: &Mat4, b: &Mat4) -> bool {
@@ -1473,8 +1500,8 @@ pub fn mul(out: &mut Mat4, a: &Mat4, b: &Mat4) -> Mat4 {
     multiply(out, a, b)
 }
 
-pub fn sub(out: &mut Mat4, a: &Mat4, b: &Mat4) {
-    subtract(out, a, b);
+pub fn sub(out: &mut Mat4, a: &Mat4, b: &Mat4) -> Mat4 {
+    subtract(out, a, b)
 }
 
 
@@ -1623,11 +1650,7 @@ mod tests {
                            0., 0., 1., 0.,
                            1., 2., 3., 1.];
 
-        let result = invert(&mut out, &mat_a); 
-        let result = match result { 
-            Some(result) => result,
-            None => panic!("This should have worked!")
-        };
+        let result = invert(&mut out, &mat_a).unwrap();
 
         assert_eq!([1., 0., 0., 0.,
                     0., 1., 0., 0.,
@@ -1649,6 +1672,10 @@ mod tests {
 
         let result = invert(&mut out, &mat_a); 
         
+        assert_eq!([0., 0., 0., 0.,
+                    0., 0., 0., 0.,
+                    0., 0., 0., 0.,
+                    0., 0., 0., 0.], out);
         assert_eq!(None, result);
     } 
 
@@ -1758,7 +1785,7 @@ mod tests {
     }
 
     #[test]
-    fn translate_mat4() { 
+    fn translate_mat4_different() { 
         let mut out: Mat4 = [0., 0., 0., 0., 
                              0., 0., 0., 0.,
                              0., 0., 0., 0., 
@@ -1778,6 +1805,27 @@ mod tests {
         assert_eq!(result, out);
     }
 
+    #[test]
+    fn translate_mat4_same() { 
+        let mut mat_a: Mat4 = [1., 0., 0., 0.,
+                               0., 1., 0., 0.,
+                               0., 0., 1., 0.,
+                               1., 2., 3., 1.];
+        let mat_a_copy: Mat4 = [1., 0., 0., 0.,
+                                0., 1., 0., 0.,
+                                0., 0., 1., 0.,
+                                1., 2., 3., 1.];
+        let vec_a: Vec3 = [4., 5., 6.];
+
+        let result = translate(&mut mat_a, &mat_a_copy, &vec_a);
+    
+        assert_eq!([1., 0., 0., 0.,
+                    0., 1., 0., 0.,
+                    0., 0., 1., 0.,
+                    5., 7., 9., 1.], mat_a);
+        assert_eq!(result, mat_a);
+    }
+   
     #[test]
     fn scale_mat4() { 
         let mut out: Mat4 = [0., 0., 0., 0., 
@@ -1813,11 +1861,7 @@ mod tests {
         let rad: f32 = PI * 0.5;
         let axis: Vec3 = [1., 0., 0.];
         
-        let result = rotate(&mut mat_a, &mat_a_copy, rad, &axis);
-        let result = match result { 
-            Some(result) => result,
-            None => panic!("This should have worked!")
-        };
+        let result = rotate(&mut mat_a, &mat_a_copy, rad, &axis).unwrap();
 
         assert!(equals(&[1., 0., 0., 0.,
                          0., f32::cos(rad), f32::sin(rad), 0.,
@@ -1839,12 +1883,8 @@ mod tests {
         let rad: f32 = PI * 0.5;
         let axis: Vec3 = [1., 0., 0.];
         
-        let result = rotate(&mut out, &mat_a, rad, &axis);
-        let result = match result { 
-            Some(result) => result,
-            None => panic!("This should have worked!")
-        };
-        
+        let result = rotate(&mut out, &mat_a, rad, &axis).unwrap();
+
         assert!(equals(&[1., 0., 0., 0.,
                          0., f32::cos(rad), f32::sin(rad), 0.,
                          0., -f32::sin(rad), f32::cos(rad), 0.,
@@ -1886,12 +1926,13 @@ mod tests {
                                 1., 2., 3., 1.];
         let rad: f32 = PI * 0.5;
         
-        rotate_x(&mut mat_a, &mat_a_copy, rad);
+        let result = rotate_x(&mut mat_a, &mat_a_copy, rad);
 
         assert!(equals(&[1., 0., 0., 0.,
                          0., f32::cos(rad), f32::sin(rad), 0.,
                          0., -f32::sin(rad), f32::cos(rad), 0.,
                          1., 2., 3., 1.], &mat_a));
+        assert_eq!(result, mat_a);
     }
 
     #[test]
@@ -1906,12 +1947,13 @@ mod tests {
                            1., 2., 3., 1.];
         let rad: f32 = PI * 0.5;
         
-        rotate_x(&mut out, &mat_a, rad);
+        let result = rotate_x(&mut out, &mat_a, rad);
 
         assert!(equals(&[1., 0., 0., 0.,
                          0., f32::cos(rad), f32::sin(rad), 0.,
                          0., -f32::sin(rad), f32::cos(rad), 0.,
                          1., 2., 3., 1.], &out));
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -1926,12 +1968,13 @@ mod tests {
                                 1., 2., 3., 1.];
         let rad: f32 = PI * 0.5;
         
-        rotate_y(&mut mat_a, &mat_a_copy, rad);
+        let result = rotate_y(&mut mat_a, &mat_a_copy, rad);
 
         assert!(equals(&[f32::cos(rad), 0., -f32::sin(rad), 0.,
                          0., 1., 0., 0.,
                          f32::sin(rad), 0., f32::cos(rad), 0.,
                          1., 2., 3., 1.], &mat_a));
+        assert_eq!(result, mat_a);
     }
 
     #[test]
@@ -1946,12 +1989,13 @@ mod tests {
                            1., 2., 3., 1.];
         let rad: f32 = PI * 0.5;
         
-        rotate_y(&mut out, &mat_a, rad);
+        let result = rotate_y(&mut out, &mat_a, rad);
 
         assert!(equals(&[f32::cos(rad), 0., -f32::sin(rad), 0.,
                          0., 1., 0., 0.,
                          f32::sin(rad), 0., f32::cos(rad), 0.,
                          1., 2., 3., 1.], &out));
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -1966,12 +2010,13 @@ mod tests {
                                 1., 2., 3., 1.];
         let rad: f32 = PI * 0.5;
         
-        rotate_z(&mut mat_a, &mat_a_copy, rad);
+        let result = rotate_z(&mut mat_a, &mat_a_copy, rad);
 
         assert!(equals(&[f32::cos(rad), f32::sin(rad), 0., 0.,
                         -f32::sin(rad), f32::cos(rad), 0., 0.,
                          0., 0., 1., 0.,
                          1., 2., 3., 1.], &mat_a));
+        assert_eq!(result, mat_a);
     }
 
     #[test]
@@ -1986,12 +2031,13 @@ mod tests {
                            1., 2., 3., 1.];
         let rad: f32 = PI * 0.5;
         
-        rotate_z(&mut out, &mat_a, rad);
+        let result = rotate_z(&mut out, &mat_a, rad);
 
         assert!(equals(&[f32::cos(rad), f32::sin(rad), 0., 0.,
                         -f32::sin(rad), f32::cos(rad), 0., 0.,
                          0., 0., 1., 0.,
                          1., 2., 3., 1.], &out));
+        assert_eq!(result, out);
     }
     
     #[test]
@@ -1999,12 +2045,13 @@ mod tests {
         let mut out = create(); 
         let vec_a: Vec3 = [2., 3., 4.];
 
-        from_translation(&mut out, &vec_a);
+        let result = from_translation(&mut out, &vec_a);
 
         assert_eq!([1., 0., 0., 0.,
                     0., 1., 0., 0.,
                     0., 0., 1., 0.,
                     2., 3., 4., 1.], out); 
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -2012,12 +2059,13 @@ mod tests {
         let mut out = create(); 
         let vec_a: Vec3 = [2., 3., 4.];
 
-        from_scaling(&mut out, &vec_a);
+        let result = from_scaling(&mut out, &vec_a);
 
         assert_eq!([2., 0., 0., 0.,
                     0., 3., 0., 0.,
                     0., 0., 4., 0.,
                     0., 0., 0., 1.], out); 
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -2026,12 +2074,13 @@ mod tests {
         let rad: f32 = PI * 0.5;
         let axis: Vec3 = [1., 0., 0.];
         
-        from_rotation(&mut out, rad, &axis);
+        let result = from_rotation(&mut out, rad, &axis).unwrap();
 
         assert!(equals(&[1., 0., 0., 0.,
                          0., f32::cos(rad), f32::sin(rad), 0.,
                          0., -f32::sin(rad), f32::cos(rad), 0.,
                          0., 0., 0., 1.], &out));
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -2044,9 +2093,10 @@ mod tests {
                            0., 0., 1., 0.,
                            0., 0., 0., 1.];
         
-        from_rotation(&mut out, rad, &axis);
+        let result  = from_rotation(&mut out, rad, &axis);
 
         assert_eq!(ident, out);
+        assert_eq!(None, result);
     }
 
     #[test]
@@ -2054,12 +2104,13 @@ mod tests {
         let mut out: Mat4 = create(); 
         let rad: f32 = PI * 0.5;
         
-        from_x_rotation(&mut out, rad);
+        let result = from_x_rotation(&mut out, rad);
 
         assert!(equals(&[1., 0., 0., 0.,
                          0., f32::cos(rad), f32::sin(rad), 0.,
                          0., -f32::sin(rad), f32::cos(rad), 0.,
                          0., 0., 0., 1.], &out));
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -2067,12 +2118,13 @@ mod tests {
         let mut out: Mat4 = create(); 
         let rad: f32 = PI * 0.5;
 
-        from_y_rotation(&mut out, rad);
+        let result = from_y_rotation(&mut out, rad);
 
         assert!(equals(&[f32::cos(rad), 0., -f32::sin(rad), 0.,
                          0., 1., 0., 0.,
                          f32::sin(rad), 0., f32::cos(rad), 0.,
                          0., 0., 0., 1.], &out));
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -2080,12 +2132,13 @@ mod tests {
         let mut out: Mat4 = create(); 
         let rad: f32 = PI * 0.5;
         
-        from_z_rotation(&mut out, rad);
+        let result = from_z_rotation(&mut out, rad);
         
         assert!(equals(&[f32::cos(rad), f32::sin(rad), 0., 0.,
                         -f32::sin(rad), f32::cos(rad), 0., 0.,
                          0., 0., 1., 0.,
                          0., 0., 0., 1.], &out));
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -2094,18 +2147,33 @@ mod tests {
         let vec_a: Vec3 = [2., 3., 4.];
         let unit_quat: Quat = [0., 0., 0., 1.];
 
-        from_rotation_translation(&mut out, &unit_quat, &vec_a);
+        let result = from_rotation_translation(&mut out, &unit_quat, &vec_a);
     
         assert_eq!([1., 0., 0., 0.,
                     0., 1., 0., 0.,
                     0., 0., 1., 0.,
                     2., 3., 4., 1.], out); 
+        assert_eq!(result, out);
     }
 
     #[test]
-    fn mat4_from_quat2() { 
+    fn mat4_from_quat2_scale() { 
         let mut out: Mat4 = create(); 
         let unit_quat2: Quat2 = [0., 0., 0., 1., 0., 0., 0., 0.];
+
+        let result = from_quat2(&mut out, &unit_quat2);
+        
+        assert_eq!([1., 0., 0., 0.,
+                    0., 1., 0., 0.,
+                    0., 0., 1., 0.,
+                    0., 0., 0., 1.], out); 
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn mat4_from_quat2_do_not_scale() { 
+        let mut out: Mat4 = create(); 
+        let unit_quat2: Quat2 = [0., 0., 0., 0., 0., 0., 0., 0.];
 
         from_quat2(&mut out, &unit_quat2);
         
@@ -2114,16 +2182,496 @@ mod tests {
                     0., 0., 1., 0.,
                     0., 0., 0., 1.], out); 
     }
+    
+    #[test]
+    fn get_translation_of_mat4() {
+        let mut out: Vec3 = [0., 0., 0.];
+        let mat_a: Mat4 = [1., 0., 0., 0.,
+                           0., 1., 0., 0.,
+                           0., 0., 1., 0.,
+                           1., 2., 3., 1.];
+
+        let result = get_translation(&mut out, &mat_a);
+
+        assert_eq!([1., 2., 3.], out);
+        assert_eq!(result, out);
+    }
+   
+    #[test]
+    fn get_scaling_of_mat4() {
+        let mut out: Vec3 = [0., 0., 0.];
+        let mat_a: Mat4 = [1., 0., 0., 0.,
+                           0., 1., 0., 0.,
+                           0., 0., 1., 0.,
+                           1., 2., 3., 1.];
+
+        let result = get_scaling(&mut out, &mat_a);
+
+        assert_eq!([1., 1., 1.], out);
+        assert_eq!(result, out);
+    }
+    
+    #[test]
+    fn get_rotation_of_mat4_case_one() {
+        let mut out: Quat = [0., 0., 0., 0.];
+        let mat_a: Mat4 = [1., 0., 0., 0.,
+                           0., 1., 0., 0.,
+                           0., 0., 1., 0.,
+                           1., 2., 3., 1.];
+
+        let result = get_rotation(&mut out, &mat_a);
+
+        assert_eq!([0., 0., 0., 1.], out);
+        assert_eq!(result, out);
+    }
+    
+    #[test]
+    fn get_rotation_of_mat4_case_two() {
+        use super::super::quat;
+       
+        let rad: f32 = PI;
+        let mut out: Quat = [0., 0., 0., 0.];
+        let mat = &mut create();
+
+        let result =get_rotation(&mut out, &from_x_rotation(mat, rad));
+
+        assert!(quat::equals(&[1., 0., 0., 0.], &out));
+        assert_eq!(result, out);
+    }
+    
+    #[test]
+    fn get_rotation_of_mat4_case_three() {
+        use super::super::quat;
+       
+        let rad: f32 = PI;
+        let mut out: Quat = [0., 0., 0., 0.];
+        let mat = &mut create();
+
+        let result = get_rotation(&mut out, &from_y_rotation(mat, rad));
+
+        assert!(quat::equals(&[0., 1., 0., 0.], &out));
+        assert_eq!(result, out);
+    }
+   
+    #[test]
+    fn get_rotation_of_mat4_case_four() {
+        use super::super::quat;
+        
+        let rad: f32 = PI;
+        let mut out: Quat = [0., 0., 0., 0.];
+        let mat = &mut create();
+
+        let result = get_rotation(&mut out, &from_z_rotation(mat, rad));
+
+        assert!(quat::equals(&[0., 0., 1., 0.], &out));
+        assert_eq!(result, out);
+    }
+   
+    #[test]
+    fn mat4_from_rotation_translation_scale() {
+        let mut out: Mat4 = [0., 0., 0., 0., 
+                             0., 0., 0., 0.,
+                             0., 0., 0., 0., 
+                             0., 0., 0., 0.];
+        let mat_a: Mat4 = [1., 0., 0., 0.,
+                           0., 1., 0., 0.,
+                           0., 0., 1., 0.,
+                           1., 2., 3., 1.];
+        let q: Quat = [0., 0., 0., 1.];
+        let v: Vec3 = [1., 2., 3.];
+        let s: Vec3 = [1., 1., 1.];
+
+        let result = from_rotation_translation_scale(&mut out, &q, &v, &s);
+
+        assert_eq!(mat_a, out);
+        assert_eq!(result, out);
+    }
+    
+    #[test]
+    fn mat4_from_rotation_translation_scale_origin() {
+        let mut out: Mat4 = [0., 0., 0., 0., 
+                             0., 0., 0., 0.,
+                             0., 0., 0., 0., 
+                             0., 0., 0., 0.];
+        let mat_a: Mat4 = [1., 0., 0., 0.,
+                           0., 1., 0., 0.,
+                           0., 0., 1., 0.,
+                           1., 2., 3., 1.];
+        let q: Quat = [0., 0., 0., 1.];
+        let v: Vec3 = [1., 2., 3.];
+        let s: Vec3 = [1., 1., 1.];
+        let o: Vec3 = [0., 0., 0.];
+
+        let result = from_rotation_translation_scale_origin(&mut out, &q, &v, &s, &o);
+
+        assert_eq!(mat_a, out);
+        assert_eq!(result, out);
+    }
+   
     #[test]
     fn mat4_from_quat() { 
         let mut out: Mat4 = create(); 
         let unit_quat: Quat = [0., 0., 0., 1.];
 
-        from_quat(&mut out, &unit_quat);
+        let result = from_quat(&mut out, &unit_quat);
         
         assert_eq!([1., 0., 0., 0.,
                     0., 1., 0., 0.,
                     0., 0., 1., 0.,
                     0., 0., 0., 1.], out); 
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    #[ignore]
+    fn mat4_frustum() { 
+        let mut out: Mat4 = [0., 0., 0., 0., 
+                             0., 0., 0., 0.,
+                             0., 0., 0., 0., 
+                             0., 0., 0., 0.];
+        
+        let result = frustum(&mut out, -1., -1., -1., -1., -1., -1.);
+
+        assert_eq!([-1., 0., 0., 0.,
+                    0., -1., 0., 0.,
+                    0., 0., 0., -1.,
+                    0., 0., 1., 0.], out);
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn mat4_perspective_case_one() { 
+        let fovy = PI * 0.5;
+        let mut out: Mat4 = [0., 0., 0., 0., 
+                             0., 0., 0., 0.,
+                             0., 0., 0., 0., 
+                             0., 0., 0., 0.];
+        
+        let result = perspective(&mut out, fovy, 1., 0., Some(1.));
+
+        assert_eq!([1., 0., 0., 0.,
+                    0., 1., 0., 0.,
+                    0., 0., -1., -1.,
+                    0., 0., 0., 0.], out);
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn mat4_perspective_case_two() { 
+        let fovy = PI * 0.5;
+        let mut out: Mat4 = [0., 0., 0., 0., 
+                             0., 0., 0., 0.,
+                             0., 0., 0., 0., 
+                             0., 0., 0., 0.];
+        
+        let result = perspective(&mut out, fovy, 1., 0., Some(INFINITY));
+
+        assert_eq!([1., 0., 0., 0.,
+                    0., 1., 0., 0.,
+                    0., 0., -1., -1.,
+                    0., 0., 0., 0.], out);
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn mat4_perspective_case_three() { 
+        let fovy = PI * 0.5;
+        let mut out: Mat4 = [0., 0., 0., 0., 
+                             0., 0., 0., 0.,
+                             0., 0., 0., 0., 
+                             0., 0., 0., 0.];
+        
+        let result = perspective(&mut out, fovy, 1., 0., None);
+
+        assert_eq!([1., 0., 0., 0.,
+                    0., 1., 0., 0.,
+                    0., 0., -1., -1.,
+                    0., 0., 0., 0.], out);
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    #[ignore]
+    fn mat4_perspective_from_field_of_view() { 
+
+    }
+
+    #[test]
+    fn mat4_ortho() { 
+        let mut out: Mat4 = [0., 0., 0., 0., 
+                             0., 0., 0., 0.,
+                             0., 0., 0., 0., 
+                             0., 0., 0., 0.];
+        
+        let result = ortho(&mut out, -1., 1., -1., 1., -1., 1.);
+
+        assert_eq!([1., 0., 0., 0.,
+                    0., 1., 0., 0.,
+                    0., 0., -1., 0.,
+                    0., 0., 0., 1.], out);
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    #[ignore]
+    fn mat4_look_at() { 
+        use super::super::mat4;
+
+
+    }
+
+    #[test]
+    #[ignore]
+    fn mat4_target_to() { 
+
+    }
+
+    #[test]
+    fn get_mat4_string() {
+        let mat_a: Mat4 = [1., 0., 0., 0.,
+                           0., 1., 0., 0.,
+                           0., 0., 1., 0.,
+                           1., 2., 3., 1.];
+        
+        let str_a = string(&mat_a);
+
+        assert_eq!("mat4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 2, 3, 1)".to_string(),
+                   str_a);
+    }
+
+    #[test]
+    fn calc_frob_norm_of_mat4() { 
+        let mat_a: Mat4 = [1., 0., 0., 0.,
+                           0., 1., 0., 0.,
+                           0., 0., 1., 0.,
+                           1., 2., 3., 1.];
+        
+        let frob_a = frob(&mat_a); 
+
+        assert_eq!((1_f32.powi(2) + 0_f32.powi(2) + 0_f32.powi(2) + 0_f32.powi(2) +
+                    0_f32.powi(2) + 1_f32.powi(2) + 0_f32.powi(2) + 0_f32.powi(2) +
+                    0_f32.powi(2) + 0_f32.powi(2) + 1_f32.powi(2) + 0_f32.powi(2) + 
+                    1_f32.powi(2) + 2_f32.powi(2) + 3_f32.powi(2) + 1_f32.powi(2)).sqrt(), frob_a);
+    }
+
+    #[test]
+    fn add_two_mat4s() { 
+        let mut out: Mat4 = [0., 0., 0., 0., 
+                             0., 0., 0., 0.,
+                             0., 0., 0., 0., 
+                             0., 0., 0., 0.];
+        let mat_a: Mat4 = [1., 2., 3., 4.,
+                           5., 6., 7., 8., 
+                           9., 10., 11., 12., 
+                           13., 14., 15., 16.];
+        let mat_b: Mat4 = [17., 18., 19., 20., 
+                           21., 22., 23., 24., 
+                           25., 26., 27., 28., 
+                           29., 30., 31., 32.];
+        
+        let result = add(&mut out, &mat_a, &mat_b);
+
+        assert_eq!([18., 20., 22., 24., 
+                    26., 28., 30., 32.,
+                    34., 36., 38., 40., 
+                    42., 44., 46., 48.], out);
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn subtract_two_mat4s() { 
+        let mut out: Mat4 = [0., 0., 0., 0., 
+                             0., 0., 0., 0.,
+                             0., 0., 0., 0., 
+                             0., 0., 0., 0.];
+        let mat_a: Mat4 = [1., 2., 3., 4.,
+                           5., 6., 7., 8., 
+                           9., 10., 11., 12., 
+                           13., 14., 15., 16.];
+        let mat_b: Mat4 = [17., 18., 19., 20., 
+                           21., 22., 23., 24., 
+                           25., 26., 27., 28., 
+                           29., 30., 31., 32.];
+        
+        let result = subtract(&mut out, &mat_a, &mat_b);
+
+        assert_eq!([-16., -16., -16. , -16., 
+                    -16., -16., -16. , -16.,
+                    -16., -16., -16. , -16.,
+                    -16., -16., -16. , -16.], out);
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn sub_two_mat3s() { 
+        let mut out: Mat4 = [0., 0., 0., 0., 
+                             0., 0., 0., 0.,
+                             0., 0., 0., 0., 
+                             0., 0., 0., 0.];
+        let mat_a: Mat4 = [1., 2., 3., 4.,
+                           5., 6., 7., 8., 
+                           9., 10., 11., 12., 
+                           13., 14., 15., 16.];
+        let mat_b: Mat4 = [17., 18., 19., 20., 
+                           21., 22., 23., 24., 
+                           25., 26., 27., 28., 
+                           29., 30., 31., 32.];
+        
+        let result = sub(&mut out, &mat_a, &mat_b);
+
+        assert_eq!([-16., -16., -16. , -16., 
+                    -16., -16., -16. , -16.,
+                    -16., -16., -16. , -16.,
+                    -16., -16., -16. , -16.], out);
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn sub_is_equal_to_subtract() { 
+        let mut out_a: Mat4 = [0., 0., 0., 0., 
+                               0., 0., 0., 0.,
+                               0., 0., 0., 0., 
+                               0., 0., 0., 0.];
+        let mut out_b: Mat4 = [0., 0., 0., 0., 
+                               0., 0., 0., 0.,
+                               0., 0., 0., 0., 
+                               0., 0., 0., 0.];
+        let mat_a: Mat4 = [1., 2., 3., 4.,
+                           5., 6., 7., 8., 
+                           9., 10., 11., 12., 
+                           13., 14., 15., 16.];
+        let mat_b: Mat4 = [17., 18., 19., 20., 
+                           21., 22., 23., 24., 
+                           25., 26., 27., 28., 
+                           29., 30., 31., 32.];
+        
+        sub(&mut out_a, &mat_a, &mat_b);
+        subtract(&mut out_b, &mat_a, &mat_b);
+
+        assert_eq!(out_a, out_b);
+    }
+
+    #[test]
+    fn multiply_mat3_by_scalar() { 
+        let mut out: Mat4 = [0., 0., 0., 0., 
+                             0., 0., 0., 0.,
+                             0., 0., 0., 0., 
+                             0., 0., 0., 0.];
+        let mat_a: Mat4 = [1., 2., 3., 4.,
+                           5., 6., 7., 8., 
+                           9., 10., 11., 12., 
+                           13., 14., 15., 16.];
+        
+        let result = multiply_scalar(&mut out, &mat_a, 2.);
+
+        assert_eq!([2., 4., 6., 8., 
+                    10., 12., 14., 16., 
+                    18., 20., 22., 24., 
+                    26., 28., 30., 32.], out);
+        assert_eq!(result, out);                    
+    }
+
+    #[test]
+    fn multiply_mat4_by_scalar_and_add() { 
+        let mut out: Mat4 = [0., 0., 0., 0., 
+                             0., 0., 0., 0.,
+                             0., 0., 0., 0., 
+                             0., 0., 0., 0.];
+        let mat_a: Mat4 = [1., 2., 3., 4.,
+                           5., 6., 7., 8., 
+                           9., 10., 11., 12., 
+                           13., 14., 15., 16.];
+        let mat_b: Mat4 = [17., 18., 19., 20., 
+                           21., 22., 23., 24., 
+                           25., 26., 27., 28., 
+                           29., 30., 31., 32.];
+
+        let result = multiply_scalar_and_add(&mut out, &mat_a, &mat_b, 0.5);
+
+        assert_eq!([9.5, 11., 12.5, 14., 
+                    15.5, 17., 18.5, 20.,
+                    21.5, 23., 24.5, 26., 
+                    27.5, 29., 30.5, 32.], out);
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn mat4s_are_exact_equal() { 
+        let mat_a: Mat4 = [0., 1., 2., 3., 
+                           5., 6.,  7., 8., 
+                           9., 10., 11., 12.,
+                           13., 14., 15., 16.];
+        let mat_b: Mat4 = [0., 1., 2., 3., 
+                           5., 6.,  7., 8., 
+                           9., 10., 11., 12.,
+                           13., 14., 15., 16.];
+
+        let r0 = exact_equals(&mat_a, &mat_b);
+
+        assert!(r0);  
+    }
+
+    #[test]
+    fn mat4s_are_not_exact_equal() { 
+        let mat_a: Mat4 = [0., 1., 2., 3., 
+                           5., 6.,  7., 8., 
+                           9., 10., 11., 12.,
+                           13., 14., 15., 16.];
+        let mat_b: Mat4 = [1., 2., 3., 5.,
+                           6.,  7., 8., 9., 
+                           10., 11., 12., 13., 
+                           14., 15., 16., 17.];
+
+        let r0 = exact_equals(&mat_a, &mat_b);
+
+        assert!(!r0); 
+    }
+
+    #[test]
+    fn mat4s_are_equal() { 
+        let mat_a: Mat4 = [0., 1., 2., 3., 
+                           5., 6.,  7., 8., 
+                           9., 10., 11., 12.,
+                           13., 14., 15., 16.];
+        let mat_b: Mat4 = [0., 1., 2., 3., 
+                           5., 6.,  7., 8., 
+                           9., 10., 11., 12.,
+                           13., 14., 15., 16.];
+
+        let r0 = equals(&mat_a, &mat_b);
+
+        assert!(r0);  
+    }
+
+    #[test]
+    fn mat4s_are_equal_enough() { 
+        let mat_a: Mat4 = [0., 1., 2., 3., 
+                           5., 6.,  7., 8., 
+                           9., 10., 11., 12.,
+                           13., 14., 15., 16.];
+        let mat_b: Mat4 = [1_f32*10_f32.powi(-16), 1., 2., 3., 
+                           5., 6.,  7., 8., 
+                           9., 10., 11., 12.,
+                           13., 14., 15., 16.];
+
+        let r0 = equals(&mat_a, &mat_b);
+
+        assert!(r0);  
+    }
+
+    #[test]
+    fn mat4_are_not_equal() { 
+        let mat_a: Mat4 = [0., 1., 2., 3., 
+                           5., 6.,  7., 8., 
+                           9., 10., 11., 12.,
+                           13., 14., 15., 16.];
+        let mat_b: Mat4 = [1., 2., 3., 5.,
+                           6.,  7., 8., 9., 
+                           10., 11., 12., 13., 
+                           14., 15., 16., 17.];
+
+        let r0 = equals(&mat_a, &mat_b);
+
+        assert!(!r0);  
     }
 }

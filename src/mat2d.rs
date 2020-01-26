@@ -387,11 +387,7 @@ mod tests {
         let mut out: Mat2d = [0., 0., 0., 0., 0., 0.];
         let mat_a: Mat2d = [1., 2., 3., 4., 5., 6.];
 
-        let result = invert(&mut out, &mat_a); 
-        let result = match result { 
-            Some(result) => result,
-            None => panic!("This should have worked!")
-        };
+        let result = invert(&mut out, &mat_a).unwrap();
 
         assert_eq!([ -2., 1., 1.5, -0.5, 1., -2.], out);
         assert_eq!(result, out);
@@ -403,7 +399,8 @@ mod tests {
         let mat_a: Mat2d = [-1., 3./2., 2./3., -1., 0., 0.]; 
 
         let result = invert(&mut out, &mat_a); 
-        
+       
+        assert_eq!([0., 0., 0., 0., 0., 0.], out);
         assert_eq!(None, result);
     } 
     

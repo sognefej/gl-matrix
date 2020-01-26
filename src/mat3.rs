@@ -891,11 +891,7 @@ mod tests {
                            0., 1., 0.,
                            1., 2., 1.];
 
-        let result = invert(&mut out, &mat_a); 
-        let result = match result { 
-            Some(result) => result,
-            None => panic!("This should have worked!")
-        };
+        let result = invert(&mut out, &mat_a).unwrap();
 
         assert_eq!([1., 0., 0.,
                     0., 1., 0.,
@@ -914,6 +910,9 @@ mod tests {
 
         let result = invert(&mut out, &mat_a); 
 
+        assert_eq!([0., 0., 0., 
+                    0., 0., 0.,
+                    0., 0., 0.], out);
         assert_eq!(None, result);
     } 
 
