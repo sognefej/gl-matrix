@@ -1,5 +1,11 @@
+//! 4x4 Matrix
+//! 
+//! Format: column-major, when typed out it looks like row-major 
+//! The matrices are being post multiplied.
+ 
 use super::common::{Mat4, Vec3, Quat, Quat2, hypot, EPSILON, PI, INFINITY, NEG_INFINITY};
 
+/// Fov struct for mat4::perspective_from_field_of_view 
 pub struct Fov {
     up_degrees: f32,
     down_degrees: f32, 
@@ -7,6 +13,9 @@ pub struct Fov {
     right_degrees: f32,
 }
 
+/// Creates a new identity mat4
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn create() -> Mat4 {
     let mut out: Mat4 = [0_f32; 16];
 
@@ -18,6 +27,9 @@ pub fn create() -> Mat4 {
     out
 }
 
+/// Creates a new mat4 initialized with values from an existing matrix
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn clone(a: &Mat4) -> Mat4 {
     let mut out: Mat4 = [0_f32; 16];
 
@@ -41,6 +53,9 @@ pub fn clone(a: &Mat4) -> Mat4 {
     out
 }
 
+/// Copy the values from one mat4 to another
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn copy(out: &mut Mat4, a: &Mat4) -> Mat4 {
     out[0] = a[0];
     out[1] = a[1];
@@ -62,6 +77,9 @@ pub fn copy(out: &mut Mat4, a: &Mat4) -> Mat4 {
     *out
 }
 
+/// Create a new mat4 with the given values
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn from_values(m00: f32, m01: f32, m02: f32, m03: f32, 
                    m10: f32, m11: f32, m12: f32, m13: f32, 
                    m20: f32, m21: f32, m22: f32, m23: f32, 
@@ -88,6 +106,9 @@ pub fn from_values(m00: f32, m01: f32, m02: f32, m03: f32,
     out
 }
 
+/// Set the components of a mat4 to the given values
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn set(out: &mut Mat4, m00: f32, m01: f32, m02: f32, m03: f32, 
                            m10: f32, m11: f32, m12: f32, m13: f32, 
                            m20: f32, m21: f32, m22: f32, m23: f32, 
@@ -112,6 +133,9 @@ pub fn set(out: &mut Mat4, m00: f32, m01: f32, m02: f32, m03: f32,
     *out
 }
 
+/// Set a mat4 to the identity matrix
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn identity(out: &mut Mat4) -> Mat4 {
     out[0] = 1.;
     out[1] = 0.;
@@ -133,6 +157,9 @@ pub fn identity(out: &mut Mat4) -> Mat4 {
     *out
 }
 
+/// Transpose the values of a mat4
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn transpose(out: &mut Mat4, a: &Mat4) -> Mat4 {
     // If we are transposing ourselves we can skip a few steps but have to cache some values
     if out.eq(&a) {
@@ -177,6 +204,9 @@ pub fn transpose(out: &mut Mat4, a: &Mat4) -> Mat4 {
     *out
 }
 
+/// Inverts a mat4
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn invert(out: &mut Mat4, a: &Mat4) -> Option<Mat4> {
     let a00 = a[0];
     let a01 = a[1];
@@ -237,6 +267,9 @@ pub fn invert(out: &mut Mat4, a: &Mat4) -> Option<Mat4> {
     Some(*out)
 }
 
+/// Calculates the adjugate of a mat4
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn adjoint(out: &mut Mat4, a: &Mat4) -> Mat4 {
     let a00 = a[0];
     let a01 = a[1];
@@ -275,6 +308,9 @@ pub fn adjoint(out: &mut Mat4, a: &Mat4) -> Mat4 {
     *out
 }
 
+///  Calculates the determinant of a mat4
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn determinant(a: &Mat4) -> f32 {
     let a00 = a[0];
     let a01 = a[1];
@@ -310,6 +346,9 @@ pub fn determinant(a: &Mat4) -> f32 {
     b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06
 }
 
+/// Multiplies two mat4s
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn multiply(out: &mut Mat4, a: &Mat4, b: &Mat4) -> Mat4 {
     let a00 = a[0];
     let a01 = a[1];
@@ -368,6 +407,9 @@ pub fn multiply(out: &mut Mat4, a: &Mat4, b: &Mat4) -> Mat4 {
     *out
 }
 
+/// Translate a mat4 by the given vector
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn translate(out: &mut Mat4, a: &Mat4, v: &Vec3) -> Mat4 {
     let x = v[0];
     let y = v[1];
@@ -413,6 +455,9 @@ pub fn translate(out: &mut Mat4, a: &Mat4, v: &Vec3) -> Mat4 {
     *out
 }
 
+/// Scales the mat4 by the dimensions in the given vec3 not using vectorization
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn scale(out: &mut Mat4, a: &Mat4, v: &Vec3) -> Mat4 {
     let x = v[0];
     let y = v[1];
@@ -438,6 +483,9 @@ pub fn scale(out: &mut Mat4, a: &Mat4, v: &Vec3) -> Mat4 {
     *out
 }
 
+/// Rotates a mat4 by the given angle around the given axis
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn rotate(out: &mut Mat4, a: &Mat4, rad: f32, axis: &Vec3) -> Option<Mat4> {
     let mut x = axis[0];
     let mut y = axis[1];
@@ -508,6 +556,9 @@ pub fn rotate(out: &mut Mat4, a: &Mat4, rad: f32, axis: &Vec3) -> Option<Mat4> {
     Some(*out)
 }
 
+/// Rotates a matrix by the given angle around the X axis
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn rotate_x(out: &mut Mat4, a: &Mat4, rad: f32) -> Mat4 {
     let s = f32::sin(rad);
     let c = f32::cos(rad);
@@ -546,6 +597,9 @@ pub fn rotate_x(out: &mut Mat4, a: &Mat4, rad: f32) -> Mat4 {
     *out
 }
 
+/// Rotates a matrix by the given angle around the Y axis
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn rotate_y(out: &mut Mat4, a: &Mat4, rad: f32) -> Mat4 {
     let s = f32::sin(rad);
     let c = f32::cos(rad);
@@ -584,6 +638,9 @@ pub fn rotate_y(out: &mut Mat4, a: &Mat4, rad: f32) -> Mat4 {
     *out
 }
 
+/// Rotates a matrix by the given angle around the Z axis
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn rotate_z(out: &mut Mat4, a: &Mat4, rad: f32) -> Mat4 {
     let s = f32::sin(rad);
     let c = f32::cos(rad);
@@ -622,6 +679,24 @@ pub fn rotate_z(out: &mut Mat4, a: &Mat4, rad: f32) -> Mat4 {
     *out
 }
 
+/// Creates a matrix from a vector translation
+/// 
+/// This is equivalent to (but much faster than):
+/// ```
+/// use gl_matrix::common::*;
+/// use gl_matrix::mat4;
+///
+/// let dest = &mut [0., 0., 0., 0.,
+///                  0., 0., 0., 0., 
+///                  0., 0., 0., 0.,
+///                  0., 0., 0., 0.];
+/// let vec: Vec2 = [2., 3.];
+/// 
+/// mat4::identity(dest);
+/// mat4::translate(dest, &mat4::clone(dest), &vec);
+/// ```
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn from_translation(out: &mut Mat4, v: &Vec3) -> Mat4 {
     out[0] = 1.;
     out[1] = 0.;
@@ -643,6 +718,25 @@ pub fn from_translation(out: &mut Mat4, v: &Vec3) -> Mat4 {
     *out
 }
 
+/// Creates a matrix from a vector scaling
+/// 
+/// This is equivalent to (but much faster than):
+/// ```
+/// use gl_matrix::common::*;
+/// use gl_matrix::mat4;
+///
+/// let dest = &mut [0., 0., 0., 0.,
+///                  0., 0., 0., 0., 
+///                  0., 0., 0., 0.,
+///                  0., 0., 0., 0.];
+/// let vec: Vec2 = [2., 3.];
+/// let axis: Vec3 = [1., 0., 0.];
+/// 
+/// mat4::identity(dest);
+/// mat4::scale(dest, &mat4::clone(dest), &vec, &axis);
+/// ```
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn from_scaling(out: &mut Mat4, v: &Vec3) -> Mat4 {
     out[0] = v[0];
     out[1] = 0.;
@@ -664,6 +758,25 @@ pub fn from_scaling(out: &mut Mat4, v: &Vec3) -> Mat4 {
     *out
 }
 
+/// Creates a matrix from a given angle around a given axis
+/// 
+/// This is equivalent to (but much faster than):
+/// ```
+/// use gl_matrix::common::*;
+/// use gl_matrix::mat4;
+///
+/// let dest = &mut [0., 0., 0., 0.,
+///                  0., 0., 0., 0., 
+///                  0., 0., 0., 0.,
+///                  0., 0., 0., 0.];
+/// let rad = PI * 0.5;
+/// let axis: Vec3 = [1., 0., 0.];
+/// 
+/// mat4::identity(dest);
+/// mat4::rotate(dest, &mat4::clone(dest), rad, &axis);
+/// ```
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn from_rotation(out: &mut Mat4, rad: f32, axis: &Vec3) -> Option<Mat4> {
     let mut x = axis[0];
     let mut y = axis[1];
@@ -706,6 +819,25 @@ pub fn from_rotation(out: &mut Mat4, rad: f32, axis: &Vec3) -> Option<Mat4> {
     Some(*out)
 }
 
+
+/// Creates a matrix from the given angle around the X axis
+/// 
+/// This is equivalent to (but much faster than):
+/// ```
+/// use gl_matrix::common::*;
+/// use gl_matrix::mat4;
+///
+/// let dest = &mut [0., 0., 0., 0.,
+///                  0., 0., 0., 0., 
+///                  0., 0., 0., 0.,
+///                  0., 0., 0., 0.];
+/// let rad = PI * 0.5;
+/// 
+/// mat4::identity(dest);
+/// mat4::rotate_x(dest, &mat4::clone(dest), rad);
+/// ```
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn from_x_rotation(out: &mut Mat4, rad: f32) -> Mat4 {
     let s = f32::sin(rad);
     let c = f32::cos(rad);
@@ -731,6 +863,24 @@ pub fn from_x_rotation(out: &mut Mat4, rad: f32) -> Mat4 {
     *out
 }
 
+/// Creates a matrix from the given angle around the Y axis
+/// 
+/// This is equivalent to (but much faster than):
+/// ```
+/// use gl_matrix::common::*;
+/// use gl_matrix::mat4;
+///
+/// let dest = &mut [0., 0., 0., 0.,
+///                  0., 0., 0., 0., 
+///                  0., 0., 0., 0.,
+///                  0., 0., 0., 0.];
+/// let rad = PI * 0.5;
+/// 
+/// mat4::identity(dest);
+/// mat4::rotate_y(dest, &mat4::clone(dest), rad);
+/// ```
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn from_y_rotation(out: &mut Mat4, rad: f32) -> Mat4 {
     let s = f32::sin(rad);
     let c = f32::cos(rad);
@@ -756,6 +906,24 @@ pub fn from_y_rotation(out: &mut Mat4, rad: f32) -> Mat4 {
     *out 
 }
 
+/// Creates a matrix from the given angle around the Z axis
+/// 
+/// This is equivalent to (but much faster than):
+/// ```
+/// use gl_matrix::common::*;
+/// use gl_matrix::mat4;
+///
+/// let dest = &mut [0., 0., 0., 0.,
+///                  0., 0., 0., 0., 
+///                  0., 0., 0., 0.,
+///                  0., 0., 0., 0.];
+/// let rad = PI * 0.5;
+/// 
+/// mat4::identity(dest);
+/// mat4::rotate_z(dest, &mat4::clone(dest), rad);
+/// ```
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn from_z_rotation(out: &mut Mat4, rad: f32) -> Mat4 {
     let s = f32::sin(rad);
     let c = f32::cos(rad);
@@ -781,6 +949,9 @@ pub fn from_z_rotation(out: &mut Mat4, rad: f32) -> Mat4 {
     *out
 }
 
+/// Creates a matrix from a quaternion rotation and vector translation
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn from_rotation_translation(out: &mut Mat4, q: &Quat, v: &Vec3) -> Mat4 {
     // Quaternion math
     let x = q[0];
@@ -821,6 +992,9 @@ pub fn from_rotation_translation(out: &mut Mat4, q: &Quat, v: &Vec3) -> Mat4 {
     *out
 }
 
+/// Creates a new mat4 from a dual quat.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn from_quat2(mut out: &mut Mat4, a: &Quat2) -> Mat4 {
     let mut translation: Vec3 = [0_f32; 3];
     let bx = -a[0];
@@ -850,6 +1024,12 @@ pub fn from_quat2(mut out: &mut Mat4, a: &Quat2) -> Mat4 {
     from_rotation_translation(&mut out, &quat_a, &translation)
 }
 
+/// Returns the translation vector component of a transformation
+/// matrix. If a matrix is built with fromRotationTranslation,
+/// the returned vector will be the same as the translation vector
+/// originally supplied.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn get_translation(out: &mut Vec3, mat: &Mat4) -> Vec3 {
     out[0] = mat[12];
     out[1] = mat[13];
@@ -858,6 +1038,13 @@ pub fn get_translation(out: &mut Vec3, mat: &Mat4) -> Vec3 {
     *out
 }
 
+/// Returns the scaling factor component of a transformation
+/// matrix. If a matrix is built with fromRotationTranslationScale
+/// with a normalized Quaternion paramter, the returned vector will be
+/// the same as the scaling vector
+/// originally supplied.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn get_scaling(out: &mut Vec3, mat: &Mat4) -> Vec3 {
     let mut vec_1: Vec3 = [0_f32; 3];
     vec_1[0] = mat[0]; // m11
@@ -881,6 +1068,12 @@ pub fn get_scaling(out: &mut Vec3, mat: &Mat4) -> Vec3 {
     *out
 }
 
+/// Returns a quaternion representing the rotational component
+/// of a transformation matrix. If a matrix is built with
+/// fromRotationTranslation, the returned quaternion will be the
+/// same as the quaternion originally supplied.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn get_rotation(out: &mut Quat, mat: &Mat4) -> Quat {
     let mut scaling: Vec3 = [0_f32; 3];
     
@@ -931,6 +1124,30 @@ pub fn get_rotation(out: &mut Quat, mat: &Mat4) -> Quat {
     *out
 }
 
+/// Creates a matrix from a quaternion rotation, vector translation and vector scale
+/// 
+/// This is equivalent to (but much faster than):
+/// ```
+/// use gl_matrix::common::*;
+/// use gl_matrix::mat4;
+/// use gl_matrix::quat; 
+/// 
+/// let dest = &mut [0., 0., 0., 0.,
+///                  0., 0., 0., 0., 
+///                  0., 0., 0., 0.,
+///                  0., 0., 0., 0.];
+/// let quat = &mut [0., 0., 0., 0.];
+/// let scale: Vec3 = [2., 3., 4.];
+///  
+/// mat4::identity(dest);
+/// mat4::translate(dest, &vec);
+/// let quat_mat = mat4::create();
+/// quat::to_mat4(quat, &quat_mat);
+/// mat4::multiply(dest, &quat_mat);
+/// mat4::scale(dest, &clone(dest), &scale);
+/// ```
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn from_rotation_translation_scale(out: &mut Mat4, q: &Quat, 
                                        v: &Vec3, s: &Vec3) -> Mat4 {
     // Quaternion math
@@ -975,6 +1192,10 @@ pub fn from_rotation_translation_scale(out: &mut Mat4, q: &Quat,
     *out
 }
 
+/// Creates a matrix from a quaternion rotation, vector translation and vector scale, 
+/// rotating and scaling around the given origin
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn from_rotation_translation_scale_origin(out: &mut Mat4, q: &Quat,
                                               v: &Vec3, s: &Vec3, o: &Vec3) -> Mat4 {
     // Quaternion math
@@ -1034,6 +1255,9 @@ pub fn from_rotation_translation_scale_origin(out: &mut Mat4, q: &Quat,
     *out
 }
 
+/// Calculates a 4x4 matrix from the given quaternion
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn from_quat(out: &mut Mat4, q: &Quat) -> Mat4 {
     let x = q[0];
     let y = q[1];
@@ -1073,6 +1297,9 @@ pub fn from_quat(out: &mut Mat4, q: &Quat) -> Mat4 {
     *out
 }
 
+/// Generates a frustum matrix with the given bounds
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn frustum(out: &mut Mat4, 
                left: f32, right: f32, 
                bottom: f32, top: f32, 
@@ -1101,6 +1328,10 @@ pub fn frustum(out: &mut Mat4,
     *out
 }
 
+/// Generates a perspective projection matrix with the given bounds.
+/// Passing None/INFINITY/NEG_INFINITY for far will generate infinite projection matrix.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn perspective(out: &mut Mat4, fovy: f32, aspect: f32, 
                    near: f32, far: Option<f32>) -> Mat4 {
     let f = 1.0 / f32::tan(fovy / 2.);
@@ -1141,6 +1372,11 @@ pub fn perspective(out: &mut Mat4, fovy: f32, aspect: f32,
     *out
 }
 
+/// Generates a perspective projection matrix with the given field of view.
+/// This is primarily useful for generating projection matrices to be used
+/// with the still experiemental WebVR API.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html) 
 pub fn perspective_from_field_of_view(out: &mut Mat4, fov: &Fov, near: f32, far: f32) {
     let up_tan = f32::tan(fov.up_degrees * PI/180.0);
     let down_tan = f32::tan(fov.down_degrees * PI/180.0);
@@ -1167,6 +1403,9 @@ pub fn perspective_from_field_of_view(out: &mut Mat4, fov: &Fov, near: f32, far:
     out[15] = 0.0;
 }
 
+/// Generates a orthogonal projection matrix with the given bounds
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html) 
 pub fn ortho(out: &mut Mat4,
              left: f32, right: f32, 
              bottom: f32, top: f32, 
@@ -1195,6 +1434,10 @@ pub fn ortho(out: &mut Mat4,
     *out
 }
 
+/// Generates a look-at matrix with the given eye position, focal point, and up axis.
+/// If you want a matrix that actually makes an object look at another object, you should use target_to instead.
+///
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html) 
 pub fn look_at(mut out: &mut Mat4, eye: &Vec3, center: &Vec3, up: &Vec3) -> Mat4 {
     let eyex = eye[0];
     let eyey = eye[1];
@@ -1277,6 +1520,9 @@ pub fn look_at(mut out: &mut Mat4, eye: &Vec3, center: &Vec3, up: &Vec3) -> Mat4
     *out
 }
 
+/// Generates a matrix that makes something look at something else
+///
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html) 
 pub fn target_to(out: &mut Mat4, eye: &Vec3, target: &Vec3, up: &Vec3) {
     let eyex = eye[0];
     let eyey = eye[1];
@@ -1327,6 +1573,9 @@ pub fn target_to(out: &mut Mat4, eye: &Vec3, target: &Vec3, up: &Vec3) {
     out[15] = 1.;
 }
 
+/// Returns a string representation of a mat4.
+///
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html) 
 pub fn string(a: &Mat4) -> String {
     let a0 = ["mat4(".to_string(), a[0].to_string()].join("");
     let a1 = a[1].to_string(); 
@@ -1348,10 +1597,16 @@ pub fn string(a: &Mat4) -> String {
     [a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15].join(", ")
 }
 
+/// Returns Frobenius norm of a mat4
+///
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html) 
 pub fn frob(a: &Mat4) -> f32 {
     hypot(a)
 }
 
+/// Adds two mat4's
+///
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html) 
 pub fn add(out: &mut Mat4, a: &Mat4, b: &Mat4) -> Mat4 {
     out[0] = a[0] + b[0];
     out[1] = a[1] + b[1];
@@ -1373,6 +1628,9 @@ pub fn add(out: &mut Mat4, a: &Mat4, b: &Mat4) -> Mat4 {
     *out
 }
 
+/// Subtracts matrix b from matrix a
+///
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html) 
 pub fn subtract(out: &mut Mat4, a: &Mat4, b: &Mat4) -> Mat4 {
     out[0] = a[0] - b[0];
     out[1] = a[1] - b[1];
@@ -1394,6 +1652,9 @@ pub fn subtract(out: &mut Mat4, a: &Mat4, b: &Mat4) -> Mat4 {
     *out
 }
 
+/// Multiply each element of the matrix by a scalar.
+///
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html) 
 pub fn multiply_scalar(out: &mut Mat4, a: &Mat4, b: f32) -> Mat4 {
     out[0] = a[0] * b;
     out[1] = a[1] * b;
@@ -1415,6 +1676,9 @@ pub fn multiply_scalar(out: &mut Mat4, a: &Mat4, b: f32) -> Mat4 {
     *out
 }
 
+/// Adds two mat4's after multiplying each element of the second operand by a scalar value
+///
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html) 
 pub fn multiply_scalar_and_add(out: &mut Mat4, a: &Mat4, b: &Mat4, scale: f32) -> Mat4 {
     out[0] = a[0] + (b[0] * scale);
     out[1] = a[1] + (b[1] * scale);
@@ -1436,6 +1700,9 @@ pub fn multiply_scalar_and_add(out: &mut Mat4, a: &Mat4, b: &Mat4, scale: f32) -
     *out
 }
 
+/// Returns whether or not the matrices have exactly the same elements in the same position (when compared with ==)
+///
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html) 
 pub fn exact_equals(a: &Mat4, b: &Mat4) -> bool {
     a[0] == b[0] && a[1] == b[1] && a[2] == b[2] && a[3] == b[3] &&
     a[4] == b[4] && a[5] == b[5] && a[6] == b[6] && a[7] == b[7] &&
@@ -1443,6 +1710,9 @@ pub fn exact_equals(a: &Mat4, b: &Mat4) -> bool {
     a[12] == b[12] && a[13] == b[13] && a[14] == b[14] && a[15] == b[15]
 }
 
+/// Returns whether or not the matrices have approximately the same elements in the same position
+/// 
+///[glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html) 
 pub fn equals(a: &Mat4, b: &Mat4) -> bool {
     let a0 = a[0];
     let a1 = a[1];
@@ -1496,10 +1766,16 @@ pub fn equals(a: &Mat4, b: &Mat4) -> bool {
     f32::abs(a15 - b15) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a15), f32::abs(b15)))
 }
 
+/// Alias for mat4::multiply
+///
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html) 
 pub fn mul(out: &mut Mat4, a: &Mat4, b: &Mat4) -> Mat4 {
     multiply(out, a, b)
 }
 
+/// Alias for mat4::subtract
+///
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html) 
 pub fn sub(out: &mut Mat4, a: &Mat4, b: &Mat4) -> Mat4 {
     subtract(out, a, b)
 }
@@ -2415,7 +2691,6 @@ mod tests {
     #[test]
     #[ignore]
     fn mat4_look_at() { 
-        use super::super::mat4;
 
 
     }

@@ -1,5 +1,41 @@
+//! 2x3 Matrix
+//! 
+//! A mat2d contains six elements defined as:
+//! ```
+//! use gl_matrix::common::Mat2d;
+//! 
+//! let a: f32 = 0.; 
+//! let b: f32 = 0.; 
+//! let c: f32 = 0.;
+//! let d: f32 = 0.; 
+//! let tx: f32 = 0.;
+//! let ty: f32 = 0.;
+//! 
+//! let ma: Mat2d = [a, b, c,
+//!                  d, tx, ty];
+//! ```
+//! This is a short form for the 3x3 matrix:
+//! ```
+//! use gl_matrix::common::Mat3;
+//! 
+//! let a: f32 = 0.; 
+//! let b: f32 = 0.; 
+//! let c: f32 = 0.;
+//! let d: f32 = 0.; 
+//! let tx: f32 = 0.;
+//! let ty: f32 = 0.;
+//! 
+//! let mat: Mat3 = [a, b, 0.,
+//!                  c, d, 0.,
+//!                  tx, ty, 1.];
+//! ```
+//! The last column is ignored so the array is shorter and operations are faster.
+
 use super::common::{Mat2d, Vec2, hypot, EPSILON};
 
+/// Creates a new identity mat2d
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2d.html)
 pub fn create() -> Mat2d {
     let mut out: Mat2d = [0_f32; 6];
   
@@ -9,6 +45,9 @@ pub fn create() -> Mat2d {
     out
 }
 
+/// Creates a new mat2d initialized with values from an existing matrix
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2d.html)
 pub fn clone(a: &Mat2d) -> Mat2d {
     let mut out: Mat2d = [0_f32; 6];
   
@@ -22,6 +61,9 @@ pub fn clone(a: &Mat2d) -> Mat2d {
     out
 }
 
+/// Copy the values from one mat2d to another
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2d.html)
 pub fn copy(out: &mut Mat2d, a: &Mat2d) -> Mat2d {
     out[0] = a[0];
     out[1] = a[1];
@@ -33,6 +75,9 @@ pub fn copy(out: &mut Mat2d, a: &Mat2d) -> Mat2d {
     *out
 }
 
+/// Set a mat2d to the identity matrix
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2d.html)
 pub fn identity(out: &mut Mat2d) -> Mat2d {
     out[0] = 1.;
     out[1] = 0.;
@@ -44,6 +89,9 @@ pub fn identity(out: &mut Mat2d) -> Mat2d {
     *out
 }
 
+/// Create a new mat2d with the given values
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2d.html)
 pub fn from_values(a: f32, b: f32, 
                    c: f32, d: f32, 
                    tx: f32, ty: f32) -> Mat2d {
@@ -59,6 +107,9 @@ pub fn from_values(a: f32, b: f32,
     out
 }
 
+/// Set the components of a mat2d to the given values
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2d.html)
 pub fn set(out: &mut Mat2d, a: f32, b: f32, 
                             c: f32, d: f32, 
                             tx: f32, ty: f32) -> Mat2d {
@@ -72,6 +123,9 @@ pub fn set(out: &mut Mat2d, a: f32, b: f32,
     *out
 }
 
+/// Inverts a mat2d
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2d.html)
 pub fn invert(out: &mut Mat2d, a: &Mat2d) -> Option<Mat2d> {
     let aa = a[0];
     let ab = a[1];
@@ -99,10 +153,16 @@ pub fn invert(out: &mut Mat2d, a: &Mat2d) -> Option<Mat2d> {
     Some(*out)
   }
 
+/// Calculates the determinant of a mat2d
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2d.html)
 pub fn determinant(a: &Mat2d) -> f32 { 
     a[0] * a[3] - a[1] * a[2]
 }
 
+/// Multiplies two mat2d's
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2d.html)
 pub fn multiply(out: &mut Mat2d, a: &Mat2d, b: &Mat2d) -> Mat2d {
     let a0 = a[0];
     let a1 = a[1];
@@ -128,6 +188,9 @@ pub fn multiply(out: &mut Mat2d, a: &Mat2d, b: &Mat2d) -> Mat2d {
     *out
 }
 
+/// Rotates a mat2d by the given angle
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2d.html)
 pub fn rotate(out: &mut Mat2d, a: &Mat2d, rad: f32) -> Mat2d {
     let a0 = a[0]; 
     let a1 = a[1];
@@ -149,6 +212,9 @@ pub fn rotate(out: &mut Mat2d, a: &Mat2d, rad: f32) -> Mat2d {
     *out
 }
 
+/// Scales the mat2d by the dimensions in the given vec2
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2d.html)
 pub fn scale(out: &mut Mat2d, a: &Mat2d, v: &Vec2) -> Mat2d {
     let a0 = a[0];
     let a1 = a[1];
@@ -170,6 +236,9 @@ pub fn scale(out: &mut Mat2d, a: &Mat2d, v: &Vec2) -> Mat2d {
     *out
 }
 
+/// Translates the mat2d by the dimensions in the given vec2
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2d.html)
 pub fn translate(out: &mut Mat2d, a: &Mat2d, v: &Vec2) -> Mat2d {
     let a0 = a[0];
     let a1 = a[1];
@@ -191,6 +260,21 @@ pub fn translate(out: &mut Mat2d, a: &Mat2d, v: &Vec2) -> Mat2d {
     *out
 }
 
+/// Creates a matrix from a given angle
+///
+/// This is equivalent to (but much faster than):
+/// ```
+/// use gl_matrix::common::*;
+/// use gl_matrix::mat2d;
+/// 
+/// let dest = &mut [0., 0., 0., 0., 0., 0.];
+/// let rad = PI * 0.5;
+/// 
+/// mat2d::identity(dest);
+/// mat2d::rotate(dest, &mat2d::clone(dest), rad);
+/// ```
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2d.html)
 pub fn from_rotation(out: &mut Mat2d, rad: f32) -> Mat2d {
     let s = f32::sin(rad);
     let c = f32::cos(rad);
@@ -205,6 +289,21 @@ pub fn from_rotation(out: &mut Mat2d, rad: f32) -> Mat2d {
     *out
 }
 
+/// Creates a matrix from a vector scaling
+/// 
+/// This is equivalent to (but much faster than):
+/// ```
+/// use gl_matrix::common::*;
+/// use gl_matrix::mat2d;
+///
+/// let dest = &mut [0., 0., 0., 0., 0., 0.];
+/// let vec: Vec2 = [2., 3.];
+/// 
+/// mat2d::identity(dest);
+/// mat2d::scale(dest, &mat2d::clone(dest), &vec);
+/// ```
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2d.html)
 pub fn from_scaling(out: &mut Mat2d, v: &Vec2) -> Mat2d {
     out[0] = v[0];
     out[1] = 0.;
@@ -216,6 +315,21 @@ pub fn from_scaling(out: &mut Mat2d, v: &Vec2) -> Mat2d {
     *out
 }
 
+/// Creates a matrix from a vector translation
+/// 
+/// This is equivalent to (but much faster than):
+/// ```
+/// use gl_matrix::common::*;
+/// use gl_matrix::mat2d;
+///
+/// let dest = &mut [0., 0., 0., 0., 0., 0.];
+/// let vec: Vec2 = [2., 3.];
+/// 
+/// mat2d::identity(dest);
+/// mat2d::translate(dest, &mat2d::clone(dest), &vec);
+/// ```
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2d.html)
 pub fn from_translation(out: &mut Mat2d, v: &Vec2) -> Mat2d {
     out[0] = 1.;
     out[1] = 0.;
@@ -227,6 +341,9 @@ pub fn from_translation(out: &mut Mat2d, v: &Vec2) -> Mat2d {
     *out
 }
 
+/// Returns a string representation of a mat2d
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2d.html)
 pub fn string(a: &Mat2d) -> String {
     let a0 = ["mat2d(".to_string(), a[0].to_string()].join("");
     let a1 = a[1].to_string(); 
@@ -238,10 +355,16 @@ pub fn string(a: &Mat2d) -> String {
     [a0, a1, a2, a3, a4, a5].join(", ")
 }
 
+/// Returns Frobenius norm of a mat2d
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2d.html)
 pub fn frob(a: &Mat2d) -> f32 {
     hypot(a)
 }
 
+/// Adds two mat2d's
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2d.html)
 pub fn add(out: &mut Mat2d, a: &Mat2d, b: &Mat2d) -> Mat2d {
     out[0] = a[0] + b[0];
     out[1] = a[1] + b[1];
@@ -253,6 +376,9 @@ pub fn add(out: &mut Mat2d, a: &Mat2d, b: &Mat2d) -> Mat2d {
     *out
 }
 
+/// Subtracts matrix b from matrix a
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2d.html)
 pub fn subtract(out: &mut Mat2d, a: &Mat2d, b: &Mat2d) -> Mat2d {
     out[0] = a[0] - b[0];
     out[1] = a[1] - b[1];
@@ -264,6 +390,9 @@ pub fn subtract(out: &mut Mat2d, a: &Mat2d, b: &Mat2d) -> Mat2d {
     *out
 }
 
+/// Multiply each element of the matrix by a scalar.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2d.html)
 pub fn multiply_scalar(out: &mut Mat2d, a: &Mat2d, b: f32) -> Mat2d {
     out[0] = a[0] * b;
     out[1] = a[1] * b;
@@ -275,6 +404,9 @@ pub fn multiply_scalar(out: &mut Mat2d, a: &Mat2d, b: f32) -> Mat2d {
     *out
 }
 
+/// Adds two mat2d's after multiplying each element of the second operand by a scalar value.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2d.html)
 pub fn multiply_scalar_and_add(out: &mut Mat2d, a: &Mat2d, b: &Mat2d, scale: f32) -> Mat2d {
     out[0] = a[0] + (b[0] * scale);
     out[1] = a[1] + (b[1] * scale);
@@ -286,10 +418,16 @@ pub fn multiply_scalar_and_add(out: &mut Mat2d, a: &Mat2d, b: &Mat2d, scale: f32
     *out
 }
 
+/// Returns whether or not the matrices have exactly the same elements in the same position (when compared with ==)
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2d.html)
 pub fn exact_equals(a: &Mat2d, b: &Mat2d) -> bool {
     a[0] == b[0] && a[1] == b[1] && a[2] == b[2] && a[3] == b[3] && a[4] == b[4] && a[5] == b[5]
 }
 
+/// Returns whether or not the matrices have approximately the same elements in the same position.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2d.html)
 pub fn equals(a: &Mat2d, b: &Mat2d) -> bool {
     let a0 = a[0];
     let a1 = a[1];
@@ -312,10 +450,16 @@ pub fn equals(a: &Mat2d, b: &Mat2d) -> bool {
     f32::abs(a5 - b5) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a5), f32::abs(b5)))
 }
 
+///  Alias for mat2d::multiply
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2d.html)
 pub fn mul(out: &mut Mat2d, a: &Mat2d, b: &Mat2d) -> Mat2d {
     multiply(out, a, b)
 }
 
+/// Alias for link mat2d::subtract
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2d.html)
 pub fn sub(out: &mut Mat2d, a: &Mat2d, b: &Mat2d) -> Mat2d {
     subtract(out, a, b)
 }
