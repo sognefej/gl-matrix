@@ -2,7 +2,7 @@
 
 use super::common::{Mat3, Mat4, Mat2d, Quat, Vec2, hypot, EPSILON};
 
-/// Creates a new identity mat3
+/// Creates a new identity mat3.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat3.html)
 pub fn create() -> Mat3 {
@@ -15,7 +15,7 @@ pub fn create() -> Mat3 {
     out
 }
 
-/// Copies the upper-left 3x3 values into the given mat3
+/// Copies the upper-left 3x3 values into the given mat3.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat3.html)
 pub fn from_mat4(out: &mut Mat3, a: &Mat4) -> Mat3 {
@@ -32,7 +32,7 @@ pub fn from_mat4(out: &mut Mat3, a: &Mat4) -> Mat3 {
     *out
 }
 
-/// Creates a new mat3 initialized with values from an existing matrix
+/// Creates a new mat3 initialized with values from an existing matrix.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat3.html)
 pub fn clone(a: &Mat3) -> Mat3 {
@@ -51,7 +51,7 @@ pub fn clone(a: &Mat3) -> Mat3 {
     out
 }
   
-/// Copy the values from one mat3 to another
+/// Copy the values from one mat3 to another.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat3.html)
 pub fn copy(out: &mut Mat3, a: &Mat3) -> Mat3 {
@@ -68,7 +68,7 @@ pub fn copy(out: &mut Mat3, a: &Mat3) -> Mat3 {
     *out
 }
 
-/// Create a new mat3 with the given values
+/// Create a new mat3 with the given values.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat3.html)
 pub fn from_values(m00: f32, m01: f32, m02: f32, 
@@ -89,7 +89,7 @@ pub fn from_values(m00: f32, m01: f32, m02: f32,
     out
 }
 
-/// Set the components of a mat3 to the given values
+/// Set the components of a mat3 to the given values.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat3.html)
 pub fn set(out: &mut Mat3, m00: f32, m01: f32, m02: f32,
@@ -109,7 +109,7 @@ pub fn set(out: &mut Mat3, m00: f32, m01: f32, m02: f32,
 }
 
 
-/// Set a mat3 to the identity matrix
+/// Set a mat3 to the identity matrix.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat3.html)
 pub fn identity(out: &mut Mat3) -> Mat3 {
@@ -126,7 +126,7 @@ pub fn identity(out: &mut Mat3) -> Mat3 {
     *out 
 }
 
-/// Copies the upper-left 3x3 values into the given mat3
+/// Copies the upper-left 3x3 values into the given mat3.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat3.html)
 pub fn transpose(out: &mut Mat3, a: &Mat3) -> Mat3 {
@@ -157,7 +157,7 @@ pub fn transpose(out: &mut Mat3, a: &Mat3) -> Mat3 {
     *out
 }
   
-/// Inverts a mat3
+/// Inverts a mat3.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat3.html)
 pub fn invert(out: &mut Mat3, a: &Mat3) -> Option<Mat3> {
@@ -196,7 +196,7 @@ pub fn invert(out: &mut Mat3, a: &Mat3) -> Option<Mat3> {
     Some(*out)
 }
 
-/// Calculates the adjugate of a mat3
+/// Calculates the adjugate of a mat3.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat3.html)
 pub fn adjoint(out: &mut Mat3, a: &Mat3) -> Mat3 {
@@ -223,7 +223,7 @@ pub fn adjoint(out: &mut Mat3, a: &Mat3) -> Mat3 {
     *out
 }
 
-/// Calculates the determinant of a mat3
+/// Calculates the determinant of a mat3.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat3.html)
 pub fn determinant(a: &Mat3) -> f32 {
@@ -243,7 +243,7 @@ pub fn determinant(a: &Mat3) -> f32 {
 }
 
 
-/// Multiplies two mat3's
+/// Multiplies two mat3's.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat3.html)
 pub fn multiply(out: &mut Mat3, a: &Mat3, b: &Mat3) -> Mat3 {
@@ -281,7 +281,7 @@ pub fn multiply(out: &mut Mat3, a: &Mat3, b: &Mat3) -> Mat3 {
 }
 
 
-/// Translate a mat3 by the given vector
+/// Translate a mat3 by the given vector.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat3.html)
 pub fn translate(out: &mut Mat3, a: &Mat3, v: &Vec2) -> Mat3 {
@@ -312,7 +312,7 @@ pub fn translate(out: &mut Mat3, a: &Mat3, v: &Vec2) -> Mat3 {
 }
 
 
-/// Rotates a mat3 by the given angle
+/// Rotates a mat3 by the given angle.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat3.html)
 pub fn rotate(out: &mut Mat3, a: &Mat3, rad: f32) -> Mat3 {
@@ -342,7 +342,7 @@ pub fn rotate(out: &mut Mat3, a: &Mat3, rad: f32) -> Mat3 {
     *out
 }
 
-/// Scales the mat3 by the dimensions in the given vec2
+/// Scales the mat3 by the dimensions in the given vec2.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat3.html)
 pub fn scale(out: &mut Mat3, a: &Mat3, v: &Vec2) -> Mat3 {
@@ -362,7 +362,7 @@ pub fn scale(out: &mut Mat3, a: &Mat3, v: &Vec2) -> Mat3 {
     *out
 }
 
-/// Creates a matrix from a vector translation
+/// Creates a matrix from a vector translation.
 /// 
 /// This is equivalent to (but much faster than):
 /// ```
@@ -393,7 +393,7 @@ pub fn from_translation(out: &mut Mat3 , v: &Vec2) -> Mat3 {
     *out
 }
   
-/// Creates a matrix from a given angle
+/// Creates a matrix from a given angle.
 /// 
 /// This is equivalent to (but much faster than):
 /// ```
@@ -427,7 +427,7 @@ pub fn from_rotation(out: &mut Mat3, rad: f32) -> Mat3 {
     *out
 }
   
-/// Creates a matrix from a vector scaling
+/// Creates a matrix from a vector scaling.
 /// 
 /// This is equivalent to (but much faster than):
 /// ```
@@ -458,7 +458,7 @@ pub fn from_scaling(out: &mut Mat3, v: &Vec2) -> Mat3 {
     *out
 }
 
-/// Copies the values from a mat2d into a mat3
+/// Copies the values from a mat2d into a mat3.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat3.html)
 pub fn from_mat2d(out: &mut Mat3, a: &Mat2d) -> Mat3 {
@@ -475,7 +475,7 @@ pub fn from_mat2d(out: &mut Mat3, a: &Mat2d) -> Mat3 {
     *out
 }
 
-/// Calculates a 3x3 matrix from the given quaternion
+/// Calculates a 3x3 matrix from the given quaternion.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat3.html)
 pub fn from_quat(out: &mut Mat3, q: &Quat) -> Mat3 {
@@ -510,7 +510,7 @@ pub fn from_quat(out: &mut Mat3, q: &Quat) -> Mat3 {
 }
 
 
-/// Calculates a 3x3 normal matrix (transpose inverse) from the 4x4 matrix
+/// Calculates a 3x3 normal matrix (transpose inverse) from the 4x4 matrix.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat3.html)
 pub fn normal_from_mat4(out: &mut Mat3, a: &Mat4) -> Option<Mat3> {
@@ -565,7 +565,7 @@ pub fn normal_from_mat4(out: &mut Mat3, a: &Mat4) -> Option<Mat3> {
     Some(*out)
 }
   
-/// Generates a 2D projection matrix with the given bounds
+/// Generates a 2D projection matrix with the given bounds.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat3.html)
 pub fn projection(out: &mut Mat3, width: f32, height: f32) -> Mat3 {
@@ -582,7 +582,7 @@ pub fn projection(out: &mut Mat3, width: f32, height: f32) -> Mat3 {
     *out
 }
  
-/// Returns a string representation of a mat3
+/// Returns a string representation of a mat3.
 ///
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat3.html)
 pub fn string(a: &Mat3) -> String {
@@ -599,14 +599,14 @@ pub fn string(a: &Mat3) -> String {
     [a0, a1, a2, a3, a4, a5, a6, a7, a8].join(", ")
 }
  
-/// Returns Frobenius norm of a mat3
+/// Returns Frobenius norm of a mat3.
 ///
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat3.html)
 pub fn frob(a: &Mat3) -> f32 {
     hypot(a)
 }
   
-/// Adds two mat3's
+/// Adds two mat3's.
 ///
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat3.html)
 pub fn add(out: &mut Mat3, a: &Mat3, b: &Mat3) -> Mat3 {
@@ -623,7 +623,7 @@ pub fn add(out: &mut Mat3, a: &Mat3, b: &Mat3) -> Mat3 {
     *out
 }
   
-/// Subtracts matrix b from matrix a
+/// Subtracts matrix b from matrix a.
 ///
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat3.html)
 pub fn subtract(out: &mut Mat3, a: &Mat3, b: &Mat3) -> Mat3 {
@@ -657,7 +657,7 @@ pub fn multiply_scalar(out: &mut Mat3, a: &Mat3, b: f32) -> Mat3 {
     *out
 }
   
-/// Adds two mat3's after multiplying each element of the second operand by a scalar value
+/// Adds two mat3's after multiplying each element of the second operand by a scalar value.
 ///
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat3.html)
 pub fn multiply_scalar_and_add(out: &mut Mat3, a: &Mat3, b: &Mat3, scale: f32) -> Mat3 {
@@ -674,7 +674,7 @@ pub fn multiply_scalar_and_add(out: &mut Mat3, a: &Mat3, b: &Mat3, scale: f32) -
     *out
 }
  
-/// Returns whether or not the matrices have exactly the same elements in the same position (when compared with ==)
+/// Returns whether or not the matrices have exactly the same elements in the same position (when compared with ==).
 ///
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat3.html)
 pub fn exact_equals(a: &Mat3, b: &Mat3) -> bool {
@@ -684,7 +684,7 @@ pub fn exact_equals(a: &Mat3, b: &Mat3) -> bool {
 }
   
 
-/// Returns whether or not the matrices have approximately the same elements in the same position
+/// Returns whether or not the matrices have approximately the same elements in the same position.
 ///
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat3.html)
 pub fn equals(a: &Mat3, b: &Mat3) -> bool {
@@ -720,14 +720,14 @@ pub fn equals(a: &Mat3, b: &Mat3) -> bool {
 }
 
 
-/// Alias for mat3::multiply
+/// Alias for mat3::multiply.
 ///
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat3.html)
 pub fn mul(out: &mut Mat3, a: &Mat3, b: &Mat3) -> Mat3 {
     multiply(out, a, b)
 }
 
-/// Alias for mat3::subtract
+/// Alias for mat3::subtract.
 ///
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat3.html)
 pub fn sub(out: &mut Mat3, a: &Mat3, b: &Mat3) -> Mat3 {

@@ -48,10 +48,12 @@ pub fn set(out: &mut Vec3, x: f32, y: f32, z: f32) {
     out[2] = z;
 }
 
-pub fn add(out: &mut Vec3, a: &Vec3, b: &Vec3) {
+pub fn add(out: &mut Vec3, a: &Vec3, b: &Vec3) -> Vec3{
     out[0] = a[0] + b[0];
     out[1] = a[1] + b[1];
     out[2] = a[2] + b[2];
+
+    *out
 }
 
 pub fn subtract(out: &mut Vec3, a: &Vec3, b: &Vec3) {

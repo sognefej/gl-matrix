@@ -1,6 +1,5 @@
 use super::common::{Quat2, Quat, Vec3, Mat4, hypot, EPSILON};
-use super::quat;
-use super::mat4;
+use super::{quat, mat4};
 
 pub fn create() -> Quat2 {
     let mut dq: Quat2 = [0_f32; 8];

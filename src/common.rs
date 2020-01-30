@@ -23,13 +23,13 @@ pub type Vec3 = [f32; 3];
 pub type Vec4 = [f32; 4];
 
 // Configuration Constants 
-/// Archimedes' constant (π)
+/// Archimedes' constant (π).
 /// 
 /// [core::f32::consts::PI](https://doc.rust-lang.org/core/f32/consts/constant.PI.html)
 pub static PI: f32 = core::f32::consts::PI; 
 /// This is the difference between 1.0 and the next largest representable number.
 /// 
-/// our value is ```0.000001```
+/// our value is ```0.000001```.
 pub static EPSILON: f32 = 0.000001;
 /// Infinity (∞).
 /// 
@@ -45,7 +45,7 @@ pub static NEG_INFINITY: f32 = -1.0_f32 / 0.0_f32;
 
 static DEGREE: f32 = PI / 180.0_f32;
 
-/// Convert Degree to Radian
+/// Convert Degree to Radian.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-glMatrix.html)
 pub fn to_radian(a: f32) -> f32{ 
@@ -54,14 +54,14 @@ pub fn to_radian(a: f32) -> f32{
 
 /// Tests whether or not the arguments have approximately the same value, within an absolute
 /// or relative tolerance of common::EPSILON (an absolute tolerance is used for values less
-/// than or equal to 1.0, and a relative tolerance is used for larger values)
+/// than or equal to 1.0, and a relative tolerance is used for larger values).
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-glMatrix.html)
 pub fn equals(a: f32, b: f32) -> bool {
   return (a - b).abs() <= EPSILON * 1.0_f32.max(a.abs().max(b.abs()));
 }
 
-/// The hypot function returns the square root of the sum of squares of the array elements
+/// The hypot function returns the square root of the sum of squares of the array elements.
 /// 
 /// [MDN Documentation](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/hypot) 
 pub fn hypot(arguments: &[f32]) -> f32 { 
@@ -75,7 +75,7 @@ pub fn hypot(arguments: &[f32]) -> f32 {
     y.sqrt()
 }
 
-/// A random f32 between 0-1 
+/// A random f32 between 0-1.
 pub fn random_f32() -> f32 { 
     let mut rng = rand::thread_rng();
     // f64 gives a uniform distriution over 0-1

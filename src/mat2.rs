@@ -2,7 +2,7 @@
 
 use super::common::{Mat2, Vec2, hypot, EPSILON};
 
-/// Creates a new identity mat2
+/// Creates a new identity mat2.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2.html)
 pub fn create() -> Mat2 {
@@ -14,7 +14,7 @@ pub fn create() -> Mat2 {
     out 
 }
 
-/// Creates a new mat2 initialized with values from an existing matrix
+/// Creates a new mat2 initialized with values from an existing matrix.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2.html)
 pub fn clone(a: &Mat2) -> Mat2 { 
@@ -28,7 +28,7 @@ pub fn clone(a: &Mat2) -> Mat2 {
     out
 } 
 
-/// Copy the values from one mat2 to another
+/// Copy the values from one mat2 to another.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2.html)
 pub fn copy(out: &mut Mat2, a: &Mat2) -> Mat2 {
@@ -40,7 +40,7 @@ pub fn copy(out: &mut Mat2, a: &Mat2) -> Mat2 {
     *out
 }
 
-/// Set a mat2 to the identity matrix
+/// Set a mat2 to the identity matrix.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2.html)
 pub fn identity(out: &mut Mat2) -> Mat2 {
@@ -52,7 +52,7 @@ pub fn identity(out: &mut Mat2) -> Mat2 {
     *out
 }
 
-/// Create a new mat2 with the given values
+/// Create a new mat2 with the given values.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2.html)
 pub fn from_values(m00: f32, m01: f32, m10: f32, m11: f32) -> Mat2 {
@@ -66,7 +66,7 @@ pub fn from_values(m00: f32, m01: f32, m10: f32, m11: f32) -> Mat2 {
     out
 }
 
-/// Set the components of a mat2 to the given values
+/// Set the components of a mat2 to the given values.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2.html)
 pub fn set(out: &mut Mat2, m00: f32, m01: f32, m10: f32, m11: f32) -> Mat2 {
@@ -78,7 +78,7 @@ pub fn set(out: &mut Mat2, m00: f32, m01: f32, m10: f32, m11: f32) -> Mat2 {
     *out
 }
 
-/// Transpose the values of a mat2
+/// Transpose the values of a mat2.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2.html)
 pub fn transpose(out: &mut Mat2, a: &Mat2) -> Mat2 {
@@ -98,7 +98,7 @@ pub fn transpose(out: &mut Mat2, a: &Mat2) -> Mat2 {
     *out
 }
 
-/// Inverts a mat2
+/// Inverts a mat2.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2.html)
 pub fn invert(out: &mut Mat2, a: &Mat2) -> Option<Mat2> {
@@ -124,7 +124,7 @@ pub fn invert(out: &mut Mat2, a: &Mat2) -> Option<Mat2> {
     Some(*out)
 }
 
-/// Calculates the adjugate of a mat2
+/// Calculates the adjugate of a mat2.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2.html)
 pub fn adjoint(out: &mut Mat2, a: &Mat2) -> Mat2 {
@@ -139,14 +139,14 @@ pub fn adjoint(out: &mut Mat2, a: &Mat2) -> Mat2 {
     *out
 }
 
-/// Calculates the determinant of a mat2
+/// Calculates the determinant of a mat2.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2.html)
 pub fn determinant(a: &Mat2) -> f32 {
     a[0] * a[3] - a[2] * a[1]
 }
 
-/// Multiplies two mat2's
+/// Multiplies two mat2's.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2.html)
 pub fn multiply(out: &mut Mat2, a: &Mat2, b: &Mat2) -> Mat2 {
@@ -168,7 +168,7 @@ pub fn multiply(out: &mut Mat2, a: &Mat2, b: &Mat2) -> Mat2 {
     *out
 }
 
-/// Rotates a mat2 by the given angle
+/// Rotates a mat2 by the given angle.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2.html)
 pub fn rotate(out: &mut Mat2, a: &Mat2, rad: f32) -> Mat2 {
@@ -188,7 +188,7 @@ pub fn rotate(out: &mut Mat2, a: &Mat2, rad: f32) -> Mat2 {
     *out
 }
 
-/// Scales the mat2 by the dimensions in the given vec2
+/// Scales the mat2 by the dimensions in the given vec2.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2.html)
 pub fn scale(out: &mut Mat2, a: &Mat2, v: &Vec2) -> Mat2 {
@@ -208,9 +208,9 @@ pub fn scale(out: &mut Mat2, a: &Mat2, v: &Vec2) -> Mat2 {
     *out
 }
 
-/// Creates a matrix from a given angle
+/// Creates a matrix from a given angle.
 /// 
-/// This is equivalent to (but much faster than)
+/// This is equivalent to (but much faster than):
 /// ```
 /// use gl_matrix::common::*;
 /// use gl_matrix::mat2;
@@ -235,7 +235,7 @@ pub fn from_rotation(out: &mut Mat2, rad: f32) -> Mat2 {
     *out
 }
 
-/// Creates a matrix from a vector scaling
+/// Creates a matrix from a vector scaling.
 /// 
 /// This is equivalent to (but much faster than):
 /// ```
@@ -259,7 +259,7 @@ pub fn from_scaling(out: &mut Mat2, v: &Vec2) -> Mat2 {
     *out
 }
 
-/// Returns a string representation of a mat2
+/// Returns a string representation of a mat2.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2.html)
 pub fn string(a: &Mat2) -> String {
@@ -271,14 +271,14 @@ pub fn string(a: &Mat2) -> String {
     [a0, a1, a2, a3].join(", ")
 }
 
-/// Returns Frobenius norm of a mat2
+/// Returns Frobenius norm of a mat2.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2.html)
 pub fn frob(a: &Mat2) -> f32 {
     hypot(a)
 }
 
-/// Returns L, D and U matrices (Lower triangular, Diagonal and Upper triangular) by factorizing the input matrix
+/// Returns L, D and U matrices (Lower triangular, Diagonal and Upper triangular) by factorizing the input matrix.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2.html)
 pub fn ldu(l: &mut Mat2, _d: &mut Mat2, u: &mut Mat2, a: &Mat2) -> (Mat2, Mat2, Mat2) {
@@ -290,7 +290,7 @@ pub fn ldu(l: &mut Mat2, _d: &mut Mat2, u: &mut Mat2, a: &Mat2) -> (Mat2, Mat2, 
     (*l, *_d, *u)
 }
 
-///  Adds two mat2's
+///  Adds two mat2's.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2.html)
 pub fn add(out: &mut Mat2, a: &Mat2, b: &Mat2) -> Mat2 {
@@ -302,7 +302,7 @@ pub fn add(out: &mut Mat2, a: &Mat2, b: &Mat2) -> Mat2 {
     *out
 }
 
-/// Subtracts matrix b from matrix a
+/// Subtracts matrix b from matrix a.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2.html)
 pub fn subtract(out: &mut Mat2, a: &Mat2, b: &Mat2) -> Mat2 {
@@ -314,7 +314,7 @@ pub fn subtract(out: &mut Mat2, a: &Mat2, b: &Mat2) -> Mat2 {
     *out
 }
 
-/// Returns whether or not the matrices have exactly the same elements in the same position (when compared with ==)
+/// Returns whether or not the matrices have exactly the same elements in the same position (when compared with ==).
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2.html)
 pub fn exact_equals(a: &Mat2, b: &Mat2) -> bool {
@@ -365,14 +365,14 @@ pub fn multiply_scalar_and_add(out: &mut Mat2, a: &Mat2, b: &Mat2, scale: f32) -
     *out
 }
 
-/// Alias for mat2::multiply
+/// Alias for mat2::multiply.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2.html)
 pub fn mul(out: &mut Mat2, a: &Mat2, b: &Mat2) -> Mat2 {
     multiply(out, a, b)
 }
 
-/// Alias for mat2::subtract
+/// Alias for mat2::subtract.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2.html)
 pub fn sub(out: &mut Mat2, a: &Mat2, b: &Mat2) -> Mat2 {

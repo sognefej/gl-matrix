@@ -1,6 +1,6 @@
 //! A Rust implementation of [glMatrix](http://glmatrix.net/)
 //!
-//! gl-matrix provides utilities or all [glMatrix](http://glmatrix.net/) functions in Rust. 
+//! gl_matrix provides utilities or all [glMatrix](http://glmatrix.net/) functions in Rust. 
 //! 
 //! # Quick Start
 //!
