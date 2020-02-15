@@ -1076,17 +1076,87 @@ mod tests {
 
     #[test]
     fn mat3_normal_from_mat4() { 
+        let mut out: Mat3 = [0., 0., 0., 
+                             0., 0., 0.,
+                             0., 0., 0.];
+        let mat_a: Mat4 = [1., 0., 0., 0.,
+                           0., 1., 0., 0.,
+                           0., 0., 1., 0.,
+                           0., 0., 0., 1.];
+        
+        let result = normal_from_mat4(&mut out, &mat_a).unwrap();
 
+        assert_eq!([1., 0., 0., 
+                    0., 1., 0., 
+                    0., 0., 1.], out);
+        assert_eq!(result, out)
     }
 
     #[test]
-    fn mat3_normal_from_mat4_translation_and_rotation() { 
+    fn mat3_normal_from_mat4_none() { 
+        let mut out: Mat3 = [0., 0., 0., 
+                             0., 0., 0.,
+                             0., 0., 0.];
+        let mat_a: Mat4 = [-1., 3./2., 0., 0.,
+                            2./3., -1., 0., 0.,
+                            0., 0., 1., 0.,
+                            0., 0., 0., 1.]; 
         
+        let result = normal_from_mat4(&mut out, &mat_a);
+
+        assert_eq!([0., 0., 0., 
+                    0., 0., 0., 
+                    0., 0., 0.], out);
+        assert_eq!(None, result);
+    }
+    
+    #[test]
+    fn mat3_normal_from_mat4_translation_and_rotation() {
+        use super::super::common::PI;
+        use super::super::mat4;
+
+        let mut out: Mat3 = [0., 0., 0., 
+                             0., 0., 0.,
+                             0., 0., 0.];
+        let mat_a = &mut [1., 0., 0., 0.,
+                          0., 1., 0., 0.,
+                          0., 0., 1., 0.,
+                          0., 0., 0., 1.];
+       
+        mat4::translate(mat_a, &mat4::clone(mat_a), &[2., 4., 6.]);
+        mat4::rotate_x(mat_a, &mat4::clone(mat_a), PI / 2_f32);
+
+        let result = normal_from_mat4(&mut out, &mat_a).unwrap();
+
+        assert!(equals(&[1., 0., 0.,
+                         0., 0., 1.,
+                         0., -1., 0.], &out));
+        assert_eq!(result, out)
     }
     
     #[test]
     fn mat3_normal_from_mat4_translation_rotation_and_scale() { 
-        
+        use super::super::common::PI;
+        use super::super::mat4;
+
+        let mut out: Mat3 = [0., 0., 0., 
+                             0., 0., 0.,
+                             0., 0., 0.];
+        let mat_a = &mut [1., 0., 0., 0.,
+                          0., 1., 0., 0.,
+                          0., 0., 1., 0.,
+                          0., 0., 0., 1.];
+       
+        mat4::translate(mat_a, &mat4::clone(mat_a), &[2., 4., 6.]);
+        mat4::rotate_x(mat_a, &mat4::clone(mat_a), PI / 2_f32);
+        mat4::scale(mat_a, &mat4::clone(mat_a), &[2., 3., 4.]); 
+
+        let result = normal_from_mat4(&mut out, &mat_a).unwrap();
+
+        assert!(equals(&[0.5, 0., 0.,
+                        0., 0., 0.333333,
+                        0., -0.25, 0.], &out));
+        assert_eq!(result, out)
     }
     
     #[test]
