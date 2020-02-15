@@ -108,7 +108,6 @@ pub fn set(out: &mut Mat3, m00: f32, m01: f32, m02: f32,
     *out
 }
 
-
 /// Set a mat3 to the identity matrix.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat3.html)
@@ -242,7 +241,6 @@ pub fn determinant(a: &Mat3) -> f32 {
     + a02 * (a21 * a10 - a11 * a20)
 }
 
-
 /// Multiplies two mat3's.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat3.html)
@@ -280,7 +278,6 @@ pub fn multiply(out: &mut Mat3, a: &Mat3, b: &Mat3) -> Mat3 {
     *out
 }
 
-
 /// Translate a mat3 by the given vector.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat3.html)
@@ -310,7 +307,6 @@ pub fn translate(out: &mut Mat3, a: &Mat3, v: &Vec2) -> Mat3 {
 
     *out
 }
-
 
 /// Rotates a mat3 by the given angle.
 /// 
@@ -508,7 +504,6 @@ pub fn from_quat(out: &mut Mat3, q: &Quat) -> Mat3 {
 
     *out
 }
-
 
 /// Calculates a 3x3 normal matrix (transpose inverse) from the 4x4 matrix.
 /// 
@@ -718,7 +713,6 @@ pub fn equals(a: &Mat3, b: &Mat3) -> bool {
     f32::abs(a7 - b7) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a7), f32::abs(b7))) && 
     f32::abs(a8 - b8) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a8), f32::abs(b8)))
 }
-
 
 /// Alias for mat3::multiply.
 ///
@@ -1080,6 +1074,21 @@ mod tests {
         assert_eq!(result, out);
     }
 
+    #[test]
+    fn mat3_normal_from_mat4() { 
+
+    }
+
+    #[test]
+    fn mat3_normal_from_mat4_translation_and_rotation() { 
+        
+    }
+    
+    #[test]
+    fn mat3_normal_from_mat4_translation_rotation_and_scale() { 
+        
+    }
+    
     #[test]
     fn invert_mat3() { 
         let mut out: Mat3 = [0., 0., 0., 

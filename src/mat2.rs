@@ -290,7 +290,7 @@ pub fn ldu(l: &mut Mat2, _d: &mut Mat2, u: &mut Mat2, a: &Mat2) -> (Mat2, Mat2, 
     (*l, *_d, *u)
 }
 
-///  Adds two mat2's.
+/// Adds two mat2's.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat2.html)
 pub fn add(out: &mut Mat2, a: &Mat2, b: &Mat2) -> Mat2 {

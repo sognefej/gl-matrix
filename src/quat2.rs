@@ -1,6 +1,18 @@
+//! Dual Quaternion
+//! 
+//! Format: ```[real, dual]```
+//! 
+//! Quaternion format: ```XYZW```
+//! 
+//! Make sure to have normalized dual quaternions, 
+//! otherwise the functions may not work as intended.
+
 use super::common::{Quat2, Quat, Vec3, Mat4, hypot, EPSILON};
 use super::{quat, mat4};
 
+/// Creates a new identity dual quat
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn create() -> Quat2 {
     let mut dq: Quat2 = [0_f32; 8];
 

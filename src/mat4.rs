@@ -818,7 +818,6 @@ pub fn from_rotation(out: &mut Mat4, rad: f32, axis: &Vec3) -> Option<Mat4> {
     Some(*out)
 }
 
-
 /// Creates a matrix from the given angle around the X axis.
 /// 
 /// This is equivalent to (but much faster than):
@@ -1038,7 +1037,7 @@ pub fn get_translation(out: &mut Vec3, mat: &Mat4) -> Vec3 {
 
 /// Returns the scaling factor component of a transformation
 /// matrix. If a matrix is built with fromRotationTranslationScale
-/// with a normalized Quaternion paramter, the returned vector will be
+/// with a normalized Quaternion parameter, the returned vector will be
 /// the same as the scaling vector originally supplied.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
@@ -1125,12 +1124,22 @@ pub fn get_rotation(out: &mut Quat, mat: &Mat4) -> Quat {
 /// 
 /// This is equivalent to (but much faster than):
 /// 
-/// TODO: Fix this example. The one given does not make sense. 
 /// ```
 /// use gl_matrix::common::*;
-/// use gl_matrix::{quat, quat2, mat4};
-/// ```  
+/// use gl_matrix::{mat4, vec3, quat};
 /// 
+/// let dest = &mut mat4::create();
+/// let quat = quat::create();
+/// let vec = vec3::create(); 
+/// let scale = vec3::create(); 
+/// 
+/// mat4::identity(dest);
+/// mat4::translate(dest, &mat4::clone(dest), &vec);
+/// let mut quat_mat = mat4::create();
+/// mat4::from_quat(&mut quat_mat, &quat);
+/// mat4::multiply(dest, &mat4::clone(dest), &quat_mat);
+/// mat4::scale(dest, &mat4::clone(dest), &scale);
+/// ```  
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn from_rotation_translation_scale(out: &mut Mat4, q: &Quat, 
@@ -1179,6 +1188,27 @@ pub fn from_rotation_translation_scale(out: &mut Mat4, q: &Quat,
 
 /// Creates a matrix from a quaternion rotation, vector translation and vector scale, 
 /// rotating and scaling around the given origin.
+/// 
+/// This is equivalent to (but much faster than):
+/// 
+/// ```
+/// use gl_matrix::common::*;
+/// use gl_matrix::{mat4, vec3, quat};
+/// 
+/// let dest = &mut mat4::create();
+/// let quat = quat::create();
+/// let vec = vec3::create(); 
+/// let origin = vec3::create(); 
+/// let scale = vec3::create(); 
+/// 
+/// mat4::identity(dest);
+/// mat4::translate(dest, &mat4::clone(dest), &vec);
+/// mat4::translate(dest, &mat4::clone(dest), &origin); 
+/// let mut quat_mat = mat4::create();
+/// mat4::from_quat(&mut quat_mat, &quat);
+/// mat4::multiply(dest, &mat4::clone(dest), &quat_mat);
+/// mat4::scale(dest, &mat4::clone(dest), &scale);
+/// ```  
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html)
 pub fn from_rotation_translation_scale_origin(out: &mut Mat4, q: &Quat,
@@ -1359,7 +1389,7 @@ pub fn perspective(out: &mut Mat4, fovy: f32, aspect: f32,
 
 /// Generates a perspective projection matrix with the given field of view.
 /// This is primarily useful for generating projection matrices to be used
-/// with the still experiemental WebVR API.
+/// with the still experimental WebVR API.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html) 
 pub fn perspective_from_field_of_view(out: &mut Mat4, fov: &Fov, near: f32, far: f32) {
@@ -2584,7 +2614,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
     fn mat4_frustum() { 
         let mut out: Mat4 = [0., 0., 0., 0., 
                              0., 0., 0., 0.,
@@ -2593,10 +2622,10 @@ mod tests {
         
         let result = frustum(&mut out, -1., -1., -1., -1., -1., -1.);
 
-        assert_eq!([-1., 0., 0., 0.,
-                    0., -1., 0., 0.,
-                    0., 0., 0., -1.,
-                    0., 0., 1., 0.], out);
+        assert_eq!([NEG_INFINITY, 0., 0., 0.,
+                    0., NEG_INFINITY, 0., 0.,
+                    NEG_INFINITY, NEG_INFINITY, NEG_INFINITY, -1.,
+                    0., 0., INFINITY, 0.], out);
         assert_eq!(result, out);
     }
 
@@ -2676,16 +2705,86 @@ mod tests {
     #[test]
     #[ignore]
     fn mat4_look_at() { 
+        use super::super::vec3;
 
+        let mut out: Mat4 = [0., 0., 0., 0., 
+                             0., 0., 0., 0.,
+                             0., 0., 0., 0., 
+                             0., 0., 0., 0.];
+        let mut up_r: Vec3 = [0.,  0., 0.];
+        let mut view_r: Vec3 = [0., 0., 0.];
+        let mut right_r: Vec3 = [0.,  0., 0.];
 
+        let up: Vec3 = [0.,  0., -1.];
+        let view: Vec3 = [0., -1.,  0.];
+        let right: Vec3 = [1.,  0.,  0.];
+        
+        // looking down
+        let result = look_at(&mut out, &[0., 0., 0.], &view, &up);
+        let result_view = vec3::transform_mat4(&mut view_r, &view, &out);
+        let result_up = vec3::transform_mat4(&mut up_r, &up, &out);
+        let result_right = vec3::transform_mat4(&mut right_r, &right, &out);
+
+        // should transform view into local -Z
+        assert_eq!([0., 0., -1.], view_r);
+        assert_eq!(result_view, view_r);
+        // should transform up into local +Y
+        assert_eq!([0., 1., 0.], up_r);
+        assert_eq!(result_up, up_r);
+        // should transform right into local +X
+        assert_eq!([1., 0., 0.], right_r);
+        assert_eq!(result_right, right_r);
+        // out
+        assert_eq!(result, out);
     }
 
+    #[test]
+    #[ignore]
+    fn mat4_look_at_74() { 
+        use super::super::vec3;
+
+        let mut out: Mat4 = [0., 0., 0., 0., 
+                             0., 0., 0., 0.,
+                             0., 0., 0., 0., 
+                             0., 0., 0., 0.];
+        let mut up_r: Vec3 = [0.,  0., 0.];
+        let mut view_r: Vec3 = [0., 0., 0.];
+        let mut right_r: Vec3 = [0.,  0., 0.];
+
+        let up: Vec3 = [0.,  -1., 0.];
+        let view: Vec3 = [0., 0.,  -1.];
+        let right: Vec3 = [1.,  0.,  0.];
+        
+        // looking down
+        let result = look_at(&mut out, &[0., 0., 0.], &view, &up);
+        let result_view = vec3::transform_mat4(&mut view_r, &view, &out);
+        let result_up = vec3::transform_mat4(&mut up_r, &up, &out);
+        let result_right = vec3::transform_mat4(&mut right_r, &right, &out);
+
+        // should transform view into local -Z
+        assert_eq!([0., 0., -1.], view_r);
+        assert_eq!(result_view, view_r);
+        // should transform up into local +Y
+        assert_eq!([0., 1., 0.], up_r);
+        assert_eq!(result_up, up_r);
+        // should transform right into local +X
+        assert_eq!([1., 0., 0.], right_r);
+        assert_eq!(result_right, right_r);
+        // out
+        assert_eq!(result, out);
+    }
+  
     #[test]
     #[ignore]
     fn mat4_target_to() { 
 
     }
 
+    #[test]
+    #[ignore]
+    fn mat4_target_to_74() { 
+    }
+    
     #[test]
     fn get_mat4_string() {
         let mat_a: Mat4 = [1., 0., 0., 0.,

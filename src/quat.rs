@@ -241,7 +241,7 @@ pub fn pow(out: &mut Quat, a: &Quat, b: f32) -> Quat {
 /// Performs a spherical linear interpolation between two quat.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-quat.html)
-pub fn slerp(out: &mut Quat, a: &Quat, b: &Quat, t: f32) {
+pub fn slerp(out: &mut Quat, a: &Quat, b: &Quat, t: f32) -> Quat {
     // benchmarks:
     // http://jsperf.com/quaternion-slerp-implementations
     let ax = a[0];
@@ -291,6 +291,8 @@ pub fn slerp(out: &mut Quat, a: &Quat, b: &Quat, t: f32) {
     out[1] = scale0 * ay + scale1 * by;
     out[2] = scale0 * az + scale1 * bz;
     out[3] = scale0 * aw + scale1 * bw;
+
+    *out
 }
 
 /// Generates a random unit quaternion
@@ -394,6 +396,9 @@ pub fn from_mat3(out: &mut Quat, m: &Mat3) -> Quat {
     *out 
 }
 
+/// Creates a quaternion from the given euler angle x, y, z.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat.html) 
 pub fn from_euler(out: &mut Quat, x: f32, y: f32, z: f32) {
     let half_to_rad = 0.5 * PI / 180.0;
 
@@ -414,6 +419,9 @@ pub fn from_euler(out: &mut Quat, x: f32, y: f32, z: f32) {
     out[3] = cx * cy * cz + sx * sy * sz;
 }
 
+/// Returns a string representation of a quatenion.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat.html) 
 pub fn string(a: &Quat) -> String {
     let a0 = ["quat(".to_string(), a[0].to_string()].join("");
     let a1 = a[1].to_string(); 
@@ -423,71 +431,124 @@ pub fn string(a: &Quat) -> String {
     [a0, a1, a2, a3].join(", ")
 }
 
+/// Creates a new quat initialized with values from an existing quaternion.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat.html) 
 pub fn clone(a: &Quat) -> Quat { 
      vec4::clone(a)
 }
 
+/// Creates a new quat initialized with the given values.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat.html) 
 pub fn from_values(x: f32, y: f32, z: f32, w: f32) -> Quat {
     vec4::from_values(x, y, z, w)
 }
 
+/// Copy the values from one quat to another.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat.html) 
 pub fn copy(out: &mut Quat, a: &Quat) -> Quat {
     vec4::copy(out, a)
 }
 
+/// Set the components of a quat to the given values.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat.html) 
 pub fn set(out: &mut Vec4, x: f32, y: f32, z: f32, w: f32) -> Quat {
     vec4::set(out, x, y, z, w)
 }
 
+/// Adds two quat's.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat.html) 
 pub fn add(out: &mut Quat, a: &Quat, b: &Quat) -> Quat {
     vec4::add(out, a, b)
 }
 
-pub fn subtract(out: &mut Quat, a: &Quat, b: &Quat) -> Quat {
-    vec4::subtract(out, a, b)
+/// Alias for link quat::multiply}
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat.html) 
+pub fn mul(out: &mut Quat, a: &Quat, b: &Quat) -> Quat {
+    multiply(out, a, b)
 }
 
+/// Scales a quat by a scalar number.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat.html) 
 pub fn scale(out: &mut Quat, a: &Quat, b: f32) -> Quat {
     vec4::scale(out, a, b)
 }
 
+/// Calculates the dot product of two quats.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat.html) 
 pub fn dot(a: &Quat, b: &Quat) -> f32 { 
     vec4::dot(a, b)
 }
 
-/// Performs a linear interpolation between two quats
+/// Performs a linear interpolation between two quats.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat.html) 
 pub fn lerp(out: &mut Quat, a: &Quat, b: &Quat, t: f32) {
     vec4::lerp(out, a, b, t);
 }
 
+/// Calculates the length of a quat.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat.html) 
 pub fn length(a: &Quat) -> f32 {
     vec4::length(a)
 }
 
+/// Alias for quat::length.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat.html) 
 pub fn len(a: &Quat) -> f32 {
     length(a)
 }
 
+/// Calculates the squared length of a quat.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat.html) 
 pub fn squared_length(a: &Quat) -> f32 {
     vec4::squared_length(a)
 }
 
+///Alias for quat::squaredLength
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat.html) 
 pub fn sqr_len(a: &Quat) -> f32 {
     squared_length(a)
 }
 
+/// Normalize a quat.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat.html) 
 pub fn normalize(out: &mut Quat, a: &Quat) -> Quat {
     vec4::normalize(out, a)
 }
 
+/// Returns whether or not the quaternions have exactly the same elements in the same position (when compared with ==).
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat.html) 
 pub fn exact_equals(a: &Quat, b: &Quat) -> bool {
     vec4::exact_equals(a, b)
 }
 
+/// Returns whether or not the quaternions have approximately the same elements in the same position.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat.html) 
 pub fn equals(a: &Quat, b: &Quat) -> bool {
     vec4::equals(a, b)
 }
 
+/// Sets a quaternion to represent the shortest rotation from one
+/// vector to another.
+//
+/// Both vectors are assumed to be unit length.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat.html) 
 pub fn rotation_to(out: &mut Quat, a: &Vec3, b: &Vec3) { 
     let tmp_vec3 = &mut vec3::create();
     let x_unit_vec3 = &vec3::from_values(1.,0.,0.);
@@ -517,6 +578,9 @@ pub fn rotation_to(out: &mut Quat, a: &Vec3, b: &Vec3) {
     }
 }
 
+/// Performs a spherical linear interpolation with two control points.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat.html) 
 pub fn sqlerp(out: &mut Quat, a: &Quat, b: &Quat, 
                               c: &Quat, d: &Quat, 
                               t: f32) { 
@@ -528,6 +592,11 @@ pub fn sqlerp(out: &mut Quat, a: &Quat, b: &Quat,
     slerp(out, temp1, temp2, 2. * t * (1. - t));
 }
 
+/// Sets the specified quaternion with values corresponding to the given
+/// axes. Each axis is a vec3 and is expected to be unit length and
+/// perpendicular to all other specified axes.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat.html) 
 pub fn set_axis(out: &mut Quat, view: &Vec3, 
                 right: &Vec3, up: &Vec3){
     let matr = &mut mat3::create();
@@ -583,29 +652,65 @@ mod tests {
     }
 
     #[test]
-    fn get_axis_angle_of_quat() {
+    fn get_axis_angle_of_quat_no_rotation() {
         use super::super::common;
 
         let mut out: Quat = [0., 0., 0., 0.]; 
         let mut vec: Vec3 = [0., 0., 0.];
 
         set_axis_angle(&mut out, &[0., 1., 0.], 0_f32);
-        let deg_90 = get_axis_angle(&mut vec, &out); 
+        let deg = get_axis_angle(&mut vec, &out); 
         
         assert_eq!([1., 0., 0.], vec);
-        assert!(common::equals(deg_90 % (PI * 2.0), 0_f32));
+        assert!(common::equals(deg % (PI * 2.0), 0_f32));
     }
 
     #[test]
-    fn get_axis_angle_of_quat_no_rotation() { 
+    fn get_axis_angle_of_quat_about_x() { 
         let mut out: Quat = [0., 0., 0., 0.]; 
         let mut vec: Vec3 = [0., 0., 0.];
 
-        set_axis_angle(&mut out, &[0., 0., 1.], 0_f32);
+        set_axis_angle(&mut out, &[1., 0., 0.],  0.7778);
         let deg = get_axis_angle(&mut vec, &out); 
        
         assert_eq!([1., 0., 0.], vec);
-        assert_eq!(deg, 0_f32);
+        assert_eq!(deg,  0.7778);
+    }
+
+    #[test]
+    fn get_axis_angle_of_quat_about_y() { 
+        let mut out: Quat = [0., 0., 0., 0.]; 
+        let mut vec: Vec3 = [0., 0., 0.];
+
+        set_axis_angle(&mut out, &[0., 1., 0.],  0.879546);
+        let deg = get_axis_angle(&mut vec, &out); 
+       
+        assert_eq!([0., 1., 0.], vec);
+        assert_eq!(deg, 0.879546);
+    }
+    
+    #[test]
+    fn get_axis_angle_of_quat_about_z() { 
+        let mut out: Quat = [0., 0., 0., 0.]; 
+        let mut vec: Vec3 = [0., 0., 0.];
+
+        set_axis_angle(&mut out, &[0., 0., 1.], 0.123456);
+        let deg = get_axis_angle(&mut vec, &out); 
+       
+        assert_eq!([0.0, 0.0, 1.0000055], vec);
+        assert_eq!(deg, 0.12345532);
+    }
+
+    #[test]
+    fn get_axis_angle_of_quat_slightly_weird() { 
+        let mut out: Quat = [0., 0., 0., 0.]; 
+        let mut vec: Vec3 = [0., 0., 0.];
+
+        set_axis_angle(&mut out, &[0.707106, 0., 0.707106], PI * 0.5);
+        let deg = get_axis_angle(&mut vec, &out); 
+       
+        assert_eq!([0.707106, 0., 0.707106], vec);
+        assert_eq!(deg, PI * 0.5);
     }
 
     #[test]
@@ -748,7 +853,14 @@ mod tests {
     #[test]
     #[ignore]
     fn slerp_quat_case_one() { 
+        let mut out: Quat = [0., 0., 0., 0.]; 
+        let quat_a = [1., 2., 3., 4.];
+        let quat_b = [5., 6., 7., 8.];
 
+        let result = slerp(&mut out, &quat_a, &quat_b, 0.5);
+
+        assert_eq!([3., 4., 5., 6.], quat_a);
+        assert_eq!(result, out);
     }
 
     #[test]
@@ -877,19 +989,6 @@ mod tests {
         assert_eq!([6., 8., 10., 12.], out);
         assert_eq!(result, out);
     }
-
-    #[test]
-    fn subtract_two_quats() { 
-        let mut out: Quat = [0., 0., 0., 0.];
-        let quat_a: Quat = [1., 2., 3., 4.];
-        let quat_b: Quat = [5., 6., 7., 8.];
-
-        let result = subtract(&mut out, &quat_a, &quat_b);
-
-        assert_eq!([-4., -4., -4., -4.], out);
-        assert_eq!(result, out);
-    }
-
 
     #[test]
     fn scale_quat() { 

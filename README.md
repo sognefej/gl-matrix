@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/sognefej/gl-matrix.svg?branch=master)](https://travis-ci.org/sognefej/gl-matrix)
 [![Coverage Status](https://coveralls.io/repos/github/sognefej/gl-matrix/badge.svg)](https://coveralls.io/github/sognefej/gl-matrix)
 
-# gl_matrix
+# gl-matrix
 A Rust implementation of [glMatrix](http://glmatrix.net/)
 
 gl_matrix provides utilities or all [glMatrix](http://glmatrix.net/) functions in Rust. 
@@ -31,8 +31,20 @@ gl_matrix provides utilities or all [glMatrix](http://glmatrix.net/) functions i
  mat4::perspective(&mut proj_matrix, to_radian(45.), canvas_w / canvas_h, 0.1, Some(100.0));
 ```
 
-## Usage 
+## Usage
+
+Add this to your `Cargo.toml`:
+
+```toml
+[dependencies]
+gl-matrix = 
+```
 
 ## Contributing 
 
+See [CONTRIBUTING.md](./CONTRIBUTING.md)
+
 ## License
+gl-matrix is under the terms of the MIT license.
+
+[LICENSE](LICENSE)

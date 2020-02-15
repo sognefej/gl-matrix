@@ -242,7 +242,7 @@ pub fn random(out: &mut Vec3, scale: Option<f32>) {
 }
 
 
-pub fn transform_mat4(out: &mut Vec3, a: &Vec3, m: &Mat4) {
+pub fn transform_mat4(out: &mut Vec3, a: &Vec3, m: &Mat4) -> Vec3 {
     let x = a[0];
     let y = a[1];
     let z = a[2];
@@ -253,6 +253,8 @@ pub fn transform_mat4(out: &mut Vec3, a: &Vec3, m: &Mat4) {
     out[0] = (m[0] * x + m[4] * y + m[8] * z + m[12]) / w;
     out[1] = (m[1] * x + m[5] * y + m[9] * z + m[13]) / w;
     out[2] = (m[2] * x + m[6] * y + m[10] * z + m[14]) / w;
+
+    *out
 }
 
 pub fn transform_mat3(out: &mut Vec3, a: &Vec3, m: &Mat3) {
