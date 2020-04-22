@@ -635,3 +635,34 @@ pub fn equals(a: &Quat2, b: &Quat2) -> bool {
     f32::abs(a6 - b6) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a6), f32::abs(b6))) &&
     f32::abs(a7 - b7) <= EPSILON * f32::max(1.0, f32::max(f32::abs(a7), f32::abs(b7)))
 }
+
+
+#[cfg(test)] 
+mod tests {
+    use super::*;
+
+    #[test]
+    fn create_a_quat2() {
+        let ident: Quat2 = [0., 0., 0., 1., 0., 0., 0., 0.];
+
+        let out = create(); 
+
+        assert_eq!(ident, out);
+    }
+    
+    #[test]
+    fn clone_a_quat2() { 
+        let quat_2a: Quat2 = [1., 2., 3., 4., 2., 5., 6., -2.];
+
+        let out = clone(&quat_2a);
+
+        assert_eq!(quat_2a, out);
+    }
+
+    #[test]
+    fn copy_values_from_a_quat2_to_another() { 
+        let out = from_values(1., 2., 3., 4., 5., 7., 8., -2.);
+        
+        assert_eq!([1., 2., 3., 4., 5., 7., 8., -2.], out);
+    }
+}

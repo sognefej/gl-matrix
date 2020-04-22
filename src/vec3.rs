@@ -257,7 +257,7 @@ pub fn transform_mat4(out: &mut Vec3, a: &Vec3, m: &Mat4) -> Vec3 {
     *out
 }
 
-pub fn transform_mat3(out: &mut Vec3, a: &Vec3, m: &Mat3) {
+pub fn transform_mat3(out: &mut Vec3, a: &Vec3, m: &Mat3) -> Vec3 {
     let x = a[0];
     let y = a[1];
     let z = a[2];
@@ -265,6 +265,8 @@ pub fn transform_mat3(out: &mut Vec3, a: &Vec3, m: &Mat3) {
     out[0] = x * m[0] + y * m[3] + z * m[6];
     out[1] = x * m[1] + y * m[4] + z * m[7];
     out[2] = x * m[2] + y * m[5] + z * m[8];
+
+    *out
 }
 
 pub fn transform_quat(out: &mut Vec3, a: &Vec3, q: &Quat) {
@@ -483,3 +485,24 @@ pub fn sqr_len(a: &Vec3) -> f32 {
 //         return a;
 //     };
 //})();
+
+
+#[cfg(test)] 
+mod tests {
+    use super::*; 
+
+    #[test]
+    fn transform_mat4_to_vec3() {
+        let mut out: Vec3 = [0., 0., 0.];
+        let mat_r: Mat4 = [1., 0., 0., 0.,
+                          0., 1., 0., 0., 
+                          0., 0., 1., 0., 
+                          0., 0., 0., 1.];
+        let vec_a: Vec3 = [1., 2., 3.];
+        
+        let result = transform_mat4(&mut out, &vec_a, &mat_r);
+
+        assert_eq!([1., 2., 3.], out);
+        assert_eq!(result, out);
+    }
+}
