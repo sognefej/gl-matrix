@@ -10,7 +10,7 @@
 use super::common::{Quat2, Quat, Vec3, Mat4, hypot, EPSILON};
 use super::{quat, mat4};
 
-/// Creates a new identity dual quat
+/// Creates a new identity dual quat.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn create() -> Quat2 {
@@ -21,6 +21,9 @@ pub fn create() -> Quat2 {
     dq
 }
 
+/// Creates a new quat initialized with values from an existing quaternion.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn clone(a: &Quat2) -> Quat2 {
     let mut dq: Quat2 = [0_f32; 8];
 
@@ -36,6 +39,10 @@ pub fn clone(a: &Quat2) -> Quat2 {
     dq
 }
 
+
+/// Creates a new dual quat initialized with the given values.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn from_values(x1: f32, y1: f32, z1: f32, w1: f32,
                    x2: f32, y2: f32, z2: f32, w2: f32) -> Quat2 {
     let mut dq: Quat2 = [0_f32; 8];
@@ -52,6 +59,9 @@ pub fn from_values(x1: f32, y1: f32, z1: f32, w1: f32,
     dq
 }
 
+/// Creates a new dual quat from the given values (quat and translation).
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn from_rotation_translation_values(x1: f32, y1: f32, z1: f32, w1: f32,
                                         x2: f32, y2: f32, z2: f32) -> Quat2 {
     let mut dq: Quat2 = [0_f32; 8];
@@ -73,6 +83,9 @@ pub fn from_rotation_translation_values(x1: f32, y1: f32, z1: f32, w1: f32,
     dq
 }
 
+/// Creates a dual quat from a quaternion and a translation.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn from_rotation_translation(out: &mut Quat2, q: &Quat, t: &Vec3) {
     let ax = t[0] * 0.5;
     let ay = t[1] * 0.5;
@@ -92,6 +105,9 @@ pub fn from_rotation_translation(out: &mut Quat2, q: &Quat, t: &Vec3) {
     out[7] = -ax * bx - ay * by - az * bz;
 }
 
+/// Creates a dual quat from a translation.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn from_translation(out: &mut Quat2, t: &Vec3) {
     out[0] = 0.;
     out[1] = 0.;
@@ -103,6 +119,9 @@ pub fn from_translation(out: &mut Quat2, t: &Vec3) {
     out[7] = 0.;
 }
 
+/// Creates a dual quat from a quaternion.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn from_rotation(out: &mut Quat2, q: &Quat) {
     out[0] = q[0];
     out[1] = q[1];
@@ -114,6 +133,9 @@ pub fn from_rotation(out: &mut Quat2, q: &Quat) {
     out[7] = 0.;
 }
 
+/// Creates a new dual quat from a matrix (4x4).
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn from_mat4(out: &mut Quat2, a: &Mat4) {
     //TODO Optimize this
     let outer = &mut quat::create();
@@ -127,6 +149,9 @@ pub fn from_mat4(out: &mut Quat2, a: &Mat4) {
     from_rotation_translation(out, outer, t);
 }
 
+/// Copy the values from one dual quat to another.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn copy(out: &mut Quat2, a: &Quat2) -> Quat2 {
     out[0] = a[0];
     out[1] = a[1];
@@ -140,6 +165,9 @@ pub fn copy(out: &mut Quat2, a: &Quat2) -> Quat2 {
     *out
 }
 
+/// Set a dual quat to the identity dual quaternion.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn identity(out: &mut Quat2) -> Quat2 {
     out[0] = 0.;
     out[1] = 0.;
@@ -153,6 +181,9 @@ pub fn identity(out: &mut Quat2) -> Quat2 {
     *out
 }
 
+/// Set the components of a dual quat to the given values.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn set(out: &mut Quat2, x1: f32, y1: f32, z1: f32, w1: f32,
                             x2: f32, y2: f32, z2: f32, w2: f32) -> Quat2 {
     out[0] = x1;
@@ -167,11 +198,17 @@ pub fn set(out: &mut Quat2, x1: f32, y1: f32, z1: f32, w1: f32,
     *out
 }
 
+/// Gets the real part of a dual quat.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn get_real(q: &mut Quat, dq: &Quat2) {
     let dq_real = [dq[0], dq[1], dq[2], dq[3]];
     quat::copy(q, &dq_real);
 }
 
+/// Gets the dual part of a dual quat.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn get_dual(out: &mut Quat, a: &Quat2) {
     out[0] = a[4];
     out[1] = a[5];
@@ -179,6 +216,9 @@ pub fn get_dual(out: &mut Quat, a: &Quat2) {
     out[3] = a[7];
 }
 
+/// Set the real component of a dual quat to the given quaternion.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn set_real(dq: &mut Quat2, q: &Quat) {
     dq[0] = q[0];
     dq[1] = q[1];
@@ -186,6 +226,9 @@ pub fn set_real(dq: &mut Quat2, q: &Quat) {
     dq[3] = q[3];
 }
 
+/// Set the dual component of a dual quat to the given quaternion.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn set_dual(out: &mut Quat2, q: &Quat) {
     out[4] = q[0];
     out[5] = q[1];
@@ -193,6 +236,9 @@ pub fn set_dual(out: &mut Quat2, q: &Quat) {
     out[7] = q[3];
 }
 
+/// Gets the translation of a normalized dual quat.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn get_translation(out: &mut Vec3, a: &Quat2) {
     let ax = a[4];
     let ay = a[5];
@@ -209,6 +255,9 @@ pub fn get_translation(out: &mut Vec3, a: &Quat2) {
     out[2] = (az * bw + aw * bz + ax * by - ay * bx) * 2.;
 }
 
+/// Translates a dual quat by the given vector.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn translate(out: &mut Quat2, a: &Quat2, v: &Vec3) {
     let ax1 = a[0];
     let ay1 = a[1];
@@ -234,6 +283,9 @@ pub fn translate(out: &mut Quat2, a: &Quat2, v: &Vec3) {
     out[7] = -ax1 * bx1 - ay1 * by1 - az1 * bz1 + aw2;
 }
 
+/// Rotates a dual quat around the X axis.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn rotate_x(out: &mut Quat2, a: &Quat2, rad: f32) {
     let mut bx = -a[0];
     let mut by = -a[1];
@@ -265,6 +317,9 @@ pub fn rotate_x(out: &mut Quat2, a: &Quat2, rad: f32) {
     out[7] = aw1 * bw - ax1 * bx - ay1 * by - az1 * bz;
 }
 
+/// Rotates a dual quat around the Y axis.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn rotate_y(out: &mut Quat2, a: &Quat2, rad: f32) {
     let mut bx = -a[0];
     let mut by = -a[1];
@@ -296,7 +351,9 @@ pub fn rotate_y(out: &mut Quat2, a: &Quat2, rad: f32) {
     out[7] = aw1 * bw - ax1 * bx - ay1 * by - az1 * bz;
 }
 
-
+/// Rotates a dual quat around the Z axis.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn rotate_z(out: &mut Quat2, a: &Quat2, rad: f32) -> Quat2 {
     let mut bx = -a[0];
     let mut by = -a[1];
@@ -330,6 +387,9 @@ pub fn rotate_z(out: &mut Quat2, a: &Quat2, rad: f32) -> Quat2 {
     *out
 }
 
+/// Rotates a dual quat by a given quaternion (a * q).
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn rotate_by_quat_append(out: &mut Quat2, a: &Quat2, q: Quat) -> Quat2 {
     let qx = q[0];
     let qy = q[1];
@@ -359,6 +419,9 @@ pub fn rotate_by_quat_append(out: &mut Quat2, a: &Quat2, q: Quat) -> Quat2 {
     *out 
 }
 
+/// Rotates a dual quat by a given quaternion (q * a).
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn rotate_by_quat_prepend(out: &mut Quat2, q: &Quat, a: &Quat2) -> Quat2 {
     let qx = q[0];
     let qy = q[1];
@@ -388,6 +451,9 @@ pub fn rotate_by_quat_prepend(out: &mut Quat2, q: &Quat, a: &Quat2) -> Quat2 {
     *out 
 }
 
+/// Rotates a dual quat around a given axis. Does the normalisation automatically.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn rotate_around_axis(out: &mut Quat2, a: &Quat2, axis: &Vec3, rad: f32) -> Quat2 {
     //Special case for rad = 0
     if f32::abs(rad) < EPSILON {
@@ -426,6 +492,9 @@ pub fn rotate_around_axis(out: &mut Quat2, a: &Quat2, axis: &Vec3, rad: f32) -> 
     *out
 }
 
+/// Adds two dual quat's.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn add(out: &mut Quat2, a: &Quat2, b: &Quat2) -> Quat2 {
     out[0] = a[0] + b[0];
     out[1] = a[1] + b[1];
@@ -439,6 +508,9 @@ pub fn add(out: &mut Quat2, a: &Quat2, b: &Quat2) -> Quat2 {
     *out
 }
 
+/// Multiplies two dual quat's.
+/// 
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn multiply(out: &mut Quat2, a: &Quat2, b: &Quat2) -> Quat2 {
     let ax0 = a[0];
     let ay0 = a[1];
@@ -472,10 +544,16 @@ pub fn multiply(out: &mut Quat2, a: &Quat2, b: &Quat2) -> Quat2 {
     *out
 }
 
+/// Alias for multiply.
+///
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn mul(out: &mut Quat2, a: &Quat2, b: &Quat2) -> Quat2 {
     multiply(out, a, b)
 }
 
+/// Scales a dual quat by a scalar number.
+///
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn scale(out: &mut Quat2, a: &Quat2, b: f32) -> Quat2 {
     out[0] = a[0] * b;
     out[1] = a[1] * b;
@@ -489,6 +567,9 @@ pub fn scale(out: &mut Quat2, a: &Quat2, b: f32) -> Quat2 {
     *out
 }
 
+/// Calculates the dot product of two dual quat's (The dot product of the real parts).
+///
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn dot(a: &Quat2, b: &Quat2) -> f32 {
     let a_real = &[a[1], a[2], a[3], a[4]];
     let b_real = &[b[1], b[2], b[3], b[4]];
@@ -496,6 +577,11 @@ pub fn dot(a: &Quat2, b: &Quat2) -> f32 {
     quat::dot(a_real, b_real)
 }
 
+/// Performs a linear interpolation between two dual quats.
+/// NOTE: The resulting dual quaternions won't always be normalized (The error is most noticeable when t = 0.5).
+///
+///
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn lerp(out: &mut Quat2, a: &Quat2, b: &Quat2, t: f32) -> Quat2 {
     let mut t = t;
     let mt = 1_f32 - t;
@@ -516,6 +602,9 @@ pub fn lerp(out: &mut Quat2, a: &Quat2, b: &Quat2, t: f32) -> Quat2 {
     *out
 }
 
+/// Calculates the inverse of a dual quat. If they are normalized, conjugate is cheaper.
+///
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn invert(out: &mut Quat2, a: &Quat2) {
     let sqlen = squared_length(a);
 
@@ -529,6 +618,10 @@ pub fn invert(out: &mut Quat2, a: &Quat2) {
     out[7] = a[7] / sqlen;
 }
 
+/// Calculates the conjugate of a dual quat.
+/// If the dual quaternion is normalized, this function is faster than quat2.inverse and produces the same result.
+///
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn conjugate(out: &mut Quat2, a: &Quat2) {
     out[0] = -a[0];
     out[1] = -a[1];
@@ -540,27 +633,42 @@ pub fn conjugate(out: &mut Quat2, a: &Quat2) {
     out[7] = a[7];
 }
 
+/// Calculates the length of a dual quat.
+///
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn length(a: &Quat2) -> f32 { 
     let a_real = &[a[1], a[2], a[3], a[4]];
     
     quat::length(a_real)
 }
 
+/// Alias for length.
+///
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn len(a: &Quat2) -> f32 { 
     length(a)
 }
 
 
+/// Calculates the squared length of a dual quat.
+///
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn squared_length(a: &Quat2) -> f32 { 
     let a_real = &[a[1], a[2], a[3], a[4]];
     
     quat::squared_length(a_real)
 }
 
+/// Alias for squared_length.
+///
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn sqr_len(a: &Quat2) -> f32 { 
     squared_length(a)
 }
 
+/// Normalize a dual quat.
+///
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn normalize(out: &mut Quat2, a: &Quat2) {
     let mut magnitude = squared_length(a);
 
@@ -589,6 +697,9 @@ pub fn normalize(out: &mut Quat2, a: &Quat2) {
     }
 }
 
+/// Returns a string representation of a dual quatenion.
+///
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn quat2_string(a: &Quat2) -> String {
     let a0 = ["quat2(".to_string(), a[0].to_string()].join("");
     let a1 = a[1].to_string(); 
@@ -602,11 +713,17 @@ pub fn quat2_string(a: &Quat2) -> String {
     [a0, a1, a2, a3, a4, a5, a6, a7].join(", ")
 }
 
+/// Returns whether or not the dual quaternions have exactly the same elements in the same position (when compared with ===).
+///
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn exact_equals(a: &Quat2, b: &Quat2) -> bool {
     a[0] == b[0] && a[1] == b[1] && a[2] == b[2] && a[3] == b[3] &&
     a[4] == b[4] && a[5] == b[5] && a[6] == b[6] && a[7] == b[7]
 }
 
+/// Returns whether or not the dual quaternions have approximately the same elements in the same position.
+///
+/// [glMatrix Documentation](http://glmatrix.net/docs/module-quat2.html)
 pub fn equals(a: &Quat2, b: &Quat2) -> bool {
     let a0 = a[0];
     let a1 = a[1];

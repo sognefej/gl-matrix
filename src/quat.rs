@@ -490,8 +490,8 @@ pub fn dot(a: &Quat, b: &Quat) -> f32 {
 /// Performs a linear interpolation between two quats.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-quat.html) 
-pub fn lerp(out: &mut Quat, a: &Quat, b: &Quat, t: f32) {
-    vec4::lerp(out, a, b, t);
+pub fn lerp(out: &mut Quat, a: &Quat, b: &Quat, t: f32) -> Quat {
+    vec4::lerp(out, a, b, t)
 }
 
 /// Calculates the length of a quat.
@@ -1018,9 +1018,9 @@ mod tests {
         let quat_a: Quat = [1., 2., 3., 4.];
         let quat_b: Quat = [5., 6., 7., 8.];
 
-        let result = add(&mut out, &quat_a, &quat_b);
+        let result = lerp(&mut out, &quat_a, &quat_b, 0.5);
 
-        assert_eq!([6., 8., 10., 12.], out);
+        assert_eq!([3., 4., 5., 6.], out);
         assert_eq!(result, out);
     }
 

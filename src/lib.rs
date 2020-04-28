@@ -40,8 +40,11 @@ pub mod mat3;
 pub mod mat4;
 #[deny(missing_docs)]
 pub mod quat; 
-//#[deny(missing_docs)]
+#[deny(missing_docs)]
 pub mod quat2;
+#[deny(missing_docs)]
 pub mod vec2;
+#[deny(missing_docs)]
 pub mod vec3; 
+#[deny(missing_docs)]
 pub mod vec4; 
