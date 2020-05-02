@@ -1075,12 +1075,14 @@ mod tests {
 
     #[test]
     fn angle_of_vec2() { 
+        use super::super::common;
+
         let vec_a: Vec2 = [1., 0.];
         let vec_b: Vec2 = [1., 2.];
 
         let result = angle(&vec_a, &vec_b);
         
-        assert_eq!(result, 1.1071486);
+        assert!(common::equals(result, 1.107148));
     }
 
     #[test]
