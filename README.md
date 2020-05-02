@@ -48,7 +48,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-gl-matrix = 0.0
+gl_matrix = 0.0
 ```
 
 ## Contributing 
