@@ -32,6 +32,7 @@ gl_matrix provides utilities or all [glMatrix](http://glmatrix.net/) functions i
 ```
 ## Future work 
 - Add support for f64 (Currently only f32) 
+- Add support for forEach 
 
 ## Usage
 
