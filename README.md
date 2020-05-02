@@ -1,8 +1,9 @@
+# gl-matrix
+
 [![Build Status](https://travis-ci.org/sognefej/gl-matrix.svg?branch=master)](https://travis-ci.org/sognefej/gl-matrix)
 [![Coverage Status](https://coveralls.io/repos/github/sognefej/gl-matrix/badge.svg)](https://coveralls.io/github/sognefej/gl-matrix)
 [![Crate](https://img.shields.io/crates/v/rand.svg)](https://crates.io/crates/gl_matrix)
 
-# gl-matrix
 A Rust implementation of [glMatrix](http://glmatrix.net/)
 
 gl_matrix provides utilities or all [glMatrix](http://glmatrix.net/) functions in Rust. 
