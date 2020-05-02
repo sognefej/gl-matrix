@@ -13,4 +13,3 @@ coveralls = { repository = "sognefej/gl-matrix" }
 
 [dependencies]
 rand = "0.7.3"
-
