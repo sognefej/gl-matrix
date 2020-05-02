@@ -30,6 +30,14 @@ gl_matrix provides utilities or all [glMatrix](http://glmatrix.net/) functions i
  mat4::look_at(&mut view_matrix, &eye, &center, &up);
  mat4::perspective(&mut proj_matrix, to_radian(45.), canvas_w / canvas_h, 0.1, Some(100.0));
 ```
+## Features 
+- No std 
+- Compiles to wasm 
+- Familar syntax
+
+## Future work 
+- Add support for f64 (Currently only f32) 
+- Add support for forEach 
 
 ## Usage
 

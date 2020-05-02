@@ -3,9 +3,13 @@ name = "gl_matrix"
 version = "0.0.1"
 authors = ["Eric Sognefest"]
 license = "MIT"
+categories = ["wasm", "no-std"]
+exclude = ["/.travis.yml", ".gitignore"]
 edition = "2018"
 
 [badges]
+travis-ci = { repository = "sognefej/gl-matrix" }
+coveralls = { repository = "sognefej/gl-matrix" }
 
 [dependencies]
 rand = "0.7.3"
