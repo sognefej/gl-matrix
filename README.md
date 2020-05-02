@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/sognefej/gl-matrix.svg?branch=master)](https://travis-ci.org/sognefej/gl-matrix)
 [![Coverage Status](https://coveralls.io/repos/github/sognefej/gl-matrix/badge.svg)](https://coveralls.io/github/sognefej/gl-matrix)
 [![Crate](https://img.shields.io/crates/v/rand.svg)](https://crates.io/crates/gl_matrix)
+[![API](https://docs.rs/rand/badge.svg)](https://docs.rs/gl_matrix)
 
 A Rust implementation of [glMatrix](http://glmatrix.net/)
 
