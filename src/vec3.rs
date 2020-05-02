@@ -53,10 +53,12 @@ pub fn from_values(x: f32, y: f32, z: f32) ->  Vec3 {
 /// Copy the values from one vec3 to another.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec3.js.html)
-pub fn copy(out: &mut Vec3, a: &Vec3) {
+pub fn copy(out: &mut Vec3, a: &Vec3) -> Vec3 {
     out[0] = a[0];
     out[1] = a[1];
     out[2] = a[2];
+
+    *out
 }
 
 /// Set the components of a vec3 to the given values.
@@ -82,91 +84,111 @@ pub fn add(out: &mut Vec3, a: &Vec3, b: &Vec3) -> Vec3{
 /// Subtracts vector b from vector a.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec3.js.html)
-pub fn subtract(out: &mut Vec3, a: &Vec3, b: &Vec3) {
+pub fn subtract(out: &mut Vec3, a: &Vec3, b: &Vec3) -> Vec3 {
     out[0] = a[0] - b[0];
     out[1] = a[1] - b[1];
     out[2] = a[2] - b[2];
+
+    *out
 }
 
 /// Multiplies two vec3's.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec3.js.html)
-pub fn multiply(out: &mut Vec3, a: &Vec3, b: &Vec3) {
+pub fn multiply(out: &mut Vec3, a: &Vec3, b: &Vec3) -> Vec3 {
     out[0] = a[0] * b[0];
     out[1] = a[1] * b[1];
     out[2] = a[2] * b[2];
+
+    *out
 }
 
 /// Divides two vec3's.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec3.js.html)
-pub fn divide(out: &mut Vec3, a: &Vec3, b: &Vec3) {
+pub fn divide(out: &mut Vec3, a: &Vec3, b: &Vec3) -> Vec3 {
     out[0] = a[0] / b[0];
     out[1] = a[1] / b[1];
     out[2] = a[2] / b[2];
+
+    *out
 }
 
 /// f32::ceil the components of a vec3.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec3.js.html)
-pub fn ceil(out: &mut Vec3, a: &Vec3) {
+pub fn ceil(out: &mut Vec3, a: &Vec3) -> Vec3 {
     out[0] = f32::ceil(a[0]);
     out[1] = f32::ceil(a[1]);
     out[2] = f32::ceil(a[2]);
+
+    *out
 }
 
 /// f32::ceil the components of a vec3.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec3.js.html)
-pub fn floor(out: &mut Vec3, a: &Vec3) {
+pub fn floor(out: &mut Vec3, a: &Vec3) -> Vec3 {
     out[0] = f32::floor(a[0]);
     out[1] = f32::floor(a[1]);
     out[2] = f32::floor(a[2]);
+
+    *out
 }
 
 /// Returns the minimum of two vec3's.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec3.js.html)
-pub fn min(out: &mut Vec3, a: &Vec3, b: &Vec3) {
+pub fn min(out: &mut Vec3, a: &Vec3, b: &Vec3) -> Vec3 {
     out[0] = f32::min(a[0], b[0]);
     out[1] = f32::min(a[1], b[1]);
     out[2] = f32::min(a[2], b[2]);
+
+    *out
 }
 
 /// Returns the maximum of two vec3's.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec3.js.html)
-pub fn max(out: &mut Vec3, a: &Vec3, b: &Vec3) {
+pub fn max(out: &mut Vec3, a: &Vec3, b: &Vec3) -> Vec3 {
     out[0] = f32::max(a[0], b[0]);
     out[1] = f32::max(a[1], b[1]);
     out[2] = f32::max(a[2], b[2]);
+
+    *out
 }
 
 /// f32::round the components of a vec3
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec3.js.html)
-pub fn round(out: &mut Vec3, a: &Vec3) {
+pub fn round(out: &mut Vec3, a: &Vec3) -> Vec3 {
     out[0] = f32::round(a[0]);
     out[1] = f32::round(a[1]);
     out[2] = f32::round(a[2]);
+
+    *out
 }
 
 /// Scales a vec3 by a scalar number.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec3.js.html)
-pub fn scale(out: &mut Vec3, a: &Vec3, b: f32) {
+pub fn scale(out: &mut Vec3, a: &Vec3, b: f32) -> Vec3 {
     out[0] = a[0] * b;
     out[1] = a[1] * b;
     out[2] = a[2] * b;
+
+    *out
 }
 
 /// Adds two vec3's after scaling the second operand by a scalar value.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec3.js.html)
-pub fn scale_and_add(out: &mut Vec3, a: &Vec3, b: &Vec3, scale: f32) {
+pub fn scale_and_add(out: &mut Vec3, a: &Vec3, b: &Vec3, scale: f32) -> Vec3 {
     out[0] = a[0] + (b[0] * scale);
     out[1] = a[1] + (b[1] * scale);
     out[2] = a[2] + (b[2] * scale);
+
+    *out
 }
 
 /// Calculates the euclidian distance between two vec3's.
@@ -207,25 +229,29 @@ pub fn squared_length(a: &Vec3) -> f32 {
 /// Negates the components of a vec3.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec3.js.html)
-pub fn negate(out: &mut Vec3, a: &Vec3) {
+pub fn negate(out: &mut Vec3, a: &Vec3) -> Vec3 {
     out[0] = -a[0];
     out[1] = -a[1];
     out[2] = -a[2];
+
+    *out
 }
 
 /// Returns the inverse of the components of a vec3.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec3.js.html)
-pub fn inverse(out: &mut Vec3, a: &Vec3) {
+pub fn inverse(out: &mut Vec3, a: &Vec3) -> Vec3 {
     out[0] = 1.0 / a[0];
     out[1] = 1.0 / a[1];
     out[2] = 1.0 / a[2];
+
+    *out
 }
 
 /// Normalize a vec3.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec3.js.html)
-pub fn normalize(out: &mut Vec3, a: &Vec3) {
+pub fn normalize(out: &mut Vec3, a: &Vec3) -> Vec3 {
     let x = a[0];
     let y = a[1];
     let z = a[2];
@@ -239,6 +265,8 @@ pub fn normalize(out: &mut Vec3, a: &Vec3) {
     out[0] = a[0] * len;
     out[1] = a[1] * len;
     out[2] = a[2] * len;
+
+    *out
 }
 
 /// Calculates the dot product of two vec3's.
@@ -251,7 +279,7 @@ pub fn dot(a: &Vec3, b: &Vec3) -> f32 {
 /// Computes the cross product of two vec3's.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec3.js.html)
-pub fn cross(out: &mut Vec3, a: &Vec3, b: &Vec3) {
+pub fn cross(out: &mut Vec3, a: &Vec3, b: &Vec3) -> Vec3 {
     let ax = a[0];
     let ay = a[1];
     let az = a[2];
@@ -263,12 +291,14 @@ pub fn cross(out: &mut Vec3, a: &Vec3, b: &Vec3) {
     out[0] = ay * bz - az * by;
     out[1] = az * bx - ax * bz;
     out[2] = ax * by - ay * bx;
+
+    *out
 }
 
 /// Performs a linear interpolation between two vec3's.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec3.js.html)
-pub fn lerp(out: &mut Vec3, a: &Vec3, b: &Vec3, t: f32) {
+pub fn lerp(out: &mut Vec3, a: &Vec3, b: &Vec3, t: f32) -> Vec3 {
     let ax = a[0];
     let ay = a[1];
     let az = a[2];
@@ -276,13 +306,15 @@ pub fn lerp(out: &mut Vec3, a: &Vec3, b: &Vec3, t: f32) {
     out[0] = ax + t * (b[0] - ax);
     out[1] = ay + t * (b[1] - ay);
     out[2] = az + t * (b[2] - az);
+
+    *out
 }
 
 /// Performs a hermite interpolation with two control points.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec3.js.html)
 pub fn hermite(out: &mut Vec3, a: &Vec3, b: &Vec3, 
-                               c: &Vec3, d: &Vec3, t: f32) {
+                               c: &Vec3, d: &Vec3, t: f32) -> Vec3 {
     let factor_times2 = t * t;
     let factor1 = factor_times2 * (2. * t - 3.) + 1.;
     let factor2 = factor_times2 * (t - 2.) + t;
@@ -292,13 +324,15 @@ pub fn hermite(out: &mut Vec3, a: &Vec3, b: &Vec3,
     out[0] = a[0] * factor1 + b[0] * factor2 + c[0] * factor3 + d[0] * factor4;
     out[1] = a[1] * factor1 + b[1] * factor2 + c[1] * factor3 + d[1] * factor4;
     out[2] = a[2] * factor1 + b[2] * factor2 + c[2] * factor3 + d[2] * factor4;
+
+    *out
 }
 
 /// Performs a bezier interpolation with two control points.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec3.js.html)
 pub fn bezier(out: &mut Vec3, a: &Vec3, b: &Vec3, 
-                              c: &Vec3, d: &Vec3, t: f32) {
+                              c: &Vec3, d: &Vec3, t: f32) -> Vec3 {
     let inverse_factor = 1_f32 - t;
     let inverse_factor_times_two = inverse_factor * inverse_factor;
     let factor_times2 = t * t;
@@ -310,12 +344,14 @@ pub fn bezier(out: &mut Vec3, a: &Vec3, b: &Vec3,
     out[0] = a[0] * factor1 + b[0] * factor2 + c[0] * factor3 + d[0] * factor4;
     out[1] = a[1] * factor1 + b[1] * factor2 + c[1] * factor3 + d[1] * factor4;
     out[2] = a[2] * factor1 + b[2] * factor2 + c[2] * factor3 + d[2] * factor4;
+
+    *out
 }
 
 /// Generates a random vector with the given scale.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec3.js.html)
-pub fn random(out: &mut Vec3, scale: Option<f32>) {    
+pub fn random(out: &mut Vec3, scale: Option<f32>) -> Vec3 {    
     let scale = match scale { 
         Some(scale) => scale, 
         None => 1_f32, 
@@ -327,6 +363,8 @@ pub fn random(out: &mut Vec3, scale: Option<f32>) {
     out[0] = f32::cos(r) * z_scale;
     out[1] = f32::sin(r) * z_scale;
     out[2] = z * scale;
+
+    *out
 }
 
 
@@ -368,7 +406,7 @@ pub fn transform_mat3(out: &mut Vec3, a: &Vec3, m: &Mat3) -> Vec3 {
 /// Can also be used for dual quaternions. (Multiply it with the real part)
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec3.js.html)
-pub fn transform_quat(out: &mut Vec3, a: &Vec3, q: &Quat) {
+pub fn transform_quat(out: &mut Vec3, a: &Vec3, q: &Quat) -> Vec3 {
     // benchmarks: https://jsperf.com/quaternion-transform-vec3-implementations-fixed
     let qx = q[0];
     let qy = q[1];
@@ -406,12 +444,14 @@ pub fn transform_quat(out: &mut Vec3, a: &Vec3, q: &Quat) {
     out[0] = x + uvx + uuvx;
     out[1] = y + uvy + uuvy;
     out[2] = z + uvz + uuvz;
+
+    *out
 }
 
 /// Rotate a 3D vector around the x-axis.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec3.js.html)
-pub fn rotate_x(out: &mut Vec3, a: &Vec3, b: &Vec3, c: f32) {
+pub fn rotate_x(out: &mut Vec3, a: &Vec3, b: &Vec3, c: f32) -> Vec3 {
     let mut p: Vec3 = [0_f32; 3];
     let mut r: Vec3 = [0_f32; 3];
     
@@ -429,12 +469,14 @@ pub fn rotate_x(out: &mut Vec3, a: &Vec3, b: &Vec3, c: f32) {
     out[0] = r[0] + b[0];
     out[1] = r[1] + b[1];
     out[2] = r[2] + b[2];
+
+    *out
 }
 
 /// Rotate a 3D vector around the y-axis.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec3.js.html)
-pub fn rotate_y(out: &mut Vec3, a: &Vec3, b: &Vec3, c: f32) {
+pub fn rotate_y(out: &mut Vec3, a: &Vec3, b: &Vec3, c: f32) -> Vec3 {
     let mut p: Vec3 = [0_f32; 3];
     let mut r: Vec3 = [0_f32; 3];
     
@@ -452,12 +494,14 @@ pub fn rotate_y(out: &mut Vec3, a: &Vec3, b: &Vec3, c: f32) {
     out[0] = r[0] + b[0];
     out[1] = r[1] + b[1];
     out[2] = r[2] + b[2];
+
+    *out
 }
 
 /// Rotate a 3D vector around the z-axis.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec3.js.html)
-pub fn rotate_z(out: &mut Vec3, a: &Vec3, b: &Vec3, c: f32) {
+pub fn rotate_z(out: &mut Vec3, a: &Vec3, b: &Vec3, c: f32) -> Vec3 {
     let mut p: Vec3 = [0_f32; 3];
     let mut r: Vec3 = [0_f32; 3];
     
@@ -475,6 +519,8 @@ pub fn rotate_z(out: &mut Vec3, a: &Vec3, b: &Vec3, c: f32) {
     out[0] = r[0] + b[0];
     out[1] = r[1] + b[1];
     out[2] = r[2] + b[2];
+
+    *out
 }
 
 /// Get the angle between two 3D vectors.
@@ -501,10 +547,12 @@ pub fn angle(a: &Vec3, b: &Vec3) -> f32 {
 /// Set the components of a vec3 to zero.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec3.js.html)
-pub fn zero(out: &mut Vec3) {
+pub fn zero(out: &mut Vec3) -> Vec3 {
     out[0] = 0.0;
     out[1] = 0.0;
     out[2] = 0.0;
+
+    *out
 }
 
 /// Returns a string representation of a vector.
@@ -545,22 +593,22 @@ pub fn equals(a: &Vec3, b: &Vec3) -> bool {
 /// Alias for vec3::subtract
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec3.js.html)
-pub fn sub(out: &mut Vec3, a: &Vec3, b: &Vec3) {
-    subtract(out, a, b);
+pub fn sub(out: &mut Vec3, a: &Vec3, b: &Vec3) -> Vec3 {
+    subtract(out, a, b)
 }
 
 /// Alias for vec3::multiply
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec3.js.html)
-pub fn mul(out: &mut Vec3, a: &Vec3, b: &Vec3) {
-    multiply(out, a, b);
+pub fn mul(out: &mut Vec3, a: &Vec3, b: &Vec3) -> Vec3 {
+    multiply(out, a, b)
 }
 
 /// Alias for vec3::divide
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec3.js.html)
-pub fn div(out: &mut Vec3, a: &Vec3, b: &Vec3) {
-    divide(out, a, b);
+pub fn div(out: &mut Vec3, a: &Vec3, b: &Vec3) -> Vec3 {
+    divide(out, a, b)
 }
 
 /// Alias for vec3::distance
@@ -634,6 +682,189 @@ pub fn sqr_len(a: &Vec3) -> f32 {
 #[cfg(test)] 
 mod tests {
     use super::*; 
+
+    #[test] 
+    fn create_a_vec3() { 
+        let out = create();
+        
+        assert_eq!([0., 0., 0.], out);
+    }
+
+    #[test] 
+    fn clone_a_vec3() {
+        let vec_a: Vec3 = [1., 2., 3.];
+  
+        let out = clone(&vec_a);
+       
+        assert_eq!(vec_a, out);
+    }
+
+    #[test]
+    fn length_of_vec3() {
+        use super::super::common;
+
+        let vec_a: Vec3 = [1., 2., 3.];
+
+        let result = length(&vec_a);
+
+        assert!(common::equals(result, 3.741657));
+    }
+
+    #[test]
+    fn len_of_vec3() { 
+        use super::super::common;
+
+        let vec_a: Vec3 = [1., 2., 3.];
+
+        let result = len(&vec_a);
+
+        assert!(common::equals(result, 3.741657));
+    }
+
+    #[test]
+    fn length_is_equal_to_len() {
+        let vec_a: Vec3 = [1., 2., 3.];
+
+        let result_a = length(&vec_a);
+        let result_b = len(&vec_a);
+
+        assert_eq!(result_a, result_b);
+    }
+
+    #[test]
+    fn create_vec3_from_values() { 
+        let out = from_values(1., 2., 3.);
+    
+        assert_eq!([1., 2., 3.], out); 
+    }
+   
+    #[test] 
+    fn copy_values_from_a_mat2d_to_another() {
+        let mut out =  [0., 0., 0.];
+        let mat_a: Vec3 = [1., 2., 3.];
+   
+        let result = copy(&mut out, &mat_a);
+      
+        assert_eq!(mat_a, out);
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn add_two_vec3s() { 
+        let mut out =  [0., 0., 0.];
+        let vec_a: Vec3 = [1., 2., 3.];
+        let vec_b: Vec3 = [4., 5., 6.];
+
+        let result = add(&mut out, &vec_a, &vec_b);
+
+        assert_eq!([5., 7., 9.], out);
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn subtract_two_vec3s() { 
+        let mut out =  [0., 0., 0.];
+        let vec_a: Vec3 = [1., 2., 3.];
+        let vec_b: Vec3 = [4., 5., 6.];
+
+        let result = subtract(&mut out, &vec_a, &vec_b);
+
+        assert_eq!([-3., -3., -3.], out);
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn sub_two_vec3s() { 
+        let mut out =  [0., 0., 0.];
+        let vec_a: Vec3 = [1., 2., 3.];
+        let vec_b: Vec3 = [4., 5., 6.];
+
+        let result = sub(&mut out, &vec_a, &vec_b);
+
+        assert_eq!([-3., -3., -3.], out);
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn sub_is_equal_to_subtract() { 
+        let mut out =  [0., 0., 0.];
+        let vec_a: Vec3 = [1., 2., 3.];
+        let vec_b: Vec3 = [4., 5., 6.];
+
+        let result_a = subtract(&mut out, &vec_a, &vec_b);
+        let result_b = sub(&mut out, &vec_a, &vec_b);
+        assert_eq!(result_a, result_b);
+    }
+
+    #[test]
+    fn multiply_two_vec3s() { 
+        let mut out =  [0., 0., 0.];
+        let vec_a: Vec3 = [1., 2., 3.];
+        let vec_b: Vec3 = [4., 5., 6.];
+
+        let result = multiply(&mut out, &vec_a, &vec_b);
+
+        assert_eq!([4., 10., 18.], out);
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn mul_two_vec3s() { 
+        let mut out =  [0., 0., 0.];
+        let vec_a: Vec3 = [1., 2., 3.];
+        let vec_b: Vec3 = [4., 5., 6.];
+
+        let result = mul(&mut out, &vec_a, &vec_b);
+
+        assert_eq!([4., 10., 18.], out);
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn mul_is_equal_to_multiply() { 
+        let mut out =  [0., 0., 0.];
+        let vec_a: Vec3 = [1., 2., 3.];
+        let vec_b: Vec3 = [4., 5., 6.];
+
+        let result_a = multiply(&mut out, &vec_a, &vec_b);
+        let result_b = mul(&mut out, &vec_a, &vec_b);
+        assert_eq!(result_a, result_b);
+    }
+
+    #[test]
+    fn divide_two_vec3s() { 
+        let mut out =  [0., 0., 0.];
+        let vec_a: Vec3 = [1., 2., 3.];
+        let vec_b: Vec3 = [4., 5., 6.];
+
+        let result = divide(&mut out, &vec_a, &vec_b);
+
+        assert_eq!([0.25, 0.4, 0.5], out);
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn div_two_vec3s() { 
+        let mut out =  [0., 0., 0.];
+        let vec_a: Vec3 = [1., 2., 3.];
+        let vec_b: Vec3 = [4., 5., 6.];
+
+        let result = div(&mut out, &vec_a, &vec_b);
+
+        assert_eq!([0.25, 0.4, 0.5], out);
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn div_is_equal_to_divide() { 
+        let mut out =  [0., 0., 0.];
+        let vec_a: Vec3 = [1., 2., 3.];
+        let vec_b: Vec3 = [4., 5., 6.];
+
+        let result_a = divide(&mut out, &vec_a, &vec_b);
+        let result_b = div(&mut out, &vec_a, &vec_b);
+        assert_eq!(result_a, result_b);
+    }
 
     #[test]
     fn transform_mat4_to_vec3() {

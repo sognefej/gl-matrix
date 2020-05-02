@@ -90,71 +90,85 @@ pub fn subtract(out: &mut Vec4, a: &Vec4, b: &Vec4) -> Vec4 {
 /// Multiplies two vec4's.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec4.js.html)
-pub fn multiply(out: &mut Vec4, a: &Vec4, b: &Vec4) {
+pub fn multiply(out: &mut Vec4, a: &Vec4, b: &Vec4) -> Vec4 {
     out[0] = a[0] * b[0];
     out[1] = a[1] * b[1];
     out[2] = a[2] * b[2];
     out[3] = a[3] * b[3];
+
+    *out
 }
 
 /// Divides two vec4's.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec4.js.html)
-pub fn divide(out: &mut Vec4, a: &Vec4, b: &Vec4) {
+pub fn divide(out: &mut Vec4, a: &Vec4, b: &Vec4) -> Vec4 {
     out[0] = a[0] / b[0];
     out[1] = a[1] / b[1];
     out[2] = a[2] / b[2];
     out[3] = a[3] / b[3];
+
+    *out
 }
 
 /// f32::ceil the components of a vec4.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec4.js.html)
-pub fn ceil(out: &mut Vec4, a: &Vec4) {
+pub fn ceil(out: &mut Vec4, a: &Vec4) -> Vec4 {
     out[0] = f32::ceil(a[0]);
     out[1] = f32::ceil(a[1]);
     out[2] = f32::ceil(a[2]);
     out[3] = f32::ceil(a[3]);
+
+    *out
 }
 
 /// f32::floor the components of a vec4.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec4.js.html)
-pub fn floor(out: &mut Vec4, a: &Vec4) {
+pub fn floor(out: &mut Vec4, a: &Vec4) -> Vec4 {
     out[0] = f32::floor(a[0]);
     out[1] = f32::floor(a[1]);
     out[2] = f32::floor(a[2]);
     out[3] = f32::floor(a[3]);
+
+    *out
 }
 
 /// Returns the minimum of two vec4's.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec4.js.html)
-pub fn min(out: &mut Vec4, a: &Vec4, b: &Vec4) {
+pub fn min(out: &mut Vec4, a: &Vec4, b: &Vec4) -> Vec4 {
     out[0] = f32::min(a[0], b[0]);
     out[1] = f32::min(a[1], b[1]);
     out[2] = f32::min(a[2], b[2]);
     out[3] = f32::min(a[3], b[3]);
+
+    *out
 }
 
 /// Returns the maximum of two vec4's.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec4.js.html)
-pub fn max(out: &mut Vec4, a: &Vec4, b: &Vec4) {
+pub fn max(out: &mut Vec4, a: &Vec4, b: &Vec4) -> Vec4 {
     out[0] = f32::max(a[0], b[0]);
     out[1] = f32::max(a[1], b[1]);
     out[2] = f32::max(a[2], b[2]);
     out[3] = f32::max(a[3], b[3]);
+
+    *out
 }
 
 /// f32::round the components of a vec4.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec4.js.html)
-pub fn round(out: &mut Vec4, a: &Vec4) {
+pub fn round(out: &mut Vec4, a: &Vec4) -> Vec4 {
     out[0] = f32::round(a[0]);
     out[1] = f32::round(a[1]);
     out[2] = f32::round(a[2]);
     out[3] = f32::round(a[3]);
+
+    *out
 }
 
 /// Scales a vec4 by a scalar number.
@@ -172,11 +186,13 @@ pub fn scale(out: &mut Vec4, a: &Vec4, b: f32) -> Vec4 {
 /// Adds two vec4's after scaling the second operand by a scalar value.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec4.js.html)
-pub fn scale_and_add(out: &mut Vec4, a: &Vec4, b: &Vec4, scale: f32) {
+pub fn scale_and_add(out: &mut Vec4, a: &Vec4, b: &Vec4, scale: f32) -> Vec4 {
     out[0] = a[0] + (b[0] * scale);
     out[1] = a[1] + (b[1] * scale);
     out[2] = a[2] + (b[2] * scale);
     out[3] = a[3] + (b[3] * scale);
+
+    *out
 }
 
 /// Calculates the euclidian distance between two vec4's.
@@ -234,21 +250,25 @@ pub fn squared_length(a: &[f32]) -> f32 {
 /// Negates the components of a vec4.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec4.js.html)
-pub fn negate(out: &mut Vec4, a: &Vec4) {
+pub fn negate(out: &mut Vec4, a: &Vec4) -> Vec4 {
     out[0] = -a[0];
     out[1] = -a[1];
     out[2] = -a[2];
     out[3] = -a[3];
+
+    *out
 }
 
 /// Returns the inverse of the components of a vec4.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec4.js.html)
-pub fn inverse(out: &mut Vec4, a: &Vec4) {
+pub fn inverse(out: &mut Vec4, a: &Vec4) -> Vec4 {
     out[0] = 1.0 / a[0];
     out[1] = 1.0 / a[1];
     out[2] = 1.0 / a[2];
     out[3] = 1.0 / a[3];
+
+    *out
 }
 
 /// Normalize a vec4.
@@ -283,7 +303,7 @@ pub fn dot(a: &Vec4, b: &Vec4) -> f32 {
 /// Returns the cross-product of three vectors in a 4-dimensional space.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec4.js.html)
-pub fn cross (out: &mut Vec4, u: &Vec4, v: &Vec4, w: &Vec4) {
+pub fn cross (out: &mut Vec4, u: &Vec4, v: &Vec4, w: &Vec4) -> Vec4 {
     let a = (v[0] * w[1]) - (v[1] * w[0]);
     let b = (v[0] * w[2]) - (v[2] * w[0]);
     let c = (v[0] * w[3]) - (v[3] * w[0]);
@@ -300,6 +320,8 @@ pub fn cross (out: &mut Vec4, u: &Vec4, v: &Vec4, w: &Vec4) {
     out[1] = -(g * f) + (i * c) - (j * b);
     out[2] = (g * e) - (h * c) + (j * a);
     out[3] = -(g * d) + (h * b) - (i * a);
+
+    *out
 }
 
 /// Performs a linear interpolation between two vec4's.
@@ -322,7 +344,7 @@ pub fn lerp(out: &mut Vec4, a: &Vec4, b: &Vec4, t: f32) -> Vec4 {
 /// Generates a random vector with the given scale.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec4.js.html)
-pub fn random(out: &mut Vec4, scale: Option<f32>) {
+pub fn random(out: &mut Vec4, scale: Option<f32>) -> Vec4 {
     let scale = match scale { 
         Some(scale) => scale, 
         None => 1_f32, 
@@ -355,12 +377,14 @@ pub fn random(out: &mut Vec4, scale: Option<f32>) {
     out[1] = scale * v2;
     out[2] = scale * v3 * d;
     out[3] = scale * v4 * d;
+
+    *out
 }
 
 /// Transforms the vec4 with a mat4.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec4.js.html)
-pub fn transform_mat4(out: &mut Vec4, a: &Vec4, m: &Mat4) {
+pub fn transform_mat4(out: &mut Vec4, a: &Vec4, m: &Mat4) -> Vec4 {
     let x = a[0];
     let y = a[1];
     let z = a[2];
@@ -370,12 +394,14 @@ pub fn transform_mat4(out: &mut Vec4, a: &Vec4, m: &Mat4) {
     out[1] = m[1] * x + m[5] * y + m[9] * z + m[13] * w;
     out[2] = m[2] * x + m[6] * y + m[10] * z + m[14] * w;
     out[3] = m[3] * x + m[7] * y + m[11] * z + m[15] * w;
+
+    *out
 }
 
 /// Transforms the vec4 with a quat.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec4.js.html)
-pub fn transform_quat(out: &mut Vec4, a: &Vec4 , q: &Quat) {
+pub fn transform_quat(out: &mut Vec4, a: &Vec4 , q: &Quat) -> Vec4 {
     let x = a[0];
     let y = a[1];
     let z = a[2];
@@ -396,16 +422,20 @@ pub fn transform_quat(out: &mut Vec4, a: &Vec4 , q: &Quat) {
     out[1] = iy * qw + iw * -qy + iz * -qx - ix * -qz;
     out[2] = iz * qw + iw * -qz + ix * -qy - iy * -qx;
     out[3] = a[3];
+
+    *out
 }
 
 /// Set the components of a vec4 to zero.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec4.js.html)
-pub fn zero(out: &mut Vec4) {
+pub fn zero(out: &mut Vec4) -> Vec4 {
     out[0] = 0.0;
     out[1] = 0.0;
     out[2] = 0.0;
     out[3] = 0.0;
+
+    *out
 }
 
 /// Returns a string representation of a vector.
@@ -450,22 +480,22 @@ pub fn equals(a: &Vec4, b: &Vec4) -> bool {
 /// Alias for vec4::subtract.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec4.js.html)
-pub fn sub(out: &mut Vec4, a: &Vec4, b: &Vec4) {
-    subtract(out, a, b);
+pub fn sub(out: &mut Vec4, a: &Vec4, b: &Vec4) -> Vec4 {
+    subtract(out, a, b)
 }
 
 /// Alias for vec4::multiply.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec4.js.html)
-pub fn mul(out: &mut Vec4, a: &Vec4, b: &Vec4) {
-    multiply(out, a, b);
+pub fn mul(out: &mut Vec4, a: &Vec4, b: &Vec4) -> Vec4 {
+    multiply(out, a, b)
 }
 
 /// Alias for vec4::divide.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec4.js.html)
-pub fn div(out: &mut Vec4, a: &Vec4, b: &Vec4) {
-    divide(out, a, b);
+pub fn div(out: &mut Vec4, a: &Vec4, b: &Vec4) -> Vec4 {
+    divide(out, a, b)
 }
 
 /// Alias for vec4::distance.
