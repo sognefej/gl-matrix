@@ -5,9 +5,7 @@ Contributions are welcome and an important part of any open source project!
 
 ---
 gl-matrix is downstream of [glMatrix](http://glmatrix.net/). New functionality in this project that is 
-not first accepted into [glMatrix](http://glmatrix.net/) will not be accepted here. If there is functionality 
-you feel is missing please attempt to add it to [glMatrix](http://glmatrix.net/) before submitting it here. 
-
+not first accepted into [glMatrix](http://glmatrix.net/) will not be accepted here. 
 ## Project objectives
 
 gl-matrix is intended to be a complete Rust port of [glMatrix](http://glmatrix.net/) for those who want 
