@@ -7,7 +7,7 @@ categories = ["wasm", "no-std"]
 exclude = ["/.travis.yml", ".gitignore"]
 description = "A Rust implementation of glMatrix"
 readme = "README.md"
-repository = "https://github.com/sognefej/gl_matrix"
+repository = "https://github.com/sognefej/gl-matrix"
 documentation = "https://docs.rs/crate/gl_matrix/0.0.1"
 homepage = "https://crates.io/crates/gl_matrix"
 edition = "2018"
@@ -20,4 +20,4 @@ coveralls = { repository = "sognefej/gl-matrix" }
 rand = "0.7.3"
 
 [package.metadata.docs.rs]
-all-features = true
+targets = ["x86_64-unknown-linux-gnu"]
