@@ -8,7 +8,7 @@ exclude = ["/.travis.yml", ".gitignore"]
 description = "A Rust implementation of glMatrix"
 readme = "README.md"
 repository = "https://github.com/sognefej/gl-matrix"
-documentation = "https://docs.rs/crate/gl_matrix/0.0.1"
+documentation = "https://docs.rs/gl_matrix/"
 homepage = "https://crates.io/crates/gl_matrix"
 edition = "2018"
 

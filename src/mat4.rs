@@ -1475,8 +1475,8 @@ pub fn look_at(mut out: &mut Mat4, eye: &Vec3, center: &Vec3, up: &Vec3) -> Mat4
     let mut z1 = eyey - centery;
     let mut z2 = eyez - centerz;
     let z_vec: Vec3 = [z0, z1, z2];
+
     let mut len = 1. / hypot(&z_vec);
-    
     z0 *= len;
     z1 *= len;
     z2 *= len;
@@ -1484,10 +1484,10 @@ pub fn look_at(mut out: &mut Mat4, eye: &Vec3, center: &Vec3, up: &Vec3) -> Mat4
     let mut x0 = upy * z2 - upz * z1;
     let mut x1 = upz * z0 - upx * z2;
     let mut x2 = upx * z1 - upy * z0;
-
     let x_vec: Vec3 = [x0, x1, x2];
+
     len = 1. / hypot(&x_vec);
-    if len > 0_f32 {
+    if len == 0_f32 {
         x0 = 0.;
         x1 = 0.;
         x2 = 0.;
@@ -1500,9 +1500,9 @@ pub fn look_at(mut out: &mut Mat4, eye: &Vec3, center: &Vec3, up: &Vec3) -> Mat4
 
     let mut y0 = z1 * x2 - z2 * x1;
     let mut y1 = z2 * x0 - z0 * x2;
-    let mut y2 = z0 * x1 - z1 * x0;
-    
+    let mut y2 = z0 * x1 - z1 * x0;    
     let y_vec: Vec3 = [y0, y1, y2];
+
     len = hypot(&y_vec);
     if len == 0_f32 {
         y0 = 0.;
@@ -1538,7 +1538,7 @@ pub fn look_at(mut out: &mut Mat4, eye: &Vec3, center: &Vec3, up: &Vec3) -> Mat4
 /// Generates a matrix that makes something look at something else.
 ///
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-mat4.html) 
-pub fn target_to(out: &mut Mat4, eye: &Vec3, target: &Vec3, up: &Vec3) {
+pub fn target_to(out: &mut Mat4, eye: &Vec3, target: &Vec3, up: &Vec3) -> Mat4 {
     let eyex = eye[0];
     let eyey = eye[1];
     let eyez = eye[2];
@@ -1586,6 +1586,8 @@ pub fn target_to(out: &mut Mat4, eye: &Vec3, target: &Vec3, up: &Vec3) {
     out[13] = eyey;
     out[14] = eyez;
     out[15] = 1.;
+
+    *out
 }
 
 /// Returns a string representation of a mat4.
@@ -2703,7 +2705,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
     fn mat4_look_at() { 
         use super::super::vec3;
 
@@ -2712,52 +2713,17 @@ mod tests {
                              0., 0., 0., 0., 
                              0., 0., 0., 0.];
         
-        let mut view_r: Vec3 = [0., 0., 0.];
-        let mut up_r: Vec3 = [0.,  0., 0.];
+        let mut view_r: Vec3  = [0.,  0., 0.];
+        let mut up_r: Vec3    = [0.,  0., 0.];
         let mut right_r: Vec3 = [0.,  0., 0.];
 
-        let view: Vec3 = [0., -1., 0.];
-        let up: Vec3 = [0.,  0., -1.];
+        let view: Vec3  = [0., -1.,  0.];
+        let up: Vec3    = [0.,  0., -1.];
         let right: Vec3 = [1.,  0.,  0.];
         
         // looking down
         let result = look_at(&mut out, &[0., 0., 0.], &view, &up);
-        let result_view = vec3::transform_mat4(&mut view_r, &view, &out);
-        let result_up = vec3::transform_mat4(&mut up_r, &up, &out);
-        let result_right = vec3::transform_mat4(&mut right_r, &right, &out);
-
-        // should transform view into local -Z
-        assert_eq!([0., 0., -1.], view_r);
-        assert_eq!(result_view, view_r);
-        // should transform up into local +Y
-        assert_eq!([0., 1., 0.], up_r);
-        assert_eq!(result_up, up_r);
-        // should transform right into local +X
-        // assert_eq!([1., 0., 0.], right_r);
-        assert_eq!(result_right, right_r);
-        // out
-        assert_eq!(result, out);
-    }
-
-    #[test]
-    #[ignore]
-    fn mat4_look_at_74() { 
-        use super::super::vec3;
-
-        let mut out: Mat4 = [0., 0., 0., 0., 
-                             0., 0., 0., 0.,
-                             0., 0., 0., 0., 
-                             0., 0., 0., 0.];
-        let mut up_r: Vec3 = [0.,  0., 0.];
-        let mut view_r: Vec3 = [0., 0., 0.];
-        let mut right_r: Vec3 = [0.,  0., 0.];
-
-        let up: Vec3 = [0.,  -1., 0.];
-        let view: Vec3 = [0., 0.,  -1.];
-        let right: Vec3 = [1.,  0.,  0.];
         
-        // looking down
-        let result = look_at(&mut out, &[0., 0., 0.], &view, &up);
         let result_view = vec3::transform_mat4(&mut view_r, &view, &out);
         let result_up = vec3::transform_mat4(&mut up_r, &up, &out);
         let result_right = vec3::transform_mat4(&mut right_r, &right, &out);
@@ -2774,16 +2740,123 @@ mod tests {
         // out
         assert_eq!(result, out);
     }
+
+    #[test]
+    fn mat4_look_at_74() { 
+        use super::super::vec3;
+
+        let mut out: Mat4 = [0., 0., 0., 0., 
+                             0., 0., 0., 0.,
+                             0., 0., 0., 0., 
+                             0., 0., 0., 0.];
+        let mut vec_a: Vec3 = [0.,  0., 0.];
+        let mut vec_b: Vec3 = [0., 0., 0.];
+        let mut vec_c: Vec3 = [0.,  0., 0.];
+
+        let eye: Vec3    = [0., 2.,  0.];
+        let center: Vec3 = [0., 0.6, 0.];
+        let up: Vec3     = [0., 0., -1.];
+        
+        // looking down
+        let result = look_at(&mut out, &eye, &center, &up);
+        let result_a = vec3::transform_mat4(&mut vec_a, &[0., 2., -1.], &out);
+        let result_b = vec3::transform_mat4(&mut vec_b, &[1., 2., 0.], &out);
+        let result_c = vec3::transform_mat4(&mut vec_c, &[0., 1., 0.], &out);
+
+        // should transform view into local -Z
+        assert_eq!([0., 1., 0.], vec_a);
+        assert_eq!(result_a, vec_a);
+        // should transform up into local +Y
+        assert_eq!([1., 0., 0.], vec_b);
+        assert_eq!(result_b, vec_b);
+        // should transform right into local +X
+        assert_eq!([0., 0., -1.], vec_c);
+        assert_eq!(result_c, vec_c);
+        // out
+        assert_eq!(result, out);
+    }
   
     #[test]
-    #[ignore]
     fn mat4_target_to() { 
+        use super::super::vec3;
 
+        let mut out: Mat4 = [0., 0., 0., 0., 
+                             0., 0., 0., 0.,
+                             0., 0., 0., 0., 
+                             0., 0., 0., 0.];
+        
+        let mut view_r: Vec3  = [0., 0., 0.];
+        let mut up_r: Vec3    = [0., 0., 0.];
+        let mut right_r: Vec3 = [0., 0., 0.];
+        let mut scale_r: Vec3 = [0., 0., 0.];
+
+        let view: Vec3  = [0., -1.,  0.];
+        let up: Vec3    = [0.,  0., -1.];
+        let right: Vec3 = [1.,  0.,  0.];
+        
+        // looking down
+        let result = target_to(&mut out, &[0., 0., 0.], &view, &up);
+        
+        let result_view = vec3::transform_mat4(&mut view_r, &view, &out);
+        let result_up = vec3::transform_mat4(&mut up_r, &up, &out);
+        let result_right = vec3::transform_mat4(&mut right_r, &right, &out);
+        let result_scaling = get_scaling(&mut scale_r, &out);
+        
+        // should transform view into local -Z
+        assert_eq!([0., 0., 1.], view_r);
+        assert_eq!(result_view, view_r);
+        // should transform up into local +Y
+        assert_eq!([0., -1., 0.], up_r);
+        assert_eq!(result_up, up_r);
+        // should transform right into local +X
+        assert_eq!([1., 0., 0.], right_r);
+        assert_eq!(result_right, right_r);
+        // out
+        assert_eq!(result, out);
+        //scaling
+        assert_eq!([1., 1., 1.], scale_r);
+        assert_eq!(result_scaling, scale_r);
     }
 
     #[test]
     #[ignore]
     fn mat4_target_to_74() { 
+        use super::super::vec3;
+
+        let mut out: Mat4 = [0., 0., 0., 0., 
+                             0., 0., 0., 0.,
+                             0., 0., 0., 0., 
+                             0., 0., 0., 0.];
+        let mut vec_a: Vec3 = [0.,  0., 0.];
+        let mut vec_b: Vec3 = [0., 0., 0.];
+        let mut vec_c: Vec3 = [0.,  0., 0.];
+        let mut scale_r: Vec3 = [0., 0., 0.];
+
+        let eye: Vec3    = [0., 2.,  0.];
+        let center: Vec3 = [0., 0.6, 0.];
+        let up: Vec3     = [0., 0., -1.];
+        
+        // looking down
+        let result = look_at(&mut out, &eye, &center, &up);
+        let result_a = vec3::transform_mat4(&mut vec_a, &[0., 2., -1.], &out);
+        let result_b = vec3::transform_mat4(&mut vec_b, &[1., 2., 0.], &out);
+        let result_c = vec3::transform_mat4(&mut vec_c, &[0., 1., 0.], &out);
+        let result_scaling = get_scaling(&mut scale_r, &out);
+
+        // should transform view into local -Z
+        assert_eq!([0., 1., 0.], vec_a);
+        assert_eq!(result_a, vec_a);
+        // should transform up into local +Y
+        assert_eq!([1., 0., 0.], vec_b);
+        assert_eq!(result_b, vec_b);
+        // should transform right into local +X
+        assert_eq!([0., 0., -1.], vec_c);
+        assert_eq!(result_c, vec_c);
+        // out
+        assert_eq!(result, out);
+        //scaling
+        assert_eq!([1., 1., 1.], scale_r);
+        assert_eq!(result_scaling, scale_r);
     }
     
     #[test]
