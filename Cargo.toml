@@ -1,6 +1,6 @@
 [package]
-name = "gl_matrix"
-version = "0.0.2"
+name = "gl-matrix"
+version = "0.0.3"
 authors = ["Eric Sognefest"]
 license = "MIT"
 categories = ["wasm", "no-std"]
@@ -8,8 +8,8 @@ exclude = ["/.travis.yml", ".gitignore"]
 description = "A Rust implementation of glMatrix"
 readme = "README.md"
 repository = "https://github.com/sognefej/gl-matrix"
-documentation = "https://docs.rs/gl_matrix/"
-homepage = "https://crates.io/crates/gl_matrix"
+documentation = "https://docs.rs/gl-matrix/"
+homepage = "https://crates.io/crates/gl-matrix"
 edition = "2018"
 
 [badges]
