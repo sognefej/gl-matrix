@@ -1,5 +1,5 @@
 [package]
-name = "gl-matrix"
+name = "gl_matrix"
 version = "0.0.3"
 authors = ["Eric Sognefest"]
 license = "MIT"

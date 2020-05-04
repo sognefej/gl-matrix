@@ -16,7 +16,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "gl-matrix"
+name = "gl_matrix"
 version = "0.0.3"
 dependencies = [
  "rand 0.7.3 (registry+https://github.com/rust-lang/crates.io-index)",
