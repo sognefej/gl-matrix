@@ -7,8 +7,6 @@
 
 A Rust implementation of [glMatrix](http://glmatrix.net/)
 
-gl_matrix provides utilities or all [glMatrix](http://glmatrix.net/) functions in Rust. 
- 
  # Quick Start
 
  Getting started should be easy if you are already familiar with [glMatrix](http://glmatrix.net/) 
