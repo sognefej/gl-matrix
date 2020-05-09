@@ -41,7 +41,7 @@ A Rust implementation of [glMatrix](http://glmatrix.net/)
 - Add support for forEach 
 
 ## Examples 
-[Learning Rust WebGL](https://github.com/sognefej/learning_rust_webgl)
+[Learning Rust WebGL](https://sognefej.github.io/learning_rust_webgl/)
 
 ## Usage
 
