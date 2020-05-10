@@ -1315,7 +1315,7 @@ mod tests {
     }
 
     #[test]
-    fn get_vec2_string() { 
+    fn get_vec3_string() { 
         let vec_a: Vec3 = [1., 2., 3.];
         
         let str_a = string(&vec_a);

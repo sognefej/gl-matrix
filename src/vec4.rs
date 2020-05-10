@@ -441,7 +441,7 @@ pub fn zero(out: &mut Vec4) -> Vec4 {
 /// Returns a string representation of a vector.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/vec4.js.html)
-pub fn vec4_string(a: &Vec4) -> String {
+pub fn string(a: &Vec4) -> String {
     let a0 = ["vec4(".to_string(), a[0].to_string()].join("");
     let a1 = a[1].to_string(); 
     let a2 = a[2].to_string(); 
@@ -574,6 +574,8 @@ pub fn sqr_len(a: &Vec4) -> f32 {
 mod tests { 
     use super::*;
 
+    //create
+
     #[test]
     fn clone_a_vec4() { 
         let vec4_a: Vec4 = [1., 2., 3., 4.];
@@ -635,41 +637,253 @@ mod tests {
         assert_eq!(result, out);
     }
 
-
     #[test]
-    fn scale_vec4() { 
-        let mut out: Vec4 = [0., 0., 0., 0.];
-        let vec4_a: Vec4 = [1., 2., 3., 4.];
-
-        let result = scale(&mut out, &vec4_a, 2_f32);
-
-        assert_eq!([2., 4., 6., 8.], out);
-        assert_eq!(result, out);
-    }
-
-    #[test]
-    fn dot_vec4() { 
-        let mut out: Vec4 = [0., 0., 0., 0.];
-        let vec4_a: Vec4 = [1., 2., 3., 4.];
-
-        let result = scale(&mut out, &vec4_a, 2_f32);
-
-        assert_eq!([2., 4., 6., 8.], out);
-        assert_eq!(result, out);
-    }
-
-    #[test]
-    fn lerp_vec4() { 
+    fn sub_two_vec4s() { 
         let mut out: Vec4 = [0., 0., 0., 0.];
         let vec4_a: Vec4 = [1., 2., 3., 4.];
         let vec4_b: Vec4 = [5., 6., 7., 8.];
 
-        let result = add(&mut out, &vec4_a, &vec4_b);
+        let result = sub(&mut out, &vec4_a, &vec4_b);
 
-        assert_eq!([6., 8., 10., 12.], out);
+        assert_eq!([-4., -4., -4., -4.], out);
         assert_eq!(result, out);
     }
 
+    #[test]
+    fn sub_is_equal_to_subtract() { 
+        let mut out: Vec4 = [0., 0., 0., 0.];
+        let vec_a: Vec4 = [1., 2., 3., 4.];
+        let vec_b: Vec4 = [5., 6., 7., 8.];
+
+        let result_a = subtract(&mut out, &vec_a, &vec_b);
+        let result_b = sub(&mut out, &vec_a, &vec_b);
+        assert_eq!(result_a, result_b);
+    }
+   
+    #[test]
+    fn multiply_two_vec4s() { 
+        let mut out: Vec4 = [0., 0., 0., 0.];
+        let vec_a: Vec4 = [1., 2., 3., 4.];
+        let vec_b: Vec4 = [5., 6., 7., 8.];
+
+        let result = multiply(&mut out, &vec_a, &vec_b);
+
+        assert_eq!([5., 12., 21., 32.], out);
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn mul_two_vec4s() { 
+        let mut out: Vec4 = [0., 0., 0., 0.];
+        let vec_a: Vec4 = [1., 2., 3., 4.];
+        let vec_b: Vec4 = [5., 6., 7., 8.];
+
+        let result = mul(&mut out, &vec_a, &vec_b);
+
+        assert_eq!([5., 12., 21., 32.], out);
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn mul_is_equal_to_multiply() { 
+        let mut out: Vec4 = [0., 0., 0., 0.];
+        let vec_a: Vec4 = [1., 2., 3., 4.];
+        let vec_b: Vec4 = [5., 6., 7., 8.];
+
+        let result_a = multiply(&mut out, &vec_a, &vec_b);
+        let result_b = mul(&mut out, &vec_a, &vec_b);
+        assert_eq!(result_a, result_b);
+    }
+
+    #[test]
+    fn divide_two_vec4s() { 
+        let mut out: Vec4 = [0., 0., 0., 0.];
+        let vec_a: Vec4 = [1., 2., 3., 4.];
+        let vec_b: Vec4 = [5., 6., 7., 8.];
+
+        let result = divide(&mut out, &vec_a, &vec_b);
+
+        assert_eq!([0.2, 0.33333334, 0.42857143, 0.5], out);
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn div_two_vec4s() { 
+        let mut out: Vec4 = [0., 0., 0., 0.];
+        let vec_a: Vec4 = [1., 2., 3., 4.];
+        let vec_b: Vec4 = [5., 6., 7., 8.];
+
+        let result = div(&mut out, &vec_a, &vec_b);
+
+        assert_eq!([0.2, 0.33333334, 0.42857143, 0.5], out);
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn div_is_equal_to_divide() { 
+        let mut out: Vec4 = [0., 0., 0., 0.];
+        let vec_a: Vec4 = [1., 2., 3., 4.];
+        let vec_b: Vec4 = [5., 6., 7., 8.];
+
+        let result_a = divide(&mut out, &vec_a, &vec_b);
+        let result_b = div(&mut out, &vec_a, &vec_b);
+        assert_eq!(result_a, result_b);
+    }
+
+    #[test]
+    fn ceil_of_vec4() {
+        use super::super::common::PI; 
+
+        let mut out: Vec4 = [0., 0., 0., 0.];
+        let vec_a: Vec4 = [core::f32::consts::E, PI, 
+                           core::f32::consts::SQRT_2,
+                           core::f32::consts::FRAC_1_SQRT_2];
+
+        let result = ceil(&mut out, &vec_a);
+
+        assert_eq!([3., 4., 2., 1.], out); 
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn floor_of_vec4() { 
+        use super::super::common::PI; 
+
+        let mut out: Vec4 = [0., 0., 0., 0.];
+        let vec_a: Vec4 = [core::f32::consts::E, PI, 
+                           core::f32::consts::SQRT_2,
+                           core::f32::consts::FRAC_1_SQRT_2];
+
+        let result = floor(&mut out, &vec_a);
+
+        assert_eq!([2., 3., 1., 0.], out); 
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn min_of_two_vec4() { 
+        let mut out: Vec4 = [0., 0., 0., 0.];
+        let vec_a: Vec4 = [1., 3., 1., 3.];
+        let vec_b: Vec4 = [3., 1., 3., 1.];
+
+        let result = min(&mut out, &vec_a, &vec_b);
+
+        assert_eq!([1., 1., 1., 1.], out); 
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn max_of_two_vec4() { 
+        let mut out: Vec4 = [0., 0., 0., 0.];
+        let vec_a: Vec4 = [1., 3., 1., 3.];
+        let vec_b: Vec4 = [3., 1., 3., 1.];
+
+        let result = max(&mut out, &vec_a, &vec_b);
+
+        assert_eq!([3., 3., 3., 3.], out); 
+        assert_eq!(result, out);
+    }
+    
+    #[test]
+    fn round_vec4() { 
+        use super::super::common::PI; 
+
+        let mut out: Vec4 = [0., 0., 0., 0.];
+        let vec_a: Vec4 = [core::f32::consts::E, PI, 
+                           core::f32::consts::SQRT_2,
+                           core::f32::consts::FRAC_1_SQRT_2];
+
+        let result = round(&mut out, &vec_a);
+
+        assert_eq!([3., 3., 1., 1.], out); 
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn scale_vec4() { 
+        let mut out: Vec4 = [0., 0., 0., 0.];
+        let vec_a: Vec4 = [1., 2., 3., 4.];
+
+        let result = scale(&mut out, &vec_a, 2.);
+
+        assert_eq!([2., 4., 6., 8.], out); 
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn scale_and_add_vec4() { 
+        let mut out: Vec4 = [0., 0., 0., 0.];
+        let vec_a: Vec4 = [1., 2., 3., 4.];
+        let vec_b: Vec4 = [5., 6., 7., 8.];
+
+        let result = scale_and_add(&mut out, &vec_a, &vec_b, 0.5);
+
+        assert_eq!([3.5, 5., 6.5, 8.], out); 
+        assert_eq!(result, out);
+    }
+    #[test]
+    fn distance_between_vec4s() {  
+        use super::super::common;
+
+        let vec_a: Vec4 = [1., 2., 3., 4.];
+        let vec_b: Vec4 = [5., 6., 7., 8.];
+
+        let result = distance(&vec_a, &vec_b);
+
+        assert!(common::equals(result, 8.));
+    }
+
+    #[test]
+    fn dist_between_vec4s() {  
+        use super::super::common;
+
+        let vec_a: Vec4 = [1., 2., 3., 4.];
+        let vec_b: Vec4 = [5., 6., 7., 8.];
+
+        let result = dist(&vec_a, &vec_b);
+
+        assert!(common::equals(result, 8.));
+    }
+
+    #[test]
+    fn dist_is_equal_to_distance() {  
+        let vec_a: Vec4 = [1., 2., 3., 4.];
+        let vec_b: Vec4 = [5., 6., 7., 8.];
+
+        let result_a = distance(&vec_a, &vec_b);
+        let result_b = dist(&vec_a, &vec_b);
+
+        assert_eq!(result_a, result_b);
+    }
+
+    #[test]
+    fn squared_length_vec4() {  
+        let vec_a: Vec4 = [1., 2., 3., 4.];
+
+        let result = squared_length(&vec_a);
+
+        assert_eq!(result, 30.);
+    }
+
+    #[test]
+    fn sqr_len_vec4() {  
+        let vec_a: Vec4 = [1., 2., 3., 4.];
+
+        let result = sqr_len(&vec_a);
+
+        assert_eq!(result, 30.);
+    }
+
+    #[test]
+    fn sqr_len_is_equal_to_sqr_dist() {  
+        let vec_a: Vec4 = [1., 2., 3., 4.];
+
+        let result_a = squared_length(&vec_a);
+        let result_b = sqr_len(&vec_a);
+
+        assert_eq!(result_a, result_b);
+    }
+    
     #[test]
     fn length_of_vec4() {
         let vec4_a: Vec4 = [1., 2., 3., 4.];
@@ -731,6 +945,29 @@ mod tests {
     }
 
     #[test]
+    fn negate_vec4() { 
+        let mut out: Vec4 = [0., 0., 0., 0.];
+        let vec_a: Vec4 = [1., 2., 3., 4.];
+
+        let result = negate(&mut out, &vec_a);
+
+        assert_eq!(out, [-1., -2., -3., -4.]);
+        assert_eq!(result, out);
+
+    }
+
+    #[test]
+    fn invert_vec4() { 
+        let mut out: Vec4 = [0., 0., 0., 0.];
+        let vec_a: Vec4 = [1., 2., 3., 4.];
+
+        let result = inverse(&mut out, &vec_a);
+
+        assert_eq!(out, [1., 0.5, 0.33333333333333, 0.25]);
+        assert_eq!(result, out);
+    }
+
+    #[test]
     fn normalize_vec4() { 
         let mut out: Vec4 = [0., 0., 0., 0.];
         let vec4_a: Vec4 = [5., 0., 0., 0.];
@@ -741,6 +978,108 @@ mod tests {
         assert_eq!(result, out);
     }
 
+    #[test]
+    fn dot_vec4() { 
+        let mut out: Vec4 = [0., 0., 0., 0.];
+        let vec4_a: Vec4 = [1., 2., 3., 4.];
+
+        let result = scale(&mut out, &vec4_a, 2_f32);
+
+        assert_eq!([2., 4., 6., 8.], out);
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn cross_product_of_two_vec4() {
+        let mut out: Vec4= [0., 0., 0., 0.];
+        let vec_a: Vec4 = [1., 0., 0., 0.];
+        let vec_b: Vec4 = [0., 1., 0., 0.];
+        let vec_c: Vec4 = [0., 0., 1., 0.];
+
+        let result = cross(&mut out, &vec_a, &vec_b, &vec_c);
+
+        assert_eq!(out, [0., 0., 0., -1.]);
+        assert_eq!(result, out)
+    }
+
+    #[test]
+    fn lerp_vec4() { 
+        let mut out: Vec4 = [0., 0., 0., 0.];
+        let vec4_a: Vec4 = [1., 2., 3., 4.];
+        let vec4_b: Vec4 = [5., 6., 7., 8.];
+
+        let result = add(&mut out, &vec4_a, &vec4_b);
+
+        assert_eq!([6., 8., 10., 12.], out);
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn random_vec3_no_scale() { 
+        let mut out: Vec4 = [0., 0., 0., 0.];
+        let result = random(&mut out, None);
+        
+        assert!(out[0] >= -1_f32 && out[0] <= 1_f32);
+        assert!(out[1] >= -1_f32 && out[1] <= 1_f32);
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn random_vec3_scaled() { 
+        let scale = 2_f32;
+        let mut out: Vec4 = [0., 0., 0., 0.]; 
+        let result = random(&mut out, Some(scale));
+        
+        assert!(out[0] >= -1_f32 * scale && out[0] <= 1_f32 * scale);
+        assert!(out[1] >= -1_f32 * scale && out[1] <= 1_f32 * scale);
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn transform_mat4_to_vec4() {
+        let mut out: Vec4 = [0., 0., 0., 0.];
+        let mat_r: Mat4 = [1., 0., 0., 0.,
+                          0., 1., 0., 0., 
+                          0., 0., 1., 0., 
+                          0., 0., 0., 1.];
+        let vec_a: Vec4 = [1., 2., 3., 4.];
+        
+        let result = transform_mat4(&mut out, &vec_a, &mat_r);
+
+        assert_eq!([1., 2., 3., 4.], out);
+        assert_eq!(result, out);
+    }
+    #[test]
+    fn transform_quat_to_vec3() {
+        let mut out: Vec4 = [0., 0., 0., 0.];
+        let quat_r: Quat = [0.18257418567011074, 0.3651483713402215, 0.5477225570103322, 0.730296742680443];
+        let vec_a: Vec4 = [1., 2., 3., 4.];
+        
+        let result = transform_quat(&mut out, &vec_a, &quat_r);
+
+        assert_eq!([1., 2., 3., 4.], out);
+        assert_eq!(result, out);
+    }
+   
+    #[test]
+    fn zero_out_vec3() { 
+        let mut vec_a: Vec4 = [1., 2., 3., 4.];
+
+        let result = zero(&mut vec_a);
+        
+        assert_eq!(vec_a, [0., 0., 0., 0.]);
+        assert_eq!(result, vec_a);
+    }
+
+    #[test]
+    fn get_vec4_string() { 
+        let vec_a: Vec4 = [1., 2., 3., 4.];
+        
+        let str_a = string(&vec_a);
+
+        assert_eq!("vec4(1, 2, 3, 4)".to_string(), str_a);
+    }
+    
     #[test]
     fn vec4_are_exact_equal() { 
         let vec4_a: Vec4 = [0., 1., 2., 3.];
