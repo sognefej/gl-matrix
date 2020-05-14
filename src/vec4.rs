@@ -574,7 +574,12 @@ pub fn sqr_len(a: &Vec4) -> f32 {
 mod tests { 
     use super::*;
 
-    //create
+    #[test]
+    fn create_a_vec4() { 
+        let out = create();
+
+        assert_eq!([0., 0., 0., 0.], out);
+    }
 
     #[test]
     fn clone_a_vec4() { 

@@ -238,7 +238,7 @@ pub fn pow(out: &mut Quat, a: &Quat, b: f32) -> Quat {
     exp(out, &clone(out))
 }
 
-/// Performs a spherical linear interpolation between two quat.
+/// Performs a spherical linear interpolation between two quats.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-quat.html)
 pub fn slerp(out: &mut Quat, a: &Quat, b: &Quat, t: f32) -> Quat {
@@ -254,22 +254,22 @@ pub fn slerp(out: &mut Quat, a: &Quat, b: &Quat, t: f32) -> Quat {
     let mut bz = b[2];
     let mut bw = b[3];
 
-    let omega;
-    let mut cosom;
-    let sinom;
-    let scale0;
-    let scale1;
+    let omega: f32;
+    let mut cosom: f32;
+    let sinom: f32;
+    let scale0: f32;
+    let scale1: f32;
 
     // calc cosine
     cosom = ax * bx + ay * by + az * bz + aw * bw;
 
     // adjust signs (if necessary)
-    if cosom < 0_f32 {
+    if cosom < 0.{
         cosom = -cosom;
-        bx = - bx;
-        by = - by;
-        bz = - bz;
-        bw = - bw;
+        bx = -bx;
+        by = -by;
+        bz = -bz;
+        bw = -bw;
     }
 
     // calculate coefficients
@@ -399,7 +399,7 @@ pub fn from_mat3(out: &mut Quat, m: &Mat3) -> Quat {
 /// Creates a quaternion from the given euler angle x, y, z.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-quat.html) 
-pub fn from_euler(out: &mut Quat, x: f32, y: f32, z: f32) {
+pub fn from_euler(out: &mut Quat, x: f32, y: f32, z: f32) -> Quat {
     let half_to_rad = 0.5 * PI / 180.0;
 
     let x = x * half_to_rad;
@@ -417,6 +417,8 @@ pub fn from_euler(out: &mut Quat, x: f32, y: f32, z: f32) {
     out[1] = cx * sy * cz + sx * cy * sz;
     out[2] = cx * cy * sz - sx * sy * cz;
     out[3] = cx * cy * cz + sx * sy * sz;
+
+    *out
 }
 
 /// Returns a string representation of a quatenion.
@@ -549,7 +551,7 @@ pub fn equals(a: &Quat, b: &Quat) -> bool {
 /// Both vectors are assumed to be unit length.
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-quat.html) 
-pub fn rotation_to(out: &mut Quat, a: &Vec3, b: &Vec3) { 
+pub fn rotation_to(out: &mut Quat, a: &Vec3, b: &Vec3) -> Quat { 
     let tmp_vec3 = &mut vec3::create();
     let x_unit_vec3 = &vec3::from_values(1.,0.,0.);
     let y_unit_vec3 = &vec3::from_values(0.,1.,0.);
@@ -576,6 +578,8 @@ pub fn rotation_to(out: &mut Quat, a: &Vec3, b: &Vec3) {
 
         normalize(out, &clone(out));
     }
+
+    *out
 }
 
 /// Performs a spherical linear interpolation with two control points.
@@ -583,13 +587,13 @@ pub fn rotation_to(out: &mut Quat, a: &Vec3, b: &Vec3) {
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-quat.html) 
 pub fn sqlerp(out: &mut Quat, a: &Quat, b: &Quat, 
                               c: &Quat, d: &Quat, 
-                              t: f32) { 
+                              t: f32) -> Quat { 
     let temp1 = &mut create();
     let temp2 = &mut create();
 
     slerp(temp1, a, d, t);
     slerp(temp2, b, c, t);
-    slerp(out, temp1, temp2, 2. * t * (1. - t));
+    slerp(out, temp1, temp2, 2. * t * (1. - t))
 }
 
 /// Sets the specified quaternion with values corresponding to the given
@@ -598,7 +602,7 @@ pub fn sqlerp(out: &mut Quat, a: &Quat, b: &Quat,
 /// 
 /// [glMatrix Documentation](http://glmatrix.net/docs/module-quat.html) 
 pub fn set_axis(out: &mut Quat, view: &Vec3, 
-                right: &Vec3, up: &Vec3){
+                right: &Vec3, up: &Vec3) -> Quat {
     let matr = &mut mat3::create();
 
     matr[0] = right[0];
@@ -611,7 +615,7 @@ pub fn set_axis(out: &mut Quat, view: &Vec3,
     matr[5] = -view[1];
     matr[8] = -view[2];
    
-    normalize(out, &from_mat3(&mut clone(out), matr));
+    normalize(out, &from_mat3(&mut clone(out), matr))
 }
 
 
@@ -740,6 +744,29 @@ mod tests {
     }
 
     #[test]
+    fn mul_two_quats() {     
+        let mut out: Quat = [0., 0., 0., 0.]; 
+        let quat_a = [1., 2., 3., 4.];
+        let quat_b = [5., 6., 7., 8.];
+
+        let result = mul(&mut out, &quat_a, &quat_b);
+
+        assert_eq!([24., 48., 48., -6.], out);
+        assert_eq!(result, out);
+    }
+    #[test]
+    fn mul_is_equal_to_multiply() {
+        let mut out: Quat = [0., 0., 0., 0.]; 
+        let quat_a = [1., 2., 3., 4.];
+        let quat_b = [5., 6., 7., 8.];
+
+        let result_a = multiply(&mut out, &quat_a, &quat_b);
+        let result_b = mul(&mut out, &quat_a, &quat_b);
+
+        assert_eq!(result_a, result_b);
+    }
+
+    #[test]
     fn rotate_quat_x() { 
         let mut out: Quat = [0., 0., 0., 0.]; 
         let mut vec = vec3::create();
@@ -851,28 +878,55 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
-    fn slerp_quat_case_one() { 
+    fn slerp_quat_normal() { 
         let mut out: Quat = [0., 0., 0., 0.]; 
-        let quat_a = [1., 2., 3., 4.];
-        let quat_b = [5., 6., 7., 8.];
+        let quat_a = [0., 0., 0., 1.];
+        let quat_b = [0., 1., 0., 0.];
 
         let result = slerp(&mut out, &quat_a, &quat_b, 0.5);
 
-        assert_eq!([3., 4., 5., 6.], quat_a);
+        assert!(equals(&[0., 0.707106, 0., 0.707106], &out));
         assert_eq!(result, out);
     }
 
     #[test]
-    #[ignore]
-    fn slerp_quat_case_two() { 
+    fn slerp_quat_a_equals_b() { 
+        let mut out: Quat = [0., 0., 0., 0.]; 
+        let quat_a = [0., 0., 0., 1.];
+        let quat_b = [0., 0., 0., 1.];
 
+        let result = slerp(&mut out, &quat_a, &quat_b, 0.5);
+
+        assert!(equals(&[0., 0., 0., 1.], &out));
+        assert_eq!(result, out);
     }
 
     #[test]
-    #[ignore]
-    fn slerp_quat_adjust_signs() { 
+    fn slerp_quat_theta_is_180_degs() { 
+        let mut out: Quat = [0., 0., 0., 0.]; 
+        let mut quat_a = [1., 2., 3., 4.];
+        rotate_x(&mut quat_a, &[1., 0., 0., 0.], PI); // 180 deg
 
+        let result = slerp(&mut out, &[1., 0., 0., 0.], &quat_a, 1.);
+        
+
+        // umm results may differ
+        //assert!(equals(&[0., 0., 0., -1.], &out));
+        assert!(equals(&[0., 0., 0., 1.], &out));
+        assert_eq!(result, out);
+    }
+
+
+    #[test]
+    fn slerp_quat_a_is_equal_to_neg_b() { 
+        let mut out: Quat = [0., 0., 0., 0.]; 
+        let quat_a = [1., 0., 0., 0.];
+        let quat_b = [-1., 0., 0., 0.];
+
+        let result = slerp(&mut out, &quat_a, &quat_b, 0.5);
+
+        assert!(equals(&[1., 0., 0., 0.], &out));
+        assert_eq!(result, out);
     }
     
     #[test]
@@ -921,17 +975,118 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
-    fn quat_from_mat3() { 
+    fn quat_from_mat3_legacy() { 
+        let mut out: Quat = [0., 0., 0., 0.];
+        let mat_r: Mat3 =[ 1., 0.,  0.,
+                           0., 0., -1.,
+                           0., 1.,  0.];
 
+        let result = from_mat3(&mut out, &mat_r);
+
+        assert!(equals(&[-0.707106, 0., 0., 0.707106], &out));
+        assert_eq!(result, out);
     }
 
     #[test]
-    #[ignore]
-    fn quat_from_euler() { 
+    fn quat_from_mat3_looking_backwards() { 
+        use super::super::mat4;
 
+        let mut out: Quat = [0., 0., 0., 0.];
+        let mat_r = &mut mat3::create();
+        mat3::transpose(mat_r, &mat3::invert(&mut mat3::clone(mat_r), 
+                                                 &mat3::from_mat4(&mut mat3::clone(mat_r), 
+                                                                      &mat4::look_at(&mut mat4::create(), 
+                                                                                     &[0., 0., 0.], 
+                                                                                     &[0., 0., 1.], 
+                                                                                     &[0., 1., 0.]))).unwrap()
+                                                );
+
+        let result = from_mat3(&mut out, &mat_r);
+        
+        assert!(
+            vec3::equals(
+                &vec3::transform_quat(&mut vec3::create(), &[3., 2., -1.], &normalize(&mut create(), &out)),
+                &vec3::transform_mat3(&mut vec3::create(), &[3., 2., -1.], mat_r)
+            )
+        );
+        assert_eq!(result, out);
     }
 
+    #[test]
+    fn quat_from_mat3_looking_left_and_upside_down() { 
+        use super::super::mat4;
+
+        let mut out: Quat = [0., 0., 0., 0.];
+        let mat_r = &mut mat3::create();
+        mat3::transpose(mat_r, &mat3::invert(&mut mat3::clone(mat_r), 
+                                                 &mat3::from_mat4(&mut mat3::clone(mat_r), 
+                                                                      &mat4::look_at(&mut mat4::create(), 
+                                                                                     &[0., 0., 0.],
+                                                                                     &[-1., 0., 0.],
+                                                                                     &[0., -1., 0.]))).unwrap()
+                                                );
+
+        let result = from_mat3(&mut out, &mat_r);
+        
+        assert!(
+            vec3::equals(
+                &vec3::transform_quat(&mut vec3::create(), &[3., 2., -1.], &normalize(&mut create(), &out)),
+                &vec3::transform_mat3(&mut vec3::create(), &[3., 2., -1.], mat_r)
+            )
+        );
+        assert_eq!(result, out);
+    }
+    
+    #[test]
+    fn quat_from_mat3_looking_upside_down() { 
+        use super::super::mat4;
+
+        let mut out: Quat = [0., 0., 0., 0.];
+        let mat_r = &mut mat3::create();
+        mat3::transpose(mat_r, &mat3::invert(&mut mat3::clone(mat_r), 
+                                                 &mat3::from_mat4(&mut mat3::clone(mat_r), 
+                                                                      &mat4::look_at(&mut mat4::create(), 
+                                                                                     &[0., 0., 0.],
+                                                                                     &[0., 0., -1.],
+                                                                                     &[0., -1., 0.]))).unwrap()
+                                                );
+
+        let result = from_mat3(&mut out, &mat_r);
+        
+        assert!(
+            vec3::equals(
+                &vec3::transform_quat(&mut vec3::create(), &[3., 2., -1.], &normalize(&mut create(), &out)),
+                &vec3::transform_mat3(&mut vec3::create(), &[3., 2., -1.], mat_r)
+            )
+        );
+        assert_eq!(result, out);
+    }
+    
+    #[test]
+    fn quat_from_euler_legacy() {
+        let mut out: Quat = [0., 0., 0., 0.];
+
+        let result = from_euler(&mut out, -90., 0., 0.);
+
+        assert!(equals(&out, &[-0.707106, 0., 0., 0.707106]));
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn quat_from_euler_trace_greater_than_zero() {
+        let mut out: Quat = [0., 0., 0., 0.];
+
+        let result = from_euler(&mut out, -90., 0., 0.);
+
+        assert!(
+            vec3::equals(
+                &vec3::transform_quat(&mut vec3::create(), &[0.,1.,0.], &out),
+                &[0.,0.,-1.]
+            )
+        );
+        assert_eq!(result, out);
+    }
+    
     #[test]
     fn get_quat_string() { 
         let quat_a: Quat = [1., 2., 3., 4.];
@@ -1143,5 +1298,124 @@ mod tests {
         let r0 = equals(&quat_a, &quat_b);
 
         assert!(!r0);  
+    }
+
+    #[test]
+    fn rotation_to_right_angle() { 
+        let mut out: Quat = [0., 0., 0., 0.];
+
+        let result = rotation_to(&mut out, &[0., 1., 0.], &[1., 0., 0.]);
+
+        assert!(equals(&[0., 0., -0.707106, 0.707106], &out));  
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn rotation_to_when_vectors_are_parallel() { 
+        let mut out: Quat = [0., 0., 0., 0.];
+
+        let result = rotation_to(&mut out, &[0., 1., 0.], &[0., 1., 0.]);
+
+        assert!(
+            vec3::equals(
+                &vec3::transform_quat(&mut vec3::create(), &[0., 1., 0.], &out),
+                &[0., 1., 0.]
+            )
+        );
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn rotation_to_when_vectors_are_opposed_x() { 
+        let mut out: Quat = [0., 0., 0., 0.];
+
+        let result = rotation_to(&mut out, &[1., 0., 0.], &[-1., 0., 0.]);
+
+        assert!(
+            vec3::equals(
+                &vec3::transform_quat(&mut vec3::create(), &[1., 0., 0.], &out),
+                &[-1., 0., 0.]
+            )
+        );
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn rotation_to_when_vectors_are_opposed_y() { 
+        let mut out: Quat = [0., 0., 0., 0.];
+
+        let result = rotation_to(&mut out, &[0., 1., 0.], &[0., -1., 0.]);
+
+        assert!(
+            vec3::equals(
+                &vec3::transform_quat(&mut vec3::create(), &[0., 1., 0.], &out),
+                &[0., -1., 0.]
+            )
+        );
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn rotation_to_when_vectors_are_opposed_z() { 
+        let mut out: Quat = [0., 0., 0., 0.];
+
+        let result = rotation_to(&mut out, &[0., 0., 1.], &[0., 0., -1.]);
+
+        assert!(
+            vec3::equals(
+                &vec3::transform_quat(&mut vec3::create(), &[0., 0., 1.], &out),
+                &[0., 0., -1.]
+            )
+        );
+        assert_eq!(result, out);
+    }
+   
+    #[test]
+    fn set_axis_looking_left() {
+        let mut out: Quat = [0., 0., 0., 0.];
+        let view  = [-1., 0., 0.];
+        let up    = [ 0., 1., 0.];
+        let right = [ 0., 0.,-1.];
+        
+        let result = set_axis(&mut out, &view, &right, &up);
+
+        assert!(
+            vec3::equals(
+                &vec3::transform_quat(&mut vec3::create(), &[0., 0., -1.], &result),
+                &[1., 0., 0.]
+            )
+        );
+        assert!(
+            vec3::equals(
+                &vec3::transform_quat(&mut vec3::create(), &[1., 0., 0.], &result),
+                &[0., 0., 1.]
+            )
+        );
+    }
+
+    #[test]
+    fn set_axis_given_opengl_defaults() {
+        let mut out: Quat = [0., 0., 0., 0.];
+        let view  = [0., 0., -1.];
+        let up    = [0., 1.,  0.];
+        let right = [1., 0.,  0.];
+        
+        let result = set_axis(&mut out, &view, &right, &up);
+
+        assert_eq!([0., 0., 0., 1.], out);
+        assert_eq!(result, out);
+    }
+
+    #[test]
+    fn set_axis_legacy_example() {
+        let mut out: Quat = [0., 0., 0., 0.];
+        let view  = [0., 0., -1.];
+        let up    = [0., 1.,  0.];
+        let right = [1., 0.,  0.];
+        
+        let result = set_axis(&mut out, &view, &right, &up);
+
+        assert_eq!([0., 0., 0., 1.], out);
+        assert_eq!(result, out);
     }
 }
